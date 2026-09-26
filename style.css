@@ -1,0 +1,101 @@
+/* Scroll Behavior halus */
+html { scroll-behavior: smooth; }
+body { background-color: #f8f9fa; }
+
+/* Brutalist Button & Interactive Cards */
+.btn-brutal, .interactive-card { transition: all 0.15s ease-in-out; }
+.btn-brutal:active, .interactive-card:active {
+    transform: translate(3px, 3px) !important;
+    box-shadow: 1px 1px 0px 0px rgba(0,0,0,1) !important;
+}
+
+/* Tab & Step transitions */
+.step-container { transition: opacity 0.3s ease, transform 0.3s ease; }
+.hidden-step {
+    opacity: 0; transform: translateY(10px);
+    pointer-events: none; position: absolute; visibility: hidden;
+}
+.active-step {
+    opacity: 1; transform: translateY(0);
+    position: relative; visibility: visible;
+}
+
+/* Loading Spinner */
+.spinner {
+    border: 3px solid rgba(0,0,0,0.1); border-left-color: #000;
+    border-radius: 50%; width: 20px; height: 20px;
+    animation: spin 1s linear infinite; display: none;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.is-loading .spinner { display: inline-block; }
+.is-loading .btn-text { display: none; }
+
+.animate-spin-fast { animation: spin 1.5s linear infinite; }
+
+/* Animasi Emoji Tada */
+.animate-tada { animation: tada 1.5s ease-in-out infinite; display: inline-block; }
+@keyframes tada {
+    0% { transform: scale(1); }
+    10%, 20% { transform: scale(0.9) rotate(-6deg); }
+    30%, 50%, 70%, 90% { transform: scale(1.2) rotate(6deg); }
+    40%, 60%, 80% { transform: scale(1.2) rotate(-6deg); }
+    100% { transform: scale(1) rotate(0); }
+}
+
+/* ANIMASI LEDAKAN CONFETTI & TALI-TALI MERIAH (±30 DETIK) */
+@keyframes confetti-burst {
+    0% { 
+        transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+        opacity: 0; 
+    }
+    2% { 
+        opacity: 1; 
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.1) rotate(var(--rot));
+    }
+    85% { 
+        opacity: 1; 
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 25px)) scale(1) rotate(calc(var(--rot) + 90deg));
+    }
+    100% { 
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 60px)) scale(0.7) rotate(calc(var(--rot) + 180deg)); 
+        opacity: 0; 
+    }
+}
+.animate-burst {
+    animation-name: confetti-burst;
+    animation-timing-function: cubic-bezier(0.1, 0.8, 0.25, 1);
+    animation-fill-mode: forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #f8f9fa; border-left: 2px solid black; }
+::-webkit-scrollbar-thumb { background: #000; border: 2px solid #000; border-radius: 0px; }
+
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; border-left: none; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border: 1px solid #000; border-radius: 10px; }
+
+/* Scroll Reveal */
+.reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* Modal Animations */
+.modal-enter { animation: modalPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards; }
+.modal-exit { animation: modalPopOut 0.2s ease-in forwards; }
+@keyframes modalPopIn {
+    from { opacity: 0; transform: scale(0.95) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes modalPopOut {
+    from { opacity: 1; transform: scale(1) translateY(0); }
+    to { opacity: 0; transform: scale(0.95) translateY(20px); }
+}
+
+.backdrop-enter { animation: fadeIn 0.3s ease-out forwards; }
+.backdrop-exit { animation: fadeOut 0.2s ease-in forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
