@@ -1,6 +1,12 @@
 let userEmailMemory = ""; 
 let countdownInterval = null;
 
+const step1UI = document.getElementById('step-1');
+const step2UI = document.getElementById('step-2');
+const step3UI = document.getElementById('step-3');
+const tabBg = document.getElementById('tab-bg');
+const tabText2 = document.getElementById('tab-text-2');
+const tabText3 = document.getElementById('tab-text-3');
 const emailInput = document.getElementById('emailInput');
 const oobInput = document.getElementById('oobInput');
 
@@ -79,26 +85,21 @@ function startTimer(durationInSeconds) {
     const display = document.getElementById('countdown-timer');
     const timerIcon = document.getElementById('timer-icon');
     
-    if (display) {
-        display.classList.remove('text-red-700', 'animate-pulse');
-        display.classList.add('text-black');
-    }
+    display.classList.remove('text-red-700', 'animate-pulse');
+    display.classList.add('text-black');
 
     countdownInterval = setInterval(function () {
         let minutes = parseInt(timer / 60, 10);
         let seconds = parseInt(timer % 60, 10);
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
-        
-        if (display) {
-            display.textContent = minutes + ":" + seconds;
+        display.textContent = minutes + ":" + seconds;
 
-            if (timer < 30) { 
-                display.classList.add('text-red-700', 'animate-pulse'); 
-                if(timerIcon) timerIcon.style.animationDuration = '1s';
-            } else {
-                if(timerIcon) timerIcon.style.animationDuration = '60s'; 
-            }
+        if (timer < 30) { 
+            display.classList.add('text-red-700', 'animate-pulse'); 
+            if(timerIcon) timerIcon.style.animationDuration = '1s';
+        } else {
+            if(timerIcon) timerIcon.style.animationDuration = '60s'; 
         }
 
         if (--timer < 0) {
@@ -110,54 +111,24 @@ function startTimer(durationInSeconds) {
 }
 
 // ----------------------------------------------------
-// FUNGSI SWITCH STEP PANEL VERIFIKASI
+// TABS & TRANSITION
 // ----------------------------------------------------
-function switchStep(stepNum) {
-    const step1 = document.getElementById('step-1');
-    const step2 = document.getElementById('step-2');
-    const step3 = document.getElementById('step-3');
-    const tab1 = document.querySelector('.step-tab-1');
-    const tab2 = document.querySelector('.step-tab-2');
-    const tab3 = document.querySelector('.step-tab-3');
-
-    // Hide all steps
-    if (step1) {
-        step1.classList.remove('active-step');
-        step1.classList.add('hidden-step');
-    }
-    if (step2) {
-        step2.classList.remove('active-step');
-        step2.classList.add('hidden-step');
-    }
-    if (step3) {
-        step3.classList.remove('active-step');
-        step3.classList.add('hidden-step');
-    }
-
-    // Remove active from all tabs
-    if (tab1) tab1.classList.remove('bg-brutal-blue');
-    if (tab2) tab2.classList.remove('bg-brutal-green');
-    if (tab3) tab3.classList.remove('bg-brutal-pink');
-
-    // Show selected step
-    if (stepNum === 1) {
-        if (step1) {
-            step1.classList.remove('hidden-step');
-            step1.classList.add('active-step');
-        }
-        if (tab1) tab1.classList.add('bg-brutal-blue');
-    } else if (stepNum === 2) {
-        if (step2) {
-            step2.classList.remove('hidden-step');
-            step2.classList.add('active-step');
-        }
-        if (tab2) tab2.classList.add('bg-brutal-green');
-    } else if (stepNum === 3) {
-        if (step3) {
-            step3.classList.remove('hidden-step');
-            step3.classList.add('active-step');
-        }
-        if (tab3) tab3.classList.add('bg-brutal-pink');
+function setTabProgress(step) {
+    if (!tabBg) return;
+    if (step === 1) {
+        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(0)';
+        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-blue border-r-2 border-black transition-all duration-300 ease-in-out";
+        tabText2.classList.add('text-gray-400'); tabText2.classList.remove('text-black');
+        tabText3.classList.add('text-gray-400'); tabText3.classList.remove('text-black');
+    } else if (step === 2) {
+        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(100%)';
+        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-green border-x-2 border-black transition-all duration-300 ease-in-out";
+        tabText2.classList.remove('text-gray-400'); tabText2.classList.add('text-black');
+        tabText3.classList.add('text-gray-400'); tabText3.classList.remove('text-black');
+    } else if (step === 3) {
+        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(200%)';
+        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-pink border-l-2 border-black transition-all duration-300 ease-in-out";
+        tabText3.classList.remove('text-gray-400'); tabText3.classList.add('text-black');
     }
 }
 
@@ -207,25 +178,44 @@ async function processStep1() {
             body: JSON.stringify({ email })
         });
         const data = await parseResponse(response);
+        if (!data.ok) throw new Error(data.why || 'Gagal mengirim link.');
 
-        if (!response.ok) throw new Error(data.message || "Gagal mengirim link OOB.");
-        
-        userEmailMemory = email;
-        showToast(`✅ Link OOB telah dikirim ke ${email}`);
-        
-        setTimeout(() => {
-            switchStep(2);
-            btn.classList.remove('is-loading');
-        }, 1500);
-    } catch (err) {
-        showToast(`❌ ${err.message}`);
-        btn.classList.remove('is-loading');
-    }
+        userEmailMemory = email; 
+        document.getElementById('display-email').innerText = email;
+        document.getElementById('modal-email').innerText = email;
+
+        setTabProgress(2);
+        transitionStep(step1UI, step2UI);
+        startTimer(180);
+
+    } catch (error) { showToast(`❌ Error: ${error.message}`); } 
+    finally { btn.classList.remove('is-loading'); }
+}
+
+function backToStep1() {
+    clearInterval(countdownInterval);
+    setTabProgress(1);
+    transitionStep(step2UI, step1UI);
+}
+
+// [ REVISI: RIWAYAT GAGAL / SUKSES ]
+function saveHistory(status, email, orderStr) {
+    const timeData = getActivationTimeData();
+    let history = JSON.parse(localStorage.getItem('alightHistory') || '[]');
+    history.unshift({ 
+        status: status,
+        email: email, 
+        date: timeData.expiryDate, 
+        time: timeData.timeWita, 
+        order: orderStr,
+        timestamp: timeData.timestamp
+    });
+    localStorage.setItem('alightHistory', JSON.stringify(history));
 }
 
 async function processStep2() {
-    const oobLink = oobInput.value.trim();
-    if (!oobLink) { showToast("⚠️ Tempel link OOB terlebih dahulu!"); return; }
+    const oob = oobInput.value.trim();
+    if (!oob) { showToast("⚠️ Tempelkan link OOB terlebih dahulu!"); return; }
 
     const btn = document.getElementById('btn-step-2');
     btn.classList.add('is-loading');
@@ -234,72 +224,85 @@ async function processStep2() {
         const response = await fetch('/api/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ oobLink })
+            body: JSON.stringify({ email: userEmailMemory, rawLink: oob })
         });
         const data = await parseResponse(response);
-
-        if (!response.ok) throw new Error(data.message || "Verifikasi gagal.");
-
-        // Simpan ke riwayat
-        const historyItem = {
-            email: userEmailMemory,
-            order: data.orderId || 'AUTO-' + Date.now(),
-            date: new Date().toLocaleDateString('id-ID'),
-            time: new Date().toLocaleTimeString('id-ID'),
-            status: 'success',
-            timestamp: Date.now()
-        };
         
-        let historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
-        historyData.unshift(historyItem);
-        localStorage.setItem('alightHistory', JSON.stringify(historyData.slice(0, 50)));
+        if (!data.ok) {
+            // [ SIMPAN RIWAYAT GAGAL ]
+            saveHistory('failed', userEmailMemory, 'Gagal/Invalid');
+            throw new Error(data.why || 'Verifikasi gagal.');
+        }
 
-        // Tampilkan data di step 3
+        clearInterval(countdownInterval); 
         const timeData = getActivationTimeData();
-        document.getElementById('step3-email').textContent = userEmailMemory;
-        document.getElementById('step3-order').textContent = data.orderId || 'AUTO-' + Date.now();
-        document.getElementById('step3-expiry').textContent = timeData.expiryDate;
-        document.getElementById('step3-time').textContent = timeData.timeWita;
-
-        showToast("✅ Verifikasi berhasil! Akun Anda sudah Pro.");
         
-        setTimeout(() => {
-            switchStep(3);
-            btn.classList.remove('is-loading');
-        }, 1500);
-    } catch (err) {
-        showToast(`❌ ${err.message}`);
-        btn.classList.remove('is-loading');
-    }
+        document.getElementById('modal-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
+        document.getElementById('modal-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
+        if(data.orderId) document.getElementById('modal-order').innerText = data.orderId;
+
+        document.getElementById('step3-email').innerText = userEmailMemory;
+        document.getElementById('step3-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
+        document.getElementById('step3-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
+        if(data.orderId) document.getElementById('step3-order').innerText = data.orderId;
+
+        // [ SIMPAN RIWAYAT SUKSES ]
+        saveHistory('success', userEmailMemory, data.orderId || 'Alfian-Shop-XXX');
+
+        openSuccessModal();
+        const counter = document.getElementById('daily-count');
+        if (counter) counter.innerText = parseInt(counter.innerText) + 1;
+
+    } catch (error) { 
+        showToast(`❌ Error: ${error.message}`); 
+    } 
+    finally { btn.classList.remove('is-loading'); }
 }
 
-function backToStep1() {
-    switchStep(1);
-    clearInterval(countdownInterval);
+function resetAndCloseModal() {
+    const modal = document.getElementById('success-modal');
+    const modalBg = document.getElementById('success-modal-bg');
+    const modalContent = document.getElementById('success-modal-content');
+    
+    modalBg.classList.remove('backdrop-enter');
+    modalBg.classList.add('backdrop-exit');
+    modalContent.classList.remove('modal-enter');
+    modalContent.classList.add('modal-exit');
+    
+    setTimeout(() => { 
+        modal.classList.add('hidden'); 
+        resetForm();
+    }, 200);
 }
 
 function resetForm() {
-    emailInput.value = '';
-    oobInput.value = '';
-    userEmailMemory = '';
-    switchStep(1);
+    clearInterval(countdownInterval);
+    userEmailMemory = ""; emailInput.value = ""; oobInput.value = "";
+    
+    if(!step3UI.classList.contains('hidden-step')) {
+        setTabProgress(1);
+        transitionStep(step3UI, step1UI);
+    } else if(!step2UI.classList.contains('hidden-step')){
+        setTabProgress(1);
+        transitionStep(step2UI, step1UI);
+    }
 }
 
-// Modal Success Functions
+// ----------------------------------------------------
+// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI
+// ----------------------------------------------------
 function openSuccessModal() {
     const modal = document.getElementById('success-modal');
     const modalBg = document.getElementById('success-modal-bg');
     const modalContent = document.getElementById('success-modal-content');
     
-    if (!modal) return;
-    
     modal.classList.remove('hidden');
-    setTimeout(() => {
-        modalBg.style.opacity = '1';
-        modalContent.style.opacity = '1';
-        modalContent.style.transform = 'scale(1) translateY(0)';
-        shootConfetti();
-    }, 50);
+    modalBg.classList.remove('backdrop-exit');
+    modalBg.classList.add('backdrop-enter');
+    modalContent.classList.remove('modal-exit');
+    modalContent.classList.add('modal-enter');
+    
+    shootConfetti();
 }
 
 function closeSuccessModal() {
@@ -307,32 +310,22 @@ function closeSuccessModal() {
     const modalBg = document.getElementById('success-modal-bg');
     const modalContent = document.getElementById('success-modal-content');
     
-    if (!modal) return;
+    modalBg.classList.remove('backdrop-enter');
+    modalBg.classList.add('backdrop-exit');
+    modalContent.classList.remove('modal-enter');
+    modalContent.classList.add('modal-exit');
     
-    modalBg.style.opacity = '0';
-    modalContent.style.opacity = '0';
-    modalContent.style.transform = 'scale(0.95) translateY(20px)';
-    
-    setTimeout(() => {
+    setTimeout(() => { 
         modal.classList.add('hidden');
-        const confettiContainer = document.getElementById('confetti-container');
-        if (confettiContainer) confettiContainer.innerHTML = '';
+        setTabProgress(3);
+        transitionStep(step2UI, step3UI);
     }, 200);
 }
 
-function resetAndCloseModal() {
-    closeSuccessModal();
-    resetForm();
-}
-
-// ----------------------------------------------------
-// FUNGSI CONFETTI EFFECT
-// ----------------------------------------------------
 function shootConfetti() {
     const container = document.getElementById('confetti-container');
-    if (!container) return;
-    
     container.innerHTML = '';
+    
     container.style.transition = 'none'; 
     container.style.opacity = '1';
     
@@ -423,6 +416,7 @@ function openHistoryModal() {
     
     let historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
     const now = Date.now();
+    // [ REVISI: Hapus Otomatis 3 Hari (72 Jam) ]
     const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
     
     historyData = historyData.filter(item => (now - item.timestamp) < THREE_DAYS);
@@ -438,6 +432,7 @@ function openHistoryModal() {
             </div>`;
     } else {
         historyData.forEach((item, index) => {
+            // [ REVISI: Pembedaan Tampilan Sukses & Gagal ]
             const isSuccess = item.status === 'success';
             const badgeIcon = isSuccess ? 'ph-check-circle text-green-500' : 'ph-x-circle text-red-500';
             const badgeText = isSuccess ? 'Berhasil' : 'Gagal';
@@ -465,9 +460,10 @@ function openHistoryModal() {
     modalContent.classList.add('modal-enter');
 }
 
+// [ REVISI: FUNGSI HAPUS MANUAL RIWAYAT ]
 function clearHistory() {
     localStorage.removeItem('alightHistory');
-    openHistoryModal();
+    openHistoryModal(); // Refresh the list UI
 }
 
 function closeHistoryModal() {
@@ -480,5 +476,29 @@ function closeHistoryModal() {
     modalContent.classList.remove('modal-enter');
     modalContent.classList.add('modal-exit');
     
+    setTimeout(() => { modal.classList.add('hidden'); }, 200);
+}
+
+// ----------------------------------------------------
+// FUNGSI MODAL CS 
+// ----------------------------------------------------
+function openCSModal() {
+    const modal = document.getElementById('cs-modal');
+    const modalBg = document.getElementById('cs-modal-bg');
+    const modalContent = document.getElementById('cs-modal-content');
+    modal.classList.remove('hidden');
+    modalBg.classList.remove('backdrop-exit');
+    modalBg.classList.add('backdrop-enter');
+    modalContent.classList.remove('modal-exit');
+    modalContent.classList.add('modal-enter');
+}
+function closeCSModal() {
+    const modal = document.getElementById('cs-modal');
+    const modalBg = document.getElementById('cs-modal-bg');
+    const modalContent = document.getElementById('cs-modal-content');
+    modalBg.classList.remove('backdrop-enter');
+    modalBg.classList.add('backdrop-exit');
+    modalContent.classList.remove('modal-enter');
+    modalContent.classList.add('modal-exit');
     setTimeout(() => { modal.classList.add('hidden'); }, 200);
 }
