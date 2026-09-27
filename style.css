@@ -2,38 +2,18 @@
 html { scroll-behavior: smooth; }
 body { background-color: #f8f9fa; }
 
-/* Brutalist Button (Animasi Tekan Biasa) */
-.btn-brutal { transition: all 0.15s ease-in-out; }
+/* Brutalist Button Interaktif Saja (Animasi Tekan) */
+.btn-brutal { transition: all 0.15s ease-in-out; cursor: pointer; }
+.btn-brutal:hover {
+    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+}
 .btn-brutal:active {
     transform: translate(3px, 3px) !important;
     box-shadow: 1px 1px 0px 0px rgba(0,0,0,1) !important;
 }
 
-/* =========================================================
-   [ CONTOH KELOMPOK ANIMASI HOVER SANGAT HALUS (Smooth) ]
-========================================================= */
-
-/* Animasi Smooth Naik Lurus (Lift & Scale Up sangat halus) - Diterapkan ke SEMUA BINGKAI yg Anda minta */
-.smooth-hover {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.smooth-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
-}
-
-/* Animasi Khusus Panel Utama (Panel Verifikasi) - Hanya membesar tipis (Smooth Scale) */
-.panel-hover {
-    transition: transform 0.4s ease-in-out;
-}
-.panel-hover:hover {
-    transform: scale(1.01);
-}
-
-/* ========================================================= */
-
 /* Tab & Step transitions */
-.step-container { transition: opacity 0.3s ease, transform 0.3s ease; }
+.step-container { transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; }
 .hidden-step {
     opacity: 0; transform: translateY(10px);
     pointer-events: none; position: absolute; visibility: hidden;
@@ -74,26 +54,24 @@ body { background-color: #f8f9fa; }
     100% { transform: scale(1) rotate(0); }
 }
 
-/* =========================================================
-   [ CONTOH ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (DURASI 10 DETIK) ]
-========================================================= */
+/* [ CONTOH: ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (DURASI 10 DETIK) ] */
 @keyframes confetti-burst {
     0% { 
         transform: translate(-50%, -50%) scale(0) rotate(0deg); 
         opacity: 0; 
     }
     5% { 
-        /* Tiba-tiba meledak membesar mengejutkan */
+        /* Meledak membesar (Fast Start) */
         transform: translate(calc(-50% + var(--tx) * 0.4), calc(-50% + var(--ty) * 0.4)) scale(1.5) rotate(calc(var(--rot) * 0.3)); 
         opacity: 1; 
     }
-    60% { 
-        /* Mulai melayang perlahan */
+    70% { 
+        /* Melayang stabil */
         transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); 
         opacity: 1; 
     }
     100% { 
-        /* Hilang perlahan-lahan ke bawah */
+        /* Hilang perlahan-lahan */
         transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 60px)) scale(0.6) rotate(calc(var(--rot) + 90deg)); 
         opacity: 0; 
     }
