@@ -149,13 +149,3 @@ body { background-color: #f8f9fa; }
 .backdrop-exit { animation: fadeOut 0.2s ease-in forwards; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-
-/* Tab styling untuk step */
-.step-tab { 
-    background-color: #f3f4f6; 
-    color: #000; 
-    font-weight: bold; 
-}
-.step-tab.active, .step-tab-1.active { 
-    background-color: #93c5fd; 
-}
