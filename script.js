@@ -4,14 +4,11 @@ let countdownInterval = null;
 const step1UI = document.getElementById('step-1');
 const step2UI = document.getElementById('step-2');
 const step3UI = document.getElementById('step-3');
-const tabBg = document.getElementById('tab-bg');
-const tabText2 = document.getElementById('tab-text-2');
-const tabText3 = document.getElementById('tab-text-3');
 const emailInput = document.getElementById('emailInput');
 const oobInput = document.getElementById('oobInput');
 
 // ----------------------------------------------------
-// FUNGSI SCROLL REVEAL 
+// FUNGSI SCROLL REVEAL (Aktif untuk Semua Frame/Bingkai)
 // ----------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
     const reveals = document.querySelectorAll(".reveal");
@@ -19,10 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add("active");
+                // Unobserve agar animasi hanya jalan sekali saat dimuat
                 observer.unobserve(entry.target); 
             }
         });
     }, { root: null, threshold: 0.1 });
+    
     reveals.forEach(reveal => revealObserver.observe(reveal));
 });
 
@@ -105,24 +104,48 @@ function startTimer(durationInSeconds) {
 }
 
 // ----------------------------------------------------
-// TABS & TRANSITION
+// [ UI FIX: DESAIN "INNER FRAME" (Active Tab State) ]
 // ----------------------------------------------------
+// Fungsi untuk Tab Navigasi Atas (Scroll)
+function navTab(btnElement, targetId, activeColorClass) {
+    const allBtns = document.querySelectorAll('.nav-tab-btn');
+    
+    // Reset seluruh tab navigasi ke state in-active murni
+    allBtns.forEach(b => {
+        b.className = "nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-gray-500 border-2 border-transparent rounded-full hover:text-black transition-all";
+    });
+    
+    // Set style tab yang diklik menjadi "bingkai timbul dalam bingkai"
+    btnElement.className = `nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap border-2 border-black rounded-full shadow-brutal-sm text-black transition-all ${activeColorClass}`;
+    
+    // Auto-scroll halus ke tujuan
+    document.getElementById(targetId).scrollIntoView({behavior: 'smooth'});
+}
+
+// Fungsi untuk Tab Langkah Verifikasi (OOB Panel)
 function setTabProgress(step) {
-    if (!tabBg) return;
+    const t1 = document.getElementById('tab-1');
+    const t2 = document.getElementById('tab-2');
+    const t3 = document.getElementById('tab-3');
+
+    const baseClasses = "flex-1 text-center py-1.5 sm:py-2 text-[11px] sm:text-sm font-bold cursor-default transition-all duration-300 border-2".split(" ");
+    
+    // Reset seluruh teks progres tab
+    [t1, t2, t3].forEach(t => {
+        t.className = "";
+        t.classList.add(...baseClasses, "text-gray-500", "border-transparent");
+    });
+
+    // Modifikasi inner tab aktif yang menonjol dan pas didalam parent-nya
     if (step === 1) {
-        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(0)';
-        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-blue border-r-2 border-black transition-all duration-300 ease-in-out";
-        tabText2.classList.add('text-gray-400'); tabText2.classList.remove('text-black');
-        tabText3.classList.add('text-gray-400'); tabText3.classList.remove('text-black');
+        t1.classList.remove("text-gray-500", "border-transparent");
+        t1.classList.add("bg-brutal-blue", "border-black", "rounded-full", "shadow-brutal-sm", "text-black");
     } else if (step === 2) {
-        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(100%)';
-        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-green border-x-2 border-black transition-all duration-300 ease-in-out";
-        tabText2.classList.remove('text-gray-400'); tabText2.classList.add('text-black');
-        tabText3.classList.add('text-gray-400'); tabText3.classList.remove('text-black');
+        t2.classList.remove("text-gray-500", "border-transparent");
+        t2.classList.add("bg-brutal-green", "border-black", "rounded-full", "shadow-brutal-sm", "text-black");
     } else if (step === 3) {
-        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(200%)';
-        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-pink border-l-2 border-black transition-all duration-300 ease-in-out";
-        tabText3.classList.remove('text-gray-400'); tabText3.classList.add('text-black');
+        t3.classList.remove("text-gray-500", "border-transparent");
+        t3.classList.add("bg-brutal-pink", "border-black", "rounded-full", "shadow-brutal-sm", "text-black");
     }
 }
 
@@ -397,7 +420,7 @@ function copyStep3Data(btnElement) {
 }
 
 // ----------------------------------------------------
-// FUNGSI MODAL RIWAYAT (HAPUS OTOMATIS 3 HARI)
+// FUNGSI MODAL RIWAYAT 
 // ----------------------------------------------------
 function openHistoryModal() {
     const modal = document.getElementById('history-modal');
@@ -427,8 +450,9 @@ function openHistoryModal() {
             const badgeText = isSuccess ? 'Berhasil' : 'Gagal';
             const badgeTextColor = isSuccess ? 'text-blue-600' : 'text-red-600';
 
+            // Animasi halus pada elemen list history
             container.innerHTML += `
-            <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3">
+            <div class="anim-list-hover bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3">
                 <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
                     <p class="text-[11px] sm:text-xs font-bold ${badgeTextColor} flex items-center gap-1">${badgeText} <i class="ph-fill ${badgeIcon}"></i></p>
                     <div class="flex flex-col items-end">
