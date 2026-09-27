@@ -2,12 +2,40 @@
 html { scroll-behavior: smooth; }
 body { background-color: #f8f9fa; }
 
-/* Brutalist Button & Interactive Cards (Animasi Tekan) */
+/* Brutalist Button & Interactive Cards (Animasi Tekan Biasa) */
 .btn-brutal, .interactive-card { transition: all 0.15s ease-in-out; }
 .btn-brutal:active, .interactive-card:active {
     transform: translate(3px, 3px) !important;
     box-shadow: 1px 1px 0px 0px rgba(0,0,0,1) !important;
 }
+
+/* =========================================================
+   [ CONTOH KELOMPOK ANIMASI HOVER BERAGAM ]
+========================================================= */
+
+/* Animasi 1: Membesar sedikit (Scale Up) - Untuk tombol biasa & statistik */
+.hover-scale-up:hover {
+    transform: scale(1.03) translateY(-2px);
+}
+
+/* Animasi 2: Naik + Miring (Lift & Tilt) - KHUSUS 4 FITUR PREMIUM & 3 Kotak Verifikasi */
+.hover-lift-tilt:hover {
+    transform: translateY(-5px) rotate(-1.5deg);
+    box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
+}
+
+/* Animasi 3: Naik Lurus (Lift) - KHUSUS FAQ */
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+}
+
+/* Animasi 4: Melompat Berotasi (Bouncy Rotate) - KHUSUS SOSMED CS & TOMBOL X */
+.hover-rotate-bouncy:hover {
+    transform: translateY(-3px) scale(1.05) rotate(4deg);
+}
+
+/* ========================================================= */
 
 /* Tab & Step transitions */
 .step-container { transition: opacity 0.3s ease, transform 0.3s ease; }
@@ -18,6 +46,11 @@ body { background-color: #f8f9fa; }
 .active-step {
     opacity: 1; transform: translateY(0);
     position: relative; visibility: visible;
+}
+
+/* Animasi Ikon Jam (Berputar searah jarum jam perlahan) */
+.animate-clock-spin {
+    animation: spin 3s linear infinite;
 }
 
 /* Loading Spinner */
@@ -42,31 +75,35 @@ body { background-color: #f8f9fa; }
     100% { transform: scale(1) rotate(0); }
 }
 
-/* [ CONTOH: ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (±6 Detik) ] */
+/* =========================================================
+   [ CONTOH ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN ]
+   Animasi Ease-Out (Cepat di awal, lambat/smooth di akhir)
+========================================================= */
 @keyframes confetti-burst {
     0% { 
         transform: translate(-50%, -50%) scale(0) rotate(0deg); 
         opacity: 0; 
     }
-    10% { 
-        /* Tiba-tiba membesar keluar secara mengejutkan */
-        transform: translate(calc(-50% + var(--tx) * 0.3), calc(-50% + var(--ty) * 0.3)) scale(1.5) rotate(calc(var(--rot) * 0.3)); 
+    5% { 
+        /* Tiba-tiba meledak membesar (Mengejutkan / Fast Start) */
+        transform: translate(calc(-50% + var(--tx) * 0.4), calc(-50% + var(--ty) * 0.4)) scale(1.5) rotate(calc(var(--rot) * 0.3)); 
         opacity: 1; 
     }
-    80% { 
-        /* Mulai melayang turun setelah meledak */
+    70% { 
+        /* Mulai melayang turun pelan-pelan (Slow end) */
         transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); 
         opacity: 1; 
     }
     100% { 
-        /* Hilang perlahan-lahan ke bawah */
+        /* Hilang perlahan-lahan ke bawah (Fade out) */
         transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 40px)) scale(0.5) rotate(calc(var(--rot) + 90deg)); 
         opacity: 0; 
     }
 }
 .animate-burst {
     animation-name: confetti-burst;
-    animation-timing-function: cubic-bezier(0.1, 0.8, 0.25, 1);
+    /* Cubic-bezier ini menciptakan efek Ease-Out super cepat di awal, sangat lambat di akhir */
+    animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
     animation-fill-mode: forwards;
 }
 
