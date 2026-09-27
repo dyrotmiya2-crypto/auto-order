@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ----------------------------------------------------
-// FUNGSI FAQ ACCORDION
+// FUNGSI FAQ ACCORDION (Animasi rotasi & slide)
 // ----------------------------------------------------
 function toggleFaq(btn) {
     const content = btn.nextElementSibling;
@@ -51,7 +51,7 @@ function toggleFaq(btn) {
         b.classList.remove('bg-brutal-blue');
     });
 
-    // Buka item yang diklik dengan transisi padding/opacity
+    // Buka item yang diklik dengan transisi padding/opacity dan rotasi panah
     if (!isOpen) {
         content.classList.remove('max-h-0', 'border-opacity-0', 'opacity-0', 'py-0');
         content.classList.add('max-h-[500px]', 'opacity-100', 'py-4');
@@ -83,7 +83,6 @@ function startTimer(durationInSeconds) {
     clearInterval(countdownInterval); 
     let timer = durationInSeconds;
     const display = document.getElementById('countdown-timer');
-    const timerIcon = document.getElementById('timer-icon');
     
     display.classList.remove('text-red-700', 'animate-pulse');
     display.classList.add('text-black');
@@ -97,9 +96,6 @@ function startTimer(durationInSeconds) {
 
         if (timer < 30) { 
             display.classList.add('text-red-700', 'animate-pulse'); 
-            if(timerIcon) timerIcon.style.animationDuration = '1s';
-        } else {
-            if(timerIcon) timerIcon.style.animationDuration = '60s'; 
         }
 
         if (--timer < 0) {
@@ -229,7 +225,7 @@ async function processStep2() {
         const data = await parseResponse(response);
         
         if (!data.ok) {
-            // [ SIMPAN RIWAYAT GAGAL ]
+            // Catat ke riwayat gagal
             saveHistory('failed', userEmailMemory, 'Gagal/Invalid');
             throw new Error(data.why || 'Verifikasi gagal.');
         }
@@ -246,7 +242,7 @@ async function processStep2() {
         document.getElementById('step3-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
         if(data.orderId) document.getElementById('step3-order').innerText = data.orderId;
 
-        // [ SIMPAN RIWAYAT SUKSES ]
+        // Catat ke riwayat sukses
         saveHistory('success', userEmailMemory, data.orderId || 'Alfian-Shop-XXX');
 
         openSuccessModal();
@@ -406,7 +402,7 @@ function copyStep3Data(btnElement) {
 }
 
 // ----------------------------------------------------
-// FUNGSI MODAL RIWAYAT (SUKSES/GAGAL + HAPUS 3 HARI)
+// FUNGSI MODAL RIWAYAT (SUKSES/GAGAL + HAPUS OTOMATIS 3 HARI)
 // ----------------------------------------------------
 function openHistoryModal() {
     const modal = document.getElementById('history-modal');
@@ -416,9 +412,10 @@ function openHistoryModal() {
     
     let historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
     const now = Date.now();
-    // [ REVISI: Hapus Otomatis 3 Hari (72 Jam) ]
+    // [ REVISI: Kedaluwarsa otomatis setelah 3 Hari (72 Jam) ]
     const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
     
+    // Filter data riwayat: Hanya simpan yang usianya di bawah 3 hari
     historyData = historyData.filter(item => (now - item.timestamp) < THREE_DAYS);
     localStorage.setItem('alightHistory', JSON.stringify(historyData)); 
     
@@ -432,7 +429,7 @@ function openHistoryModal() {
             </div>`;
     } else {
         historyData.forEach((item, index) => {
-            // [ REVISI: Pembedaan Tampilan Sukses & Gagal ]
+            // Tampilan UI dibedakan berdasarkan status
             const isSuccess = item.status === 'success';
             const badgeIcon = isSuccess ? 'ph-check-circle text-green-500' : 'ph-x-circle text-red-500';
             const badgeText = isSuccess ? 'Berhasil' : 'Gagal';
@@ -460,10 +457,10 @@ function openHistoryModal() {
     modalContent.classList.add('modal-enter');
 }
 
-// [ REVISI: FUNGSI HAPUS MANUAL RIWAYAT ]
+// [ REVISI: Tombol Hapus Manual Riwayat ]
 function clearHistory() {
     localStorage.removeItem('alightHistory');
-    openHistoryModal(); // Refresh the list UI
+    openHistoryModal(); // Muat ulang list UI (akan kosong)
 }
 
 function closeHistoryModal() {
