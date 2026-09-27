@@ -3,8 +3,22 @@ html { scroll-behavior: smooth; }
 body { background-color: #f8f9fa; }
 
 /* =========================================================
-   [ REVISI: ANIMASI HANYA PADA TOMBOL & ELEMEN INTERAKTIF ]
+   [ REVISI: ANIMASI TERARAH HANYA PADA ELEMEN YANG TEPAT ]
 ========================================================= */
+
+/* Hapus animasi/shadow yang tidak diinginkan */
+.no-anim-hover { transition: none !important; cursor: default; }
+.no-anim-hover:hover { transform: none !important; box-shadow: 2px 2px 0px 0px rgba(0,0,0,1) !important; }
+.no-anim-hover:active { transform: none !important; box-shadow: 2px 2px 0px 0px rgba(0,0,0,1) !important; }
+
+/* Hapus box-shadow saat di-hover pada Menu Navigasi */
+.no-hover-shadow:hover { box-shadow: none !important; }
+
+/* Hapus text-shadow pada link bawah */
+.no-text-shadow { text-shadow: none !important; }
+
+/* Paksa tag/teks tidak miring */
+.transform-none { transform: none !important; }
 
 /* Tombol Biasa (CTA Utama, Tombol Navigasi, dll) */
 .btn-brutal { transition: all 0.15s ease-in-out; cursor: pointer; }
@@ -16,7 +30,7 @@ body { background-color: #f8f9fa; }
     box-shadow: 1px 1px 0px 0px rgba(0,0,0,1) !important;
 }
 
-/* 1. Animasi 3 Kartu Fitur Utama (Hover Translate Y) */
+/* 1. Animasi 3 Kartu Fitur Utama (Hover Translate Y Seragam) */
 .anim-kartu-3 { transition: all 0.2s ease-in-out; }
 .anim-kartu-3:hover { 
     transform: translateY(-4px); 
@@ -27,7 +41,7 @@ body { background-color: #f8f9fa; }
     box-shadow: 1px 1px 0px 0px rgba(0,0,0,1); 
 }
 
-/* 2. Animasi Statistik Verifikasi (Hover Scale & Miring tipis) */
+/* 2. Animasi Statistik Verifikasi (HANYA BINGKAI LUAR) */
 .anim-stats { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .anim-stats:hover { 
     transform: scale(1.02) rotate(-1deg); 
@@ -37,8 +51,11 @@ body { background-color: #f8f9fa; }
     transform: scale(0.98) rotate(0deg); 
     box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
 }
+/* Memastikan anak elemen dalam statistik tidak ikut bereaksi aneh (opsional pengaman) */
+.anim-stats > * { transition: none; pointer-events: none; }
+.anim-stats > .flex, .anim-stats > .grid { pointer-events: auto; }
 
-/* 3. Animasi Eksplorasi Fitur Premium 4 Kotak (Hover Lift tinggi) */
+/* 3. Animasi Eksplorasi Fitur Premium 4 Kotak (Hover Lift tinggi, berbeda dari .anim-kartu-3) */
 .anim-fitur-4 { transition: transform 0.3s ease, box-shadow 0.3s ease; }
 .anim-fitur-4:hover { 
     transform: translateY(-8px) scale(1.01); 
@@ -49,7 +66,7 @@ body { background-color: #f8f9fa; }
     box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
 }
 
-/* 4. Animasi FAQ (Geser ke kanan tipis) */
+/* 4. Animasi FAQ (Interaktif rotasi panah + Smooth slide down) */
 .anim-faq { transition: all 0.2s ease-in-out; }
 .anim-faq:hover { 
     transform: translateX(4px); 
@@ -59,8 +76,6 @@ body { background-color: #f8f9fa; }
     transform: translateX(0) scale(0.99); 
     box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
 }
-
-/* FAQ Content Smooth Slide Down & Fade */
 .faq-content {
     transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
 }
@@ -78,9 +93,8 @@ body { background-color: #f8f9fa; }
     position: relative; visibility: visible;
 }
 
-/* Animasi Ikon Jam (Berputar stabil 60 detik seperti jam dunia nyata) */
-.animate-clock-real { animation: clockSpin 60s linear infinite; }
-@keyframes clockSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* [ REVISI: Ikon Jam Diam Tanpa Animasi ] */
+.static-clock { animation: none !important; transform: rotate(0deg) !important; }
 
 /* Loading Spinner */
 .spinner {
