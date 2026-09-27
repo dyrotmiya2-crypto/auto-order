@@ -2,7 +2,11 @@
 html { scroll-behavior: smooth; }
 body { background-color: #f8f9fa; }
 
-/* Brutalist Button Interaktif Saja (Animasi Tekan) */
+/* =========================================================
+   [ REVISI: ANIMASI HANYA PADA TOMBOL & ELEMEN INTERAKTIF ]
+========================================================= */
+
+/* Tombol Biasa (CTA Utama, Tombol Navigasi, dll) */
 .btn-brutal { transition: all 0.15s ease-in-out; cursor: pointer; }
 .btn-brutal:hover {
     box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
@@ -11,6 +15,57 @@ body { background-color: #f8f9fa; }
     transform: translate(3px, 3px) !important;
     box-shadow: 1px 1px 0px 0px rgba(0,0,0,1) !important;
 }
+
+/* 1. Animasi 3 Kartu Fitur Utama (Hover Translate Y) */
+.anim-kartu-3 { transition: all 0.2s ease-in-out; }
+.anim-kartu-3:hover { 
+    transform: translateY(-4px); 
+    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); 
+}
+.anim-kartu-3:active { 
+    transform: translate(2px, 2px); 
+    box-shadow: 1px 1px 0px 0px rgba(0,0,0,1); 
+}
+
+/* 2. Animasi Statistik Verifikasi (Hover Scale & Miring tipis) */
+.anim-stats { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.anim-stats:hover { 
+    transform: scale(1.02) rotate(-1deg); 
+    box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); 
+}
+.anim-stats:active { 
+    transform: scale(0.98) rotate(0deg); 
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+}
+
+/* 3. Animasi Eksplorasi Fitur Premium 4 Kotak (Hover Lift tinggi) */
+.anim-fitur-4 { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.anim-fitur-4:hover { 
+    transform: translateY(-8px) scale(1.01); 
+    box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); 
+}
+.anim-fitur-4:active { 
+    transform: translateY(0) scale(0.98); 
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+}
+
+/* 4. Animasi FAQ (Geser ke kanan tipis) */
+.anim-faq { transition: all 0.2s ease-in-out; }
+.anim-faq:hover { 
+    transform: translateX(4px); 
+    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); 
+}
+.anim-faq:active { 
+    transform: translateX(0) scale(0.99); 
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+}
+
+/* FAQ Content Smooth Slide Down & Fade */
+.faq-content {
+    transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+/* ========================================================= */
 
 /* Tab & Step transitions */
 .step-container { transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; }
@@ -24,13 +79,8 @@ body { background-color: #f8f9fa; }
 }
 
 /* Animasi Ikon Jam (Berputar stabil 60 detik seperti jam dunia nyata) */
-.animate-clock-real {
-    animation: clockSpin 60s linear infinite;
-}
-@keyframes clockSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
+.animate-clock-real { animation: clockSpin 60s linear infinite; }
+@keyframes clockSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* Loading Spinner */
 .spinner {
@@ -54,27 +104,12 @@ body { background-color: #f8f9fa; }
     100% { transform: scale(1) rotate(0); }
 }
 
-/* [ CONTOH: ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (DURASI 10 DETIK) ] */
+/* ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (DURASI 10 DETIK) */
 @keyframes confetti-burst {
-    0% { 
-        transform: translate(-50%, -50%) scale(0) rotate(0deg); 
-        opacity: 0; 
-    }
-    5% { 
-        /* Meledak membesar (Fast Start) */
-        transform: translate(calc(-50% + var(--tx) * 0.4), calc(-50% + var(--ty) * 0.4)) scale(1.5) rotate(calc(var(--rot) * 0.3)); 
-        opacity: 1; 
-    }
-    70% { 
-        /* Melayang stabil */
-        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); 
-        opacity: 1; 
-    }
-    100% { 
-        /* Hilang perlahan-lahan */
-        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 60px)) scale(0.6) rotate(calc(var(--rot) + 90deg)); 
-        opacity: 0; 
-    }
+    0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+    5% { transform: translate(calc(-50% + var(--tx) * 0.4), calc(-50% + var(--ty) * 0.4)) scale(1.5) rotate(calc(var(--rot) * 0.3)); opacity: 1; }
+    70% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 60px)) scale(0.6) rotate(calc(var(--rot) + 90deg)); opacity: 0; }
 }
 .animate-burst {
     animation-name: confetti-burst;
