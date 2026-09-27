@@ -38,9 +38,10 @@ function toggleFaq(btn) {
 
     const isOpen = !content.classList.contains('max-h-0');
 
+    // Tutup semuanya dengan transisi smooth
     allContents.forEach(c => {
-        c.classList.add('max-h-0', 'border-opacity-0');
-        c.classList.remove('max-h-[500px]');
+        c.classList.add('max-h-0', 'border-opacity-0', 'opacity-0', 'py-0');
+        c.classList.remove('max-h-[500px]', 'opacity-100', 'py-4');
     });
     allIcons.forEach(i => {
         i.classList.remove('rotate-180', 'bg-black', 'text-white');
@@ -50,9 +51,10 @@ function toggleFaq(btn) {
         b.classList.remove('bg-brutal-blue');
     });
 
+    // Buka item yang diklik dengan transisi padding/opacity
     if (!isOpen) {
-        content.classList.remove('max-h-0', 'border-opacity-0');
-        content.classList.add('max-h-[500px]');
+        content.classList.remove('max-h-0', 'border-opacity-0', 'opacity-0', 'py-0');
+        content.classList.add('max-h-[500px]', 'opacity-100', 'py-4');
         icon.classList.add('rotate-180', 'bg-black', 'text-white');
         icon.classList.remove('bg-white');
         btn.classList.add('bg-brutal-blue');
@@ -93,12 +95,11 @@ function startTimer(durationInSeconds) {
         seconds = seconds < 10 ? "0" + seconds : seconds;
         display.textContent = minutes + ":" + seconds;
 
-        // Visual Merah saat sisa < 30 detik
         if (timer < 30) { 
             display.classList.add('text-red-700', 'animate-pulse'); 
             if(timerIcon) timerIcon.style.animationDuration = '1s';
         } else {
-            if(timerIcon) timerIcon.style.animationDuration = '60s'; // Putaran normal
+            if(timerIcon) timerIcon.style.animationDuration = '60s'; 
         }
 
         if (--timer < 0) {
@@ -185,7 +186,7 @@ async function processStep1() {
 
         setTabProgress(2);
         transitionStep(step1UI, step2UI);
-        startTimer(180); // Waktu 3 Menit
+        startTimer(180);
 
     } catch (error) { showToast(`❌ Error: ${error.message}`); } 
     finally { btn.classList.remove('is-loading'); }
@@ -195,6 +196,21 @@ function backToStep1() {
     clearInterval(countdownInterval);
     setTabProgress(1);
     transitionStep(step2UI, step1UI);
+}
+
+// [ REVISI: RIWAYAT GAGAL / SUKSES ]
+function saveHistory(status, email, orderStr) {
+    const timeData = getActivationTimeData();
+    let history = JSON.parse(localStorage.getItem('alightHistory') || '[]');
+    history.unshift({ 
+        status: status,
+        email: email, 
+        date: timeData.expiryDate, 
+        time: timeData.timeWita, 
+        order: orderStr,
+        timestamp: timeData.timestamp
+    });
+    localStorage.setItem('alightHistory', JSON.stringify(history));
 }
 
 async function processStep2() {
@@ -211,44 +227,38 @@ async function processStep2() {
             body: JSON.stringify({ email: userEmailMemory, rawLink: oob })
         });
         const data = await parseResponse(response);
-        if (!data.ok) throw new Error(data.why || 'Verifikasi gagal.');
+        
+        if (!data.ok) {
+            // [ SIMPAN RIWAYAT GAGAL ]
+            saveHistory('failed', userEmailMemory, 'Gagal/Invalid');
+            throw new Error(data.why || 'Verifikasi gagal.');
+        }
 
         clearInterval(countdownInterval); 
-        
         const timeData = getActivationTimeData();
         
-        // Update Data Modal
         document.getElementById('modal-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
         document.getElementById('modal-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
         if(data.orderId) document.getElementById('modal-order').innerText = data.orderId;
 
-        // Update Data di Step 3 (Hasil UI di belakang)
         document.getElementById('step3-email').innerText = userEmailMemory;
         document.getElementById('step3-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
         document.getElementById('step3-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
         if(data.orderId) document.getElementById('step3-order').innerText = data.orderId;
 
-        // Simpan ke Riwayat memori (Dengan Jam WITA & Timestamp 24h limit)
-        let history = JSON.parse(localStorage.getItem('alightHistory') || '[]');
-        history.unshift({ 
-            email: userEmailMemory, 
-            date: timeData.expiryDate, 
-            time: timeData.timeWita, 
-            order: data.orderId || 'Alfian-Shop-XXX',
-            timestamp: timeData.timestamp
-        });
-        localStorage.setItem('alightHistory', JSON.stringify(history));
+        // [ SIMPAN RIWAYAT SUKSES ]
+        saveHistory('success', userEmailMemory, data.orderId || 'Alfian-Shop-XXX');
 
         openSuccessModal();
-        
         const counter = document.getElementById('daily-count');
         if (counter) counter.innerText = parseInt(counter.innerText) + 1;
 
-    } catch (error) { showToast(`❌ Error: ${error.message}`); } 
+    } catch (error) { 
+        showToast(`❌ Error: ${error.message}`); 
+    } 
     finally { btn.classList.remove('is-loading'); }
 }
 
-// Fungsi Lanjut Verifikasi (Reset dan Tutup Modal)
 function resetAndCloseModal() {
     const modal = document.getElementById('success-modal');
     const modalBg = document.getElementById('success-modal-bg');
@@ -279,7 +289,7 @@ function resetForm() {
 }
 
 // ----------------------------------------------------
-// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI (DURASI 10 DETIK)
+// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI
 // ----------------------------------------------------
 function openSuccessModal() {
     const modal = document.getElementById('success-modal');
@@ -347,7 +357,6 @@ function shootConfetti() {
         confetti.style.setProperty('--ty', `${ty}px`);
         confetti.style.setProperty('--rot', `${rot}deg`);
         
-        // [ CONTOH: DURASI ANIMASI CONFETTI ±10 DETIK ]
         confetti.style.animationDuration = (Math.random() * 2 + 8) + 's';
         confetti.style.animationDelay = (Math.random() * 0.2) + 's';
         
@@ -397,7 +406,7 @@ function copyStep3Data(btnElement) {
 }
 
 // ----------------------------------------------------
-// FUNGSI MODAL RIWAYAT (HAPUS DATA > 24 JAM)
+// FUNGSI MODAL RIWAYAT (SUKSES/GAGAL + HAPUS 3 HARI)
 // ----------------------------------------------------
 function openHistoryModal() {
     const modal = document.getElementById('history-modal');
@@ -407,10 +416,10 @@ function openHistoryModal() {
     
     let historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
     const now = Date.now();
-    const ONE_DAY = 24 * 60 * 60 * 1000;
+    // [ REVISI: Hapus Otomatis 3 Hari (72 Jam) ]
+    const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
     
-    // [ REVISI: FILTER HANYA RIWAYAT YANG KURANG DARI 24 JAM ]
-    historyData = historyData.filter(item => (now - item.timestamp) < ONE_DAY);
+    historyData = historyData.filter(item => (now - item.timestamp) < THREE_DAYS);
     localStorage.setItem('alightHistory', JSON.stringify(historyData)); 
     
     container.innerHTML = '';
@@ -419,14 +428,20 @@ function openHistoryModal() {
         container.innerHTML = `
             <div class="flex flex-col items-center justify-center py-10 opacity-50">
                 <i class="ph ph-ghost text-5xl mb-2"></i>
-                <p class="text-xs font-bold text-gray-700">Belum ada riwayat verifikasi hari ini.</p>
+                <p class="text-xs font-bold text-gray-700">Belum ada riwayat verifikasi.</p>
             </div>`;
     } else {
         historyData.forEach((item, index) => {
+            // [ REVISI: Pembedaan Tampilan Sukses & Gagal ]
+            const isSuccess = item.status === 'success';
+            const badgeIcon = isSuccess ? 'ph-check-circle text-green-500' : 'ph-x-circle text-red-500';
+            const badgeText = isSuccess ? 'Berhasil' : 'Gagal';
+            const badgeTextColor = isSuccess ? 'text-blue-600' : 'text-red-600';
+
             container.innerHTML += `
             <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3">
                 <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
-                    <p class="text-[11px] sm:text-xs font-bold text-blue-600 flex items-center gap-1">Berhasil <i class="ph-fill ph-check-circle text-green-500"></i></p>
+                    <p class="text-[11px] sm:text-xs font-bold ${badgeTextColor} flex items-center gap-1">${badgeText} <i class="ph-fill ${badgeIcon}"></i></p>
                     <div class="flex flex-col items-end">
                         <p class="text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> ${item.date}</p>
                         <p class="text-[9px] sm:text-[10px] font-bold text-purple-600 flex items-center gap-1 mt-0.5"><i class="ph ph-clock"></i> ${item.time || '-'}</p>
@@ -443,6 +458,12 @@ function openHistoryModal() {
     modalBg.classList.add('backdrop-enter');
     modalContent.classList.remove('modal-exit');
     modalContent.classList.add('modal-enter');
+}
+
+// [ REVISI: FUNGSI HAPUS MANUAL RIWAYAT ]
+function clearHistory() {
+    localStorage.removeItem('alightHistory');
+    openHistoryModal(); // Refresh the list UI
 }
 
 function closeHistoryModal() {
