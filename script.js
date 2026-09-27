@@ -75,12 +75,13 @@ function showToast(message) {
 }
 
 // ----------------------------------------------------
-// FUNGSI TIMER COUNTDOWN
+// FUNGSI TIMER COUNTDOWN & ANIMASI IKON JAM
 // ----------------------------------------------------
 function startTimer(durationInSeconds) {
     clearInterval(countdownInterval); 
     let timer = durationInSeconds;
     const display = document.getElementById('countdown-timer');
+    const timerIcon = document.getElementById('timer-icon'); // Ikon Jam
     
     display.classList.remove('text-red-700', 'animate-pulse');
     display.classList.add('text-black');
@@ -92,7 +93,13 @@ function startTimer(durationInSeconds) {
         seconds = seconds < 10 ? "0" + seconds : seconds;
         display.textContent = minutes + ":" + seconds;
 
-        if (timer < 30) { display.classList.add('text-red-700', 'animate-pulse'); }
+        // Semakin cepat jamnya kalau sisa waktu menipis
+        if (timer < 30) { 
+            display.classList.add('text-red-700', 'animate-pulse');
+            if(timerIcon) timerIcon.style.animationDuration = '1s';
+        } else {
+            if(timerIcon) timerIcon.style.animationDuration = '3s';
+        }
 
         if (--timer < 0) {
             clearInterval(countdownInterval);
@@ -133,10 +140,19 @@ function transitionStep(hideEl, showEl) {
     }, 300);
 }
 
-function getExpiryDate() {
+// Dapatkan Tanggal & Jam Aktif untuk Riwayat
+function getActivationTimeData() {
     const now = new Date();
     const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-    return `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear() + 1}`;
+    const expiryDate = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear() + 1}`;
+    
+    let hours = now.getHours();
+    let mins = now.getMinutes();
+    hours = hours < 10 ? '0' + hours : hours;
+    mins = mins < 10 ? '0' + mins : mins;
+    const timeWita = `${hours}:${mins} WITA`;
+
+    return { expiryDate, timeWita };
 }
 
 // ----------------------------------------------------
@@ -170,7 +186,7 @@ async function processStep1() {
 
         setTabProgress(2);
         transitionStep(step1UI, step2UI);
-        startTimer(180);
+        startTimer(180); // Waktu 3 Menit
 
     } catch (error) { showToast(`❌ Error: ${error.message}`); } 
     finally { btn.classList.remove('is-loading'); }
@@ -200,17 +216,25 @@ async function processStep2() {
 
         clearInterval(countdownInterval); 
         
-        const expiry = getExpiryDate();
-        document.getElementById('modal-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${expiry}`;
+        const timeData = getActivationTimeData();
         
-        // [ CONTOH: MENAMPILKAN ORDER ID DARI BACKEND KE MODAL SUKSES ]
-        if(data.orderId) {
-            document.getElementById('modal-order').innerText = data.orderId;
-        }
+        // Update Data Modal
+        document.getElementById('modal-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
+        if(data.orderId) document.getElementById('modal-order').innerText = data.orderId;
 
-        // [ CONTOH: MENYIMPAN RIWAYAT KE MEMORI BROWSER (LOCALSTORAGE) ]
+        // Update Data di Step 3 (Hasil UI di belakang)
+        document.getElementById('step3-email').innerText = userEmailMemory;
+        document.getElementById('step3-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
+        if(data.orderId) document.getElementById('step3-order').innerText = data.orderId;
+
+        // Simpan ke Riwayat memori (Dengan Jam WITA)
         let history = JSON.parse(localStorage.getItem('alightHistory') || '[]');
-        history.unshift({ email: userEmailMemory, date: expiry, order: data.orderId || 'Alfian-Shop-XXX' });
+        history.unshift({ 
+            email: userEmailMemory, 
+            date: timeData.expiryDate, 
+            time: timeData.timeWita, 
+            order: data.orderId || 'Alfian-Shop-XXX' 
+        });
         localStorage.setItem('alightHistory', JSON.stringify(history));
 
         openSuccessModal();
@@ -222,15 +246,42 @@ async function processStep2() {
     finally { btn.classList.remove('is-loading'); }
 }
 
+// Fungsi untuk Tombol "Lanjut Verifikasi Akun Lainnya"
+function resetAndCloseModal() {
+    // 1. Tutup modal sukses
+    const modal = document.getElementById('success-modal');
+    const modalBg = document.getElementById('success-modal-bg');
+    const modalContent = document.getElementById('success-modal-content');
+    
+    modalBg.classList.remove('backdrop-enter');
+    modalBg.classList.add('backdrop-exit');
+    modalContent.classList.remove('modal-enter');
+    modalContent.classList.add('modal-exit');
+    
+    setTimeout(() => { 
+        modal.classList.add('hidden'); 
+        // 2. Reset formulir & kembali ke Langkah 1
+        resetForm();
+    }, 200);
+}
+
+// Fungsi Reset Form manual (dari UI Step 3 atau tombol lainnya)
 function resetForm() {
     clearInterval(countdownInterval);
     userEmailMemory = ""; emailInput.value = ""; oobInput.value = "";
-    setTabProgress(1);
-    transitionStep(step3UI, step1UI);
+    
+    // Jika posisi saat ini di step 3, turunkan ke step 1
+    if(!step3UI.classList.contains('hidden-step')) {
+        setTabProgress(1);
+        transitionStep(step3UI, step1UI);
+    } else if(!step2UI.classList.contains('hidden-step')){
+        setTabProgress(1);
+        transitionStep(step2UI, step1UI);
+    }
 }
 
 // ----------------------------------------------------
-// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI LEDAKAN (±6 Detik)
+// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI (DURASI 10s)
 // ----------------------------------------------------
 function openSuccessModal() {
     const modal = document.getElementById('success-modal');
@@ -246,6 +297,7 @@ function openSuccessModal() {
     shootConfetti();
 }
 
+// Fungsi jika menekan 'X' pada modal sukses -> Buka Step 3
 function closeSuccessModal() {
     const modal = document.getElementById('success-modal');
     const modalBg = document.getElementById('success-modal-bg');
@@ -258,6 +310,7 @@ function closeSuccessModal() {
     
     setTimeout(() => { 
         modal.classList.add('hidden');
+        // Transisi ke Panel Langkah 3 (Hasil Verifikasi)
         setTabProgress(3);
         transitionStep(step2UI, step3UI);
     }, 200);
@@ -266,10 +319,13 @@ function closeSuccessModal() {
 function shootConfetti() {
     const container = document.getElementById('confetti-container');
     container.innerHTML = '';
+    
+    // Pastikan container terlihat dan fade transisinya dihilangkan agar langsung muncul
+    container.style.transition = 'none'; 
     container.style.opacity = '1';
     
     const colors = ['#fef08a', '#93c5fd', '#bbf7d0', '#fbcfe8', '#e9d5ff', '#ef4444', '#f97316', '#06b6d4', '#a855f7'];
-    const totalPieces = 200; // Jumlah pita & confetti banyak dan meriah
+    const totalPieces = 220; // Sangat meriah
     
     for(let i = 0; i < totalPieces; i++) {
         let confetti = document.createElement('div');
@@ -277,7 +333,6 @@ function shootConfetti() {
         
         confetti.style.top = '50%';
         confetti.style.left = '50%';
-        
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         
         const isRibbon = Math.random() > 0.35;
@@ -289,47 +344,67 @@ function shootConfetti() {
             confetti.style.height = (Math.random() * 12 + 6) + 'px';
         }
         
-        const tx = (Math.random() - 0.5) * window.innerWidth * 0.9;
-        const ty = (Math.random() - 0.5) * window.innerHeight * 0.9;
+        const tx = (Math.random() - 0.5) * window.innerWidth * 1.1;
+        const ty = (Math.random() - 0.5) * window.innerHeight * 1.1;
         const rot = (Math.random() - 0.5) * 1440;
 
         confetti.style.setProperty('--tx', `${tx}px`);
         confetti.style.setProperty('--ty', `${ty}px`);
         confetti.style.setProperty('--rot', `${rot}deg`);
         
-        // [ CONTOH: DURASI ANIMASI CONFETTI HANYA 5-8 DETIK SESUAI PERMINTAAN ]
-        confetti.style.animationDuration = (Math.random() * 3 + 5) + 's';
-        confetti.style.animationDelay = (Math.random() * 0.3) + 's';
+        // [ SETTING DURASI: 8 - 10 Detik sesuai permintaan ]
+        confetti.style.animationDuration = (Math.random() * 2 + 8) + 's';
+        confetti.style.animationDelay = (Math.random() * 0.2) + 's'; // Delay sangat singkat agar meledak seketika
         
         container.appendChild(confetti);
     }
     
-    // Perlahan hilang dari layar setelah ledakan selesai (±8 Detik max)
-    setTimeout(() => { container.style.opacity = '0'; }, 7000);
+    // Perlahan fade-out keseluruhan div confetti setelah 10 detik
+    setTimeout(() => { 
+        container.style.transition = 'opacity 2s ease-in-out';
+        container.style.opacity = '0'; 
+    }, 10000);
 }
 
 // ----------------------------------------------------
 // FUNGSI COPY DATA
 // ----------------------------------------------------
-function copySuccessData() {
-    const email = document.getElementById('modal-email').innerText;
-    const expiry = document.getElementById('modal-expiry').innerText;
-    const orderId = document.getElementById('modal-order').innerText;
+function copySuccessData(btnElement) {
+    // Bisa dipanggil dari Modal (modal-email) atau Step 3 (step3-email)
+    const isFromStep3 = btnElement.innerText.includes('Verifikasi Akun');
+    const email = document.getElementById(isFromStep3 ? 'step3-email' : 'modal-email').innerText;
+    const expiry = document.getElementById(isFromStep3 ? 'step3-expiry' : 'modal-expiry').innerText;
+    const orderId = document.getElementById(isFromStep3 ? 'step3-order' : 'modal-order').innerText;
     
     const textToCopy = `AlightPro - Bukti Verifikasi\n\nEmail Terdaftar: ${email}\nOrder ID: ${orderId}\nMasa Berlaku Lisensi: ${expiry}\nStatus Akun: LINKED & VERIFIED\nAuto Renewal: Aktif\n\nSelamat berkreasi!`;
     
     navigator.clipboard.writeText(textToCopy).then(() => {
-        const btn = document.querySelector('#success-modal-content button:nth-of-type(2)');
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> Disalin!`;
-        setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
+        const originalHtml = btnElement.innerHTML;
+        btnElement.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> Disalin!`;
+        setTimeout(() => { btnElement.innerHTML = originalHtml; }, 2000);
     }).catch(err => {
         showToast("❌ Gagal menyalin. Silakan coba lagi.");
     });
 }
 
+function copyStep3Data(btnElement) {
+    const email = document.getElementById('step3-email').innerText;
+    const expiry = document.getElementById('step3-expiry').innerText;
+    const orderId = document.getElementById('step3-order').innerText;
+    
+    const textToCopy = `AlightPro - Bukti Verifikasi\n\nEmail Terdaftar: ${email}\nOrder ID: ${orderId}\nMasa Berlaku Lisensi: ${expiry}\nStatus Akun: LINKED & VERIFIED\nAuto Renewal: Aktif\n\nSelamat berkreasi!`;
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalHtml = btnElement.innerHTML;
+        btnElement.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> Disalin!`;
+        setTimeout(() => { btnElement.innerHTML = originalHtml; }, 2000);
+    }).catch(err => {
+        showToast("❌ Gagal menyalin.");
+    });
+}
+
 // ----------------------------------------------------
-// FUNGSI MODAL RIWAYAT (BARU: MENGAMBIL DATA DARI LOCAL STORAGE)
+// FUNGSI MODAL RIWAYAT (MENAMPILKAN JAM WITA)
 // ----------------------------------------------------
 function openHistoryModal() {
     const modal = document.getElementById('history-modal');
@@ -348,11 +423,15 @@ function openHistoryModal() {
             </div>`;
     } else {
         historyData.forEach((item, index) => {
+            // [ REVISI: MENAMPILKAN TANGGAL BESERTA JAM WITA (item.time) ]
             container.innerHTML += `
-            <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3 interactive-card">
+            <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3 interactive-card hover-scale-up">
                 <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
-                    <p class="text-xs font-bold text-blue-600 flex items-center gap-1">Berhasil <i class="ph-fill ph-check-circle text-green-500"></i></p>
-                    <p class="text-[10px] font-bold text-gray-500"><i class="ph ph-calendar-blank"></i> ${item.date}</p>
+                    <p class="text-[11px] sm:text-xs font-bold text-blue-600 flex items-center gap-1">Berhasil <i class="ph-fill ph-check-circle text-green-500"></i></p>
+                    <div class="flex flex-col items-end">
+                        <p class="text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> ${item.date}</p>
+                        <p class="text-[9px] sm:text-[10px] font-bold text-purple-600 flex items-center gap-1 mt-0.5"><i class="ph ph-clock"></i> ${item.time || 'Waktu tidak tersedia'}</p>
+                    </div>
                 </div>
                 <p class="text-[11px] sm:text-xs font-semibold text-black mb-1">Email: <span class="font-bold text-gray-700">${item.email}</span></p>
                 <p class="text-[11px] sm:text-xs font-semibold text-black">Order ID: <span class="font-bold text-gray-700">${item.order}</span></p>
