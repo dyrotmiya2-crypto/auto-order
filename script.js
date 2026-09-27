@@ -199,7 +199,19 @@ async function processStep2() {
         if (!data.ok) throw new Error(data.why || 'Verifikasi gagal.');
 
         clearInterval(countdownInterval); 
-        document.getElementById('modal-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${getExpiryDate()}`;
+        
+        const expiry = getExpiryDate();
+        document.getElementById('modal-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${expiry}`;
+        
+        // [ CONTOH: MENAMPILKAN ORDER ID DARI BACKEND KE MODAL SUKSES ]
+        if(data.orderId) {
+            document.getElementById('modal-order').innerText = data.orderId;
+        }
+
+        // [ CONTOH: MENYIMPAN RIWAYAT KE MEMORI BROWSER (LOCALSTORAGE) ]
+        let history = JSON.parse(localStorage.getItem('alightHistory') || '[]');
+        history.unshift({ email: userEmailMemory, date: expiry, order: data.orderId || 'Alfian-Shop-XXX' });
+        localStorage.setItem('alightHistory', JSON.stringify(history));
 
         openSuccessModal();
         
@@ -218,7 +230,7 @@ function resetForm() {
 }
 
 // ----------------------------------------------------
-// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI LEDAKAN MERIAH (±30 DETIK)
+// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI LEDAKAN (±6 Detik)
 // ----------------------------------------------------
 function openSuccessModal() {
     const modal = document.getElementById('success-modal');
@@ -257,7 +269,7 @@ function shootConfetti() {
     container.style.opacity = '1';
     
     const colors = ['#fef08a', '#93c5fd', '#bbf7d0', '#fbcfe8', '#e9d5ff', '#ef4444', '#f97316', '#06b6d4', '#a855f7'];
-    const totalPieces = 180; // Jumlah pita & confetti banyak dan meriah
+    const totalPieces = 200; // Jumlah pita & confetti banyak dan meriah
     
     for(let i = 0; i < totalPieces; i++) {
         let confetti = document.createElement('div');
@@ -268,34 +280,32 @@ function shootConfetti() {
         
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         
-        // Kombinasi bentuk tali panjang (ribbon) dan potongan kotak meriah
         const isRibbon = Math.random() > 0.35;
         if (isRibbon) {
             confetti.style.width = (Math.random() * 6 + 3) + 'px';
-            confetti.style.height = (Math.random() * 50 + 25) + 'px'; // Panjang seperti pita/tali
+            confetti.style.height = (Math.random() * 50 + 25) + 'px';
         } else {
             confetti.style.width = (Math.random() * 12 + 6) + 'px';
             confetti.style.height = (Math.random() * 12 + 6) + 'px';
         }
         
-        // Meledak memenuhi hampir seluruh layar
-        const tx = (Math.random() - 0.5) * window.innerWidth * 0.95;
-        const ty = (Math.random() - 0.5) * window.innerHeight * 0.95;
+        const tx = (Math.random() - 0.5) * window.innerWidth * 0.9;
+        const ty = (Math.random() - 0.5) * window.innerHeight * 0.9;
         const rot = (Math.random() - 0.5) * 1440;
 
         confetti.style.setProperty('--tx', `${tx}px`);
         confetti.style.setProperty('--ty', `${ty}px`);
         confetti.style.setProperty('--rot', `${rot}deg`);
         
-        // Bertahan selama ±30 detik
-        confetti.style.animationDuration = '30s';
-        confetti.style.animationDelay = (Math.random() * 0.4) + 's';
+        // [ CONTOH: DURASI ANIMASI CONFETTI HANYA 5-8 DETIK SESUAI PERMINTAAN ]
+        confetti.style.animationDuration = (Math.random() * 3 + 5) + 's';
+        confetti.style.animationDelay = (Math.random() * 0.3) + 's';
         
         container.appendChild(confetti);
     }
     
-    // Perlahan hilang setelah 30 detik
-    setTimeout(() => { container.style.opacity = '0'; }, 30000);
+    // Perlahan hilang dari layar setelah ledakan selesai (±8 Detik max)
+    setTimeout(() => { container.style.opacity = '0'; }, 7000);
 }
 
 // ----------------------------------------------------
@@ -304,8 +314,9 @@ function shootConfetti() {
 function copySuccessData() {
     const email = document.getElementById('modal-email').innerText;
     const expiry = document.getElementById('modal-expiry').innerText;
+    const orderId = document.getElementById('modal-order').innerText;
     
-    const textToCopy = `AlightPro - Bukti Verifikasi\n\nEmail Terdaftar: ${email}\nMasa Berlaku Lisensi: ${expiry}\nStatus Akun: LINKED & VERIFIED\nAuto Renewal: Aktif\n\nSelamat berkreasi!`;
+    const textToCopy = `AlightPro - Bukti Verifikasi\n\nEmail Terdaftar: ${email}\nOrder ID: ${orderId}\nMasa Berlaku Lisensi: ${expiry}\nStatus Akun: LINKED & VERIFIED\nAuto Renewal: Aktif\n\nSelamat berkreasi!`;
     
     navigator.clipboard.writeText(textToCopy).then(() => {
         const btn = document.querySelector('#success-modal-content button:nth-of-type(2)');
@@ -315,6 +326,58 @@ function copySuccessData() {
     }).catch(err => {
         showToast("❌ Gagal menyalin. Silakan coba lagi.");
     });
+}
+
+// ----------------------------------------------------
+// FUNGSI MODAL RIWAYAT (BARU: MENGAMBIL DATA DARI LOCAL STORAGE)
+// ----------------------------------------------------
+function openHistoryModal() {
+    const modal = document.getElementById('history-modal');
+    const modalBg = document.getElementById('history-modal-bg');
+    const modalContent = document.getElementById('history-modal-content');
+    const container = document.getElementById('history-list');
+    
+    const historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
+    container.innerHTML = '';
+    
+    if (historyData.length === 0) {
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-10 opacity-50">
+                <i class="ph ph-ghost text-5xl mb-2"></i>
+                <p class="text-xs font-bold text-gray-700">Belum ada riwayat verifikasi.</p>
+            </div>`;
+    } else {
+        historyData.forEach((item, index) => {
+            container.innerHTML += `
+            <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3 interactive-card">
+                <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
+                    <p class="text-xs font-bold text-blue-600 flex items-center gap-1">Berhasil <i class="ph-fill ph-check-circle text-green-500"></i></p>
+                    <p class="text-[10px] font-bold text-gray-500"><i class="ph ph-calendar-blank"></i> ${item.date}</p>
+                </div>
+                <p class="text-[11px] sm:text-xs font-semibold text-black mb-1">Email: <span class="font-bold text-gray-700">${item.email}</span></p>
+                <p class="text-[11px] sm:text-xs font-semibold text-black">Order ID: <span class="font-bold text-gray-700">${item.order}</span></p>
+            </div>`;
+        });
+    }
+
+    modal.classList.remove('hidden');
+    modalBg.classList.remove('backdrop-exit');
+    modalBg.classList.add('backdrop-enter');
+    modalContent.classList.remove('modal-exit');
+    modalContent.classList.add('modal-enter');
+}
+
+function closeHistoryModal() {
+    const modal = document.getElementById('history-modal');
+    const modalBg = document.getElementById('history-modal-bg');
+    const modalContent = document.getElementById('history-modal-content');
+    
+    modalBg.classList.remove('backdrop-enter');
+    modalBg.classList.add('backdrop-exit');
+    modalContent.classList.remove('modal-enter');
+    modalContent.classList.add('modal-exit');
+    
+    setTimeout(() => { modal.classList.add('hidden'); }, 200);
 }
 
 // ----------------------------------------------------
