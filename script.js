@@ -75,13 +75,12 @@ function showToast(message) {
 }
 
 // ----------------------------------------------------
-// FUNGSI TIMER COUNTDOWN & ANIMASI IKON JAM
+// FUNGSI TIMER COUNTDOWN
 // ----------------------------------------------------
 function startTimer(durationInSeconds) {
     clearInterval(countdownInterval); 
     let timer = durationInSeconds;
     const display = document.getElementById('countdown-timer');
-    const timerIcon = document.getElementById('timer-icon'); // Ikon Jam
     
     display.classList.remove('text-red-700', 'animate-pulse');
     display.classList.add('text-black');
@@ -93,12 +92,8 @@ function startTimer(durationInSeconds) {
         seconds = seconds < 10 ? "0" + seconds : seconds;
         display.textContent = minutes + ":" + seconds;
 
-        // Semakin cepat jamnya kalau sisa waktu menipis
         if (timer < 30) { 
-            display.classList.add('text-red-700', 'animate-pulse');
-            if(timerIcon) timerIcon.style.animationDuration = '1s';
-        } else {
-            if(timerIcon) timerIcon.style.animationDuration = '3s';
+            display.classList.add('text-red-700', 'animate-pulse'); 
         }
 
         if (--timer < 0) {
@@ -140,7 +135,6 @@ function transitionStep(hideEl, showEl) {
     }, 300);
 }
 
-// Dapatkan Tanggal & Jam Aktif untuk Riwayat
 function getActivationTimeData() {
     const now = new Date();
     const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -152,7 +146,8 @@ function getActivationTimeData() {
     mins = mins < 10 ? '0' + mins : mins;
     const timeWita = `${hours}:${mins} WITA`;
 
-    return { expiryDate, timeWita };
+    // Timestamp untuk fungsi hapus otomatis 24 jam di Riwayat
+    return { expiryDate, timeWita, timestamp: now.getTime() };
 }
 
 // ----------------------------------------------------
@@ -220,20 +215,23 @@ async function processStep2() {
         
         // Update Data Modal
         document.getElementById('modal-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
+        document.getElementById('modal-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
         if(data.orderId) document.getElementById('modal-order').innerText = data.orderId;
 
         // Update Data di Step 3 (Hasil UI di belakang)
         document.getElementById('step3-email').innerText = userEmailMemory;
         document.getElementById('step3-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
+        document.getElementById('step3-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
         if(data.orderId) document.getElementById('step3-order').innerText = data.orderId;
 
-        // Simpan ke Riwayat memori (Dengan Jam WITA)
+        // Simpan ke Riwayat memori (Dengan Jam WITA & Timestamp)
         let history = JSON.parse(localStorage.getItem('alightHistory') || '[]');
         history.unshift({ 
             email: userEmailMemory, 
             date: timeData.expiryDate, 
             time: timeData.timeWita, 
-            order: data.orderId || 'Alfian-Shop-XXX' 
+            order: data.orderId || 'Alfian-Shop-XXX',
+            timestamp: timeData.timestamp
         });
         localStorage.setItem('alightHistory', JSON.stringify(history));
 
@@ -246,9 +244,8 @@ async function processStep2() {
     finally { btn.classList.remove('is-loading'); }
 }
 
-// Fungsi untuk Tombol "Lanjut Verifikasi Akun Lainnya"
+// Fungsi Lanjut Verifikasi (Reset dan Tutup Modal)
 function resetAndCloseModal() {
-    // 1. Tutup modal sukses
     const modal = document.getElementById('success-modal');
     const modalBg = document.getElementById('success-modal-bg');
     const modalContent = document.getElementById('success-modal-content');
@@ -260,17 +257,14 @@ function resetAndCloseModal() {
     
     setTimeout(() => { 
         modal.classList.add('hidden'); 
-        // 2. Reset formulir & kembali ke Langkah 1
         resetForm();
     }, 200);
 }
 
-// Fungsi Reset Form manual (dari UI Step 3 atau tombol lainnya)
 function resetForm() {
     clearInterval(countdownInterval);
     userEmailMemory = ""; emailInput.value = ""; oobInput.value = "";
     
-    // Jika posisi saat ini di step 3, turunkan ke step 1
     if(!step3UI.classList.contains('hidden-step')) {
         setTabProgress(1);
         transitionStep(step3UI, step1UI);
@@ -281,7 +275,7 @@ function resetForm() {
 }
 
 // ----------------------------------------------------
-// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI (DURASI 10s)
+// FUNGSI MODAL SUCCESS & ANIMASI CONFETTI (DURASI 10 DETIK)
 // ----------------------------------------------------
 function openSuccessModal() {
     const modal = document.getElementById('success-modal');
@@ -297,7 +291,7 @@ function openSuccessModal() {
     shootConfetti();
 }
 
-// Fungsi jika menekan 'X' pada modal sukses -> Buka Step 3
+// Tutup (X) pada modal -> Arahkan ke Hasil (Step 3)
 function closeSuccessModal() {
     const modal = document.getElementById('success-modal');
     const modalBg = document.getElementById('success-modal-bg');
@@ -310,7 +304,6 @@ function closeSuccessModal() {
     
     setTimeout(() => { 
         modal.classList.add('hidden');
-        // Transisi ke Panel Langkah 3 (Hasil Verifikasi)
         setTabProgress(3);
         transitionStep(step2UI, step3UI);
     }, 200);
@@ -320,12 +313,11 @@ function shootConfetti() {
     const container = document.getElementById('confetti-container');
     container.innerHTML = '';
     
-    // Pastikan container terlihat dan fade transisinya dihilangkan agar langsung muncul
     container.style.transition = 'none'; 
     container.style.opacity = '1';
     
     const colors = ['#fef08a', '#93c5fd', '#bbf7d0', '#fbcfe8', '#e9d5ff', '#ef4444', '#f97316', '#06b6d4', '#a855f7'];
-    const totalPieces = 220; // Sangat meriah
+    const totalPieces = 220; 
     
     for(let i = 0; i < totalPieces; i++) {
         let confetti = document.createElement('div');
@@ -352,14 +344,13 @@ function shootConfetti() {
         confetti.style.setProperty('--ty', `${ty}px`);
         confetti.style.setProperty('--rot', `${rot}deg`);
         
-        // [ SETTING DURASI: 8 - 10 Detik sesuai permintaan ]
+        // [ CONTOH: DURASI ANIMASI CONFETTI KISARAN 10 DETIK ]
         confetti.style.animationDuration = (Math.random() * 2 + 8) + 's';
-        confetti.style.animationDelay = (Math.random() * 0.2) + 's'; // Delay sangat singkat agar meledak seketika
+        confetti.style.animationDelay = (Math.random() * 0.2) + 's';
         
         container.appendChild(confetti);
     }
     
-    // Perlahan fade-out keseluruhan div confetti setelah 10 detik
     setTimeout(() => { 
         container.style.transition = 'opacity 2s ease-in-out';
         container.style.opacity = '0'; 
@@ -370,7 +361,6 @@ function shootConfetti() {
 // FUNGSI COPY DATA
 // ----------------------------------------------------
 function copySuccessData(btnElement) {
-    // Bisa dipanggil dari Modal (modal-email) atau Step 3 (step3-email)
     const isFromStep3 = btnElement.innerText.includes('Verifikasi Akun');
     const email = document.getElementById(isFromStep3 ? 'step3-email' : 'modal-email').innerText;
     const expiry = document.getElementById(isFromStep3 ? 'step3-expiry' : 'modal-expiry').innerText;
@@ -404,7 +394,7 @@ function copyStep3Data(btnElement) {
 }
 
 // ----------------------------------------------------
-// FUNGSI MODAL RIWAYAT (MENAMPILKAN JAM WITA)
+// FUNGSI MODAL RIWAYAT (HAPUS DATA > 24 JAM)
 // ----------------------------------------------------
 function openHistoryModal() {
     const modal = document.getElementById('history-modal');
@@ -412,28 +402,34 @@ function openHistoryModal() {
     const modalContent = document.getElementById('history-modal-content');
     const container = document.getElementById('history-list');
     
-    const historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
+    let historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
+    const now = Date.now();
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    
+    // [ REVISI: FILTER HANYA RIWAYAT YANG KURANG DARI 24 JAM ]
+    historyData = historyData.filter(item => (now - item.timestamp) < ONE_DAY);
+    localStorage.setItem('alightHistory', JSON.stringify(historyData)); // Save cleaned history
+    
     container.innerHTML = '';
     
     if (historyData.length === 0) {
         container.innerHTML = `
             <div class="flex flex-col items-center justify-center py-10 opacity-50">
                 <i class="ph ph-ghost text-5xl mb-2"></i>
-                <p class="text-xs font-bold text-gray-700">Belum ada riwayat verifikasi.</p>
+                <p class="text-xs font-bold text-gray-700">Belum ada riwayat verifikasi hari ini.</p>
             </div>`;
     } else {
         historyData.forEach((item, index) => {
-            // [ REVISI: MENAMPILKAN TANGGAL BESERTA JAM WITA (item.time) ]
             container.innerHTML += `
-            <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3 interactive-card hover-scale-up">
+            <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3 smooth-hover cursor-pointer">
                 <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
                     <p class="text-[11px] sm:text-xs font-bold text-blue-600 flex items-center gap-1">Berhasil <i class="ph-fill ph-check-circle text-green-500"></i></p>
                     <div class="flex flex-col items-end">
                         <p class="text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> ${item.date}</p>
-                        <p class="text-[9px] sm:text-[10px] font-bold text-purple-600 flex items-center gap-1 mt-0.5"><i class="ph ph-clock"></i> ${item.time || 'Waktu tidak tersedia'}</p>
+                        <p class="text-[9px] sm:text-[10px] font-bold text-purple-600 flex items-center gap-1 mt-0.5"><i class="ph ph-clock"></i> ${item.time || '-'}</p>
                     </div>
                 </div>
-                <p class="text-[11px] sm:text-xs font-semibold text-black mb-1">Email: <span class="font-bold text-gray-700">${item.email}</span></p>
+                <p class="text-[11px] sm:text-xs font-semibold text-black mb-1">Email: <span class="font-bold text-gray-700 break-all">${item.email}</span></p>
                 <p class="text-[11px] sm:text-xs font-semibold text-black">Order ID: <span class="font-bold text-gray-700">${item.order}</span></p>
             </div>`;
         });
