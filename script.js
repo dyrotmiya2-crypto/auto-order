@@ -4,6 +4,9 @@ let countdownInterval = null;
 const step1UI = document.getElementById('step-1');
 const step2UI = document.getElementById('step-2');
 const step3UI = document.getElementById('step-3');
+const tabBg = document.getElementById('tab-bg');
+const tabText2 = document.getElementById('tab-text-2');
+const tabText3 = document.getElementById('tab-text-3');
 const emailInput = document.getElementById('emailInput');
 const oobInput = document.getElementById('oobInput');
 
@@ -35,6 +38,7 @@ function toggleFaq(btn) {
 
     const isOpen = !content.classList.contains('max-h-0');
 
+    // Tutup semuanya dengan transisi smooth
     allContents.forEach(c => {
         c.classList.add('max-h-0', 'border-opacity-0', 'opacity-0', 'py-0');
         c.classList.remove('max-h-[500px]', 'opacity-100', 'py-4');
@@ -47,6 +51,7 @@ function toggleFaq(btn) {
         b.classList.remove('bg-brutal-blue');
     });
 
+    // Buka item yang diklik dengan transisi padding/opacity dan rotasi panah
     if (!isOpen) {
         content.classList.remove('max-h-0', 'border-opacity-0', 'opacity-0', 'py-0');
         content.classList.add('max-h-[500px]', 'opacity-100', 'py-4');
@@ -80,7 +85,7 @@ function startTimer(durationInSeconds) {
     const display = document.getElementById('countdown-timer');
     
     display.classList.remove('text-red-700', 'animate-pulse');
-    display.classList.add('text-brutal-dark');
+    display.classList.add('text-black');
 
     countdownInterval = setInterval(function () {
         let minutes = parseInt(timer / 60, 10);
@@ -90,7 +95,6 @@ function startTimer(durationInSeconds) {
         display.textContent = minutes + ":" + seconds;
 
         if (timer < 30) { 
-            display.classList.remove('text-brutal-dark');
             display.classList.add('text-red-700', 'animate-pulse'); 
         }
 
@@ -106,25 +110,21 @@ function startTimer(durationInSeconds) {
 // TABS & TRANSITION
 // ----------------------------------------------------
 function setTabProgress(step) {
-    const t1 = document.getElementById('tab-1');
-    const t2 = document.getElementById('tab-2');
-    const t3 = document.getElementById('tab-3');
-    
-    if (!t1 || !t2 || !t3) return;
-
-    // Reset default styling untuk semua tab
-    const defaultClass = "flex-1 text-center py-2.5 text-[11px] sm:text-sm font-extrabold rounded-full border-[3px] border-transparent text-gray-500 transition-all duration-300";
-    t1.className = defaultClass;
-    t2.className = defaultClass;
-    t3.className = defaultClass;
-
-    // Set styling untuk tab aktif (menyesuaikan warna dan bingkai)
+    if (!tabBg) return;
     if (step === 1) {
-        t1.className = "flex-1 text-center py-2.5 text-[11px] sm:text-sm font-extrabold rounded-full border-[3px] border-brutal-dark bg-brutal-blue text-black transition-all duration-300";
+        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(0)';
+        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-blue border-r-2 border-black transition-all duration-300 ease-in-out";
+        tabText2.classList.add('text-gray-400'); tabText2.classList.remove('text-black');
+        tabText3.classList.add('text-gray-400'); tabText3.classList.remove('text-black');
     } else if (step === 2) {
-        t2.className = "flex-1 text-center py-2.5 text-[11px] sm:text-sm font-extrabold rounded-full border-[3px] border-brutal-dark bg-brutal-green text-black transition-all duration-300";
+        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(100%)';
+        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-green border-x-2 border-black transition-all duration-300 ease-in-out";
+        tabText2.classList.remove('text-gray-400'); tabText2.classList.add('text-black');
+        tabText3.classList.add('text-gray-400'); tabText3.classList.remove('text-black');
     } else if (step === 3) {
-        t3.className = "flex-1 text-center py-2.5 text-[11px] sm:text-sm font-extrabold rounded-full border-[3px] border-brutal-dark bg-brutal-pink text-black transition-all duration-300";
+        tabBg.style.width = '33.33%'; tabBg.style.transform = 'translateX(200%)';
+        tabBg.className = "absolute top-0 left-0 h-full w-1/3 bg-brutal-pink border-l-2 border-black transition-all duration-300 ease-in-out";
+        tabText3.classList.remove('text-gray-400'); tabText3.classList.add('text-black');
     }
 }
 
@@ -194,7 +194,7 @@ function backToStep1() {
     transitionStep(step2UI, step1UI);
 }
 
-// SIMPAN RIWAYAT GAGAL / SUKSES 
+// [ REVISI: RIWAYAT GAGAL / SUKSES ]
 function saveHistory(status, email, orderStr) {
     const timeData = getActivationTimeData();
     let history = JSON.parse(localStorage.getItem('alightHistory') || '[]');
@@ -225,6 +225,7 @@ async function processStep2() {
         const data = await parseResponse(response);
         
         if (!data.ok) {
+            // Catat ke riwayat gagal
             saveHistory('failed', userEmailMemory, 'Gagal/Invalid');
             throw new Error(data.why || 'Verifikasi gagal.');
         }
@@ -241,6 +242,7 @@ async function processStep2() {
         document.getElementById('step3-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
         if(data.orderId) document.getElementById('step3-order').innerText = data.orderId;
 
+        // Catat ke riwayat sukses
         saveHistory('success', userEmailMemory, data.orderId || 'Alfian-Shop-XXX');
 
         openSuccessModal();
@@ -410,8 +412,10 @@ function openHistoryModal() {
     
     let historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
     const now = Date.now();
+    // [ REVISI: Kedaluwarsa otomatis setelah 3 Hari (72 Jam) ]
     const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
     
+    // Filter data riwayat: Hanya simpan yang usianya di bawah 3 hari
     historyData = historyData.filter(item => (now - item.timestamp) < THREE_DAYS);
     localStorage.setItem('alightHistory', JSON.stringify(historyData)); 
     
@@ -425,6 +429,7 @@ function openHistoryModal() {
             </div>`;
     } else {
         historyData.forEach((item, index) => {
+            // Tampilan UI dibedakan berdasarkan status
             const isSuccess = item.status === 'success';
             const badgeIcon = isSuccess ? 'ph-check-circle text-green-500' : 'ph-x-circle text-red-500';
             const badgeText = isSuccess ? 'Berhasil' : 'Gagal';
@@ -452,9 +457,10 @@ function openHistoryModal() {
     modalContent.classList.add('modal-enter');
 }
 
+// [ REVISI: Tombol Hapus Manual Riwayat ]
 function clearHistory() {
     localStorage.removeItem('alightHistory');
-    openHistoryModal();
+    openHistoryModal(); // Muat ulang list UI (akan kosong)
 }
 
 function closeHistoryModal() {
