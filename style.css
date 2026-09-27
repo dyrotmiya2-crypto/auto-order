@@ -51,11 +51,10 @@ body { background-color: #f8f9fa; }
     transform: scale(0.98) rotate(0deg); 
     box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
 }
-/* Memastikan anak elemen dalam statistik tidak ikut bereaksi aneh (opsional pengaman) */
 .anim-stats > * { transition: none; pointer-events: none; }
 .anim-stats > .flex, .anim-stats > .grid { pointer-events: auto; }
 
-/* 3. Animasi Eksplorasi Fitur Premium 4 Kotak (Hover Lift tinggi, berbeda dari .anim-kartu-3) */
+/* 3. Animasi Eksplorasi Fitur Premium 4 Kotak */
 .anim-fitur-4 { transition: transform 0.3s ease, box-shadow 0.3s ease; }
 .anim-fitur-4:hover { 
     transform: translateY(-8px) scale(1.01); 
@@ -66,7 +65,7 @@ body { background-color: #f8f9fa; }
     box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
 }
 
-/* 4. Animasi FAQ (Interaktif rotasi panah + Smooth slide down) */
+/* 4. Animasi FAQ */
 .anim-faq { transition: all 0.2s ease-in-out; }
 .anim-faq:hover { 
     transform: translateX(4px); 
@@ -118,7 +117,7 @@ body { background-color: #f8f9fa; }
     100% { transform: scale(1) rotate(0); }
 }
 
-/* ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (DURASI 10 DETIK) */
+/* ANIMASI LEDAKAN CONFETTI */
 @keyframes confetti-burst {
     0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
     5% { transform: translate(calc(-50% + var(--tx) * 0.4), calc(-50% + var(--ty) * 0.4)) scale(1.5) rotate(calc(var(--rot) * 0.3)); opacity: 1; }
