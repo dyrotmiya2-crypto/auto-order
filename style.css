@@ -3,96 +3,112 @@ html { scroll-behavior: smooth; }
 body { background-color: #f8f9fa; }
 
 /* =========================================================
-   [ REVISI: ANIMASI HANYA PADA TOMBOL & ELEMEN INTERAKTIF ]
+   [ CONTOH KELOMPOK ANIMASI INTERAKTIF (KLIK/HOVER) ]
 ========================================================= */
 
-/* Tombol Biasa (CTA Utama, Tombol Navigasi, dll) */
-.btn-brutal { transition: all 0.15s ease-in-out; cursor: pointer; }
-.btn-brutal:hover {
+/* 1. Animasi Klik Biasa (Skala memudar) untuk Tombol Navigasi/CTA */
+.btn-hover {
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    cursor: pointer;
+}
+.btn-hover:active {
+    transform: scale(0.96) !important;
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1) !important;
+}
+
+/* 2. Animasi Naik & Miring Sedikit (Lift & Tilt) -> 3 Fitur Utama */
+.hover-lift-tilt {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.hover-lift-tilt:hover {
+    transform: translateY(-4px) rotate(-1.5deg);
     box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
 }
-.btn-brutal:active {
-    transform: translate(3px, 3px) !important;
-    box-shadow: 1px 1px 0px 0px rgba(0,0,0,1) !important;
+.hover-lift-tilt:active {
+    transform: scale(0.98) rotate(0deg);
 }
 
-/* 1. Animasi 3 Kartu Fitur Utama (Hover Translate Y) */
-.anim-kartu-3 { transition: all 0.2s ease-in-out; }
-.anim-kartu-3:hover { 
-    transform: translateY(-4px); 
-    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); 
+/* 3. Animasi Membesar (Scale Up) -> 4 Eksplorasi Fitur Premium */
+.hover-scale-up {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
-.anim-kartu-3:active { 
-    transform: translate(2px, 2px); 
-    box-shadow: 1px 1px 0px 0px rgba(0,0,0,1); 
+.hover-scale-up:hover {
+    transform: scale(1.02);
+    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
 }
-
-/* 2. Animasi Statistik Verifikasi (Hover Scale & Miring tipis) */
-.anim-stats { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.anim-stats:hover { 
-    transform: scale(1.02) rotate(-1deg); 
-    box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); 
-}
-.anim-stats:active { 
-    transform: scale(0.98) rotate(0deg); 
-    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+.hover-scale-up:active {
+    transform: scale(0.98);
 }
 
-/* 3. Animasi Eksplorasi Fitur Premium 4 Kotak (Hover Lift tinggi) */
-.anim-fitur-4 { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-.anim-fitur-4:hover { 
-    transform: translateY(-8px) scale(1.01); 
-    box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); 
+/* 4. Animasi Lurus Naik (Lift) -> FAQ Accordion */
+.hover-lift {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
-.anim-fitur-4:active { 
-    transform: translateY(0) scale(0.98); 
-    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
 }
-
-/* 4. Animasi FAQ (Geser ke kanan tipis) */
-.anim-faq { transition: all 0.2s ease-in-out; }
-.anim-faq:hover { 
-    transform: translateX(4px); 
-    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); 
-}
-.anim-faq:active { 
-    transform: translateX(0) scale(0.99); 
-    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+.hover-lift:active {
+    transform: translateY(0);
 }
 
-/* FAQ Content Smooth Slide Down & Fade */
-.faq-content {
-    transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
+/* 5. Animasi Melompat Rotasi (Bouncy Rotate) -> Sosmed CS */
+.hover-rotate-bouncy {
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.26, 1.55);
+    cursor: pointer;
+}
+.hover-rotate-bouncy:hover {
+    transform: scale(1.05) rotate(4deg) translateY(-2px);
+}
+.hover-rotate-bouncy:active {
+    transform: scale(0.95);
+}
+
+/* 6. Animasi Membesar Lincah (Bouncy Scale) -> Statistik Luar */
+.hover-bouncy-scale {
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.26, 1.55), box-shadow 0.3s ease;
+}
+.hover-bouncy-scale:hover {
+    transform: scale(1.02) translateY(-2px);
+    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+}
+.hover-bouncy-scale:active {
+    transform: scale(0.98);
 }
 
 /* ========================================================= */
 
-/* Tab & Step transitions */
-.step-container { transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; }
+/* Tab & Step transitions - Perbaikan Absolut Posisi Panel agar tidak panjang */
+.step-container { 
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
+}
 .hidden-step {
-    opacity: 0;
+    opacity: 0; 
     transform: translateY(10px);
-    pointer-events: none;
-    position: absolute;
+    pointer-events: none; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
     visibility: hidden;
-    width: 100%;
-    top: 0;
-    left: 0;
-    height: 0;
-    overflow: hidden;
+    z-index: -1;
 }
 .active-step {
-    opacity: 1;
+    opacity: 1; 
     transform: translateY(0);
-    position: relative;
+    position: relative; 
     visibility: visible;
-    height: auto;
-    overflow: visible;
+    z-index: 1;
 }
 
 /* Animasi Ikon Jam (Berputar stabil 60 detik seperti jam dunia nyata) */
-.animate-clock-real { animation: clockSpin 60s linear infinite; }
-@keyframes clockSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.animate-clock-real {
+    animation: clockSpin 60s linear infinite;
+}
+@keyframes clockSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
 
 /* Loading Spinner */
 .spinner {
@@ -116,34 +132,29 @@ body { background-color: #f8f9fa; }
     100% { transform: scale(1) rotate(0); }
 }
 
-/* ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (DURASI 10 DETIK) */
+/* [ CONTOH: ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (DURASI 10 DETIK) ] */
 @keyframes confetti-burst {
-    0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
-    5% { transform: translate(calc(-50% + var(--tx) * 0.4), calc(-50% + var(--ty) * 0.4)) scale(1.5) rotate(calc(var(--rot) * 0.3)); opacity: 1; }
-    70% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); opacity: 1; }
-    100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 60px)) scale(0.6) rotate(calc(var(--rot) + 90deg)); opacity: 0; }
+    0% { 
+        transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+        opacity: 0; 
+    }
+    5% { 
+        transform: translate(calc(-50% + var(--tx) * 0.4), calc(-50% + var(--ty) * 0.4)) scale(1.5) rotate(calc(var(--rot) * 0.3)); 
+        opacity: 1; 
+    }
+    70% { 
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); 
+        opacity: 1; 
+    }
+    100% { 
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 60px)) scale(0.6) rotate(calc(var(--rot) + 90deg)); 
+        opacity: 0; 
+    }
 }
 .animate-burst {
     animation-name: confetti-burst;
     animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
     animation-fill-mode: forwards;
-}
-
-/* =========================================================
-   [ FIX: Panel Verifikasi Pro — Bingkai Tidak Memanjang ]
-   Masalah: step-3 pakai flex-1 yang bikin container memanjang
-   Solusi: overflow hidden pada step transition container
-========================================================= */
-.panel-verifikasi-body {
-    position: relative;
-    width: 100%;
-    /* Container steps: cukup tinggi untuk konten terbesar (step-3) */
-    min-height: 200px;
-}
-
-/* Pastikan tab indicator tidak merusak rounded */
-#tab-bg {
-    border-radius: 10px;
 }
 
 /* Custom Scrollbar */
