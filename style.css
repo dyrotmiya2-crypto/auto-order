@@ -2,37 +2,32 @@
 html { scroll-behavior: smooth; }
 body { background-color: #f8f9fa; }
 
-/* Brutalist Button & Interactive Cards (Animasi Tekan Biasa) */
-.btn-brutal, .interactive-card { transition: all 0.15s ease-in-out; }
-.btn-brutal:active, .interactive-card:active {
+/* Brutalist Button (Animasi Tekan Biasa) */
+.btn-brutal { transition: all 0.15s ease-in-out; }
+.btn-brutal:active {
     transform: translate(3px, 3px) !important;
     box-shadow: 1px 1px 0px 0px rgba(0,0,0,1) !important;
 }
 
 /* =========================================================
-   [ CONTOH KELOMPOK ANIMASI HOVER BERAGAM ]
+   [ CONTOH KELOMPOK ANIMASI HOVER SANGAT HALUS (Smooth) ]
 ========================================================= */
 
-/* Animasi 1: Membesar sedikit (Scale Up) - Untuk tombol biasa & statistik */
-.hover-scale-up:hover {
-    transform: scale(1.03) translateY(-2px);
+/* Animasi Smooth Naik Lurus (Lift & Scale Up sangat halus) - Diterapkan ke SEMUA BINGKAI yg Anda minta */
+.smooth-hover {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-/* Animasi 2: Naik + Miring (Lift & Tilt) - KHUSUS 4 FITUR PREMIUM & 3 Kotak Verifikasi */
-.hover-lift-tilt:hover {
-    transform: translateY(-5px) rotate(-1.5deg);
-    box-shadow: 8px 8px 0px 0px rgba(0,0,0,1);
-}
-
-/* Animasi 3: Naik Lurus (Lift) - KHUSUS FAQ */
-.hover-lift:hover {
+.smooth-hover:hover {
     transform: translateY(-4px);
     box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
 }
 
-/* Animasi 4: Melompat Berotasi (Bouncy Rotate) - KHUSUS SOSMED CS & TOMBOL X */
-.hover-rotate-bouncy:hover {
-    transform: translateY(-3px) scale(1.05) rotate(4deg);
+/* Animasi Khusus Panel Utama (Panel Verifikasi) - Hanya membesar tipis (Smooth Scale) */
+.panel-hover {
+    transition: transform 0.4s ease-in-out;
+}
+.panel-hover:hover {
+    transform: scale(1.01);
 }
 
 /* ========================================================= */
@@ -48,9 +43,13 @@ body { background-color: #f8f9fa; }
     position: relative; visibility: visible;
 }
 
-/* Animasi Ikon Jam (Berputar searah jarum jam perlahan) */
-.animate-clock-spin {
-    animation: spin 3s linear infinite;
+/* Animasi Ikon Jam (Berputar stabil 60 detik seperti jam dunia nyata) */
+.animate-clock-real {
+    animation: clockSpin 60s linear infinite;
+}
+@keyframes clockSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* Loading Spinner */
@@ -76,8 +75,7 @@ body { background-color: #f8f9fa; }
 }
 
 /* =========================================================
-   [ CONTOH ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN ]
-   Animasi Ease-Out (Cepat di awal, lambat/smooth di akhir)
+   [ CONTOH ANIMASI LEDAKAN CONFETTI & TALI-TALI MENGAGETKAN (DURASI 10 DETIK) ]
 ========================================================= */
 @keyframes confetti-burst {
     0% { 
@@ -85,24 +83,23 @@ body { background-color: #f8f9fa; }
         opacity: 0; 
     }
     5% { 
-        /* Tiba-tiba meledak membesar (Mengejutkan / Fast Start) */
+        /* Tiba-tiba meledak membesar mengejutkan */
         transform: translate(calc(-50% + var(--tx) * 0.4), calc(-50% + var(--ty) * 0.4)) scale(1.5) rotate(calc(var(--rot) * 0.3)); 
         opacity: 1; 
     }
-    70% { 
-        /* Mulai melayang turun pelan-pelan (Slow end) */
+    60% { 
+        /* Mulai melayang perlahan */
         transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); 
         opacity: 1; 
     }
     100% { 
-        /* Hilang perlahan-lahan ke bawah (Fade out) */
-        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 40px)) scale(0.5) rotate(calc(var(--rot) + 90deg)); 
+        /* Hilang perlahan-lahan ke bawah */
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) + 60px)) scale(0.6) rotate(calc(var(--rot) + 90deg)); 
         opacity: 0; 
     }
 }
 .animate-burst {
     animation-name: confetti-burst;
-    /* Cubic-bezier ini menciptakan efek Ease-Out super cepat di awal, sangat lambat di akhir */
     animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
     animation-fill-mode: forwards;
 }
