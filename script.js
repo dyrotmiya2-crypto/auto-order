@@ -81,6 +81,7 @@ function startTimer(durationInSeconds) {
     clearInterval(countdownInterval); 
     let timer = durationInSeconds;
     const display = document.getElementById('countdown-timer');
+    const timerIcon = document.getElementById('timer-icon');
     
     display.classList.remove('text-red-700', 'animate-pulse');
     display.classList.add('text-black');
@@ -92,8 +93,12 @@ function startTimer(durationInSeconds) {
         seconds = seconds < 10 ? "0" + seconds : seconds;
         display.textContent = minutes + ":" + seconds;
 
+        // Visual Merah saat sisa < 30 detik
         if (timer < 30) { 
             display.classList.add('text-red-700', 'animate-pulse'); 
+            if(timerIcon) timerIcon.style.animationDuration = '1s';
+        } else {
+            if(timerIcon) timerIcon.style.animationDuration = '60s'; // Putaran normal
         }
 
         if (--timer < 0) {
@@ -146,7 +151,6 @@ function getActivationTimeData() {
     mins = mins < 10 ? '0' + mins : mins;
     const timeWita = `${hours}:${mins} WITA`;
 
-    // Timestamp untuk fungsi hapus otomatis 24 jam di Riwayat
     return { expiryDate, timeWita, timestamp: now.getTime() };
 }
 
@@ -224,7 +228,7 @@ async function processStep2() {
         document.getElementById('step3-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
         if(data.orderId) document.getElementById('step3-order').innerText = data.orderId;
 
-        // Simpan ke Riwayat memori (Dengan Jam WITA & Timestamp)
+        // Simpan ke Riwayat memori (Dengan Jam WITA & Timestamp 24h limit)
         let history = JSON.parse(localStorage.getItem('alightHistory') || '[]');
         history.unshift({ 
             email: userEmailMemory, 
@@ -291,7 +295,6 @@ function openSuccessModal() {
     shootConfetti();
 }
 
-// Tutup (X) pada modal -> Arahkan ke Hasil (Step 3)
 function closeSuccessModal() {
     const modal = document.getElementById('success-modal');
     const modalBg = document.getElementById('success-modal-bg');
@@ -344,7 +347,7 @@ function shootConfetti() {
         confetti.style.setProperty('--ty', `${ty}px`);
         confetti.style.setProperty('--rot', `${rot}deg`);
         
-        // [ CONTOH: DURASI ANIMASI CONFETTI KISARAN 10 DETIK ]
+        // [ CONTOH: DURASI ANIMASI CONFETTI ±10 DETIK ]
         confetti.style.animationDuration = (Math.random() * 2 + 8) + 's';
         confetti.style.animationDelay = (Math.random() * 0.2) + 's';
         
@@ -408,7 +411,7 @@ function openHistoryModal() {
     
     // [ REVISI: FILTER HANYA RIWAYAT YANG KURANG DARI 24 JAM ]
     historyData = historyData.filter(item => (now - item.timestamp) < ONE_DAY);
-    localStorage.setItem('alightHistory', JSON.stringify(historyData)); // Save cleaned history
+    localStorage.setItem('alightHistory', JSON.stringify(historyData)); 
     
     container.innerHTML = '';
     
@@ -421,7 +424,7 @@ function openHistoryModal() {
     } else {
         historyData.forEach((item, index) => {
             container.innerHTML += `
-            <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3 smooth-hover cursor-pointer">
+            <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3">
                 <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
                     <p class="text-[11px] sm:text-xs font-bold text-blue-600 flex items-center gap-1">Berhasil <i class="ph-fill ph-check-circle text-green-500"></i></p>
                     <div class="flex flex-col items-end">
