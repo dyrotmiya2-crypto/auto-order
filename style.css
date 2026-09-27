@@ -70,12 +70,24 @@ body { background-color: #f8f9fa; }
 /* Tab & Step transitions */
 .step-container { transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; }
 .hidden-step {
-    opacity: 0; transform: translateY(10px);
-    pointer-events: none; position: absolute; visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    position: absolute;
+    visibility: hidden;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 0;
+    overflow: hidden;
 }
 .active-step {
-    opacity: 1; transform: translateY(0);
-    position: relative; visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+    visibility: visible;
+    height: auto;
+    overflow: visible;
 }
 
 /* Animasi Ikon Jam (Berputar stabil 60 detik seperti jam dunia nyata) */
@@ -115,6 +127,23 @@ body { background-color: #f8f9fa; }
     animation-name: confetti-burst;
     animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
     animation-fill-mode: forwards;
+}
+
+/* =========================================================
+   [ FIX: Panel Verifikasi Pro — Bingkai Tidak Memanjang ]
+   Masalah: step-3 pakai flex-1 yang bikin container memanjang
+   Solusi: overflow hidden pada step transition container
+========================================================= */
+.panel-verifikasi-body {
+    position: relative;
+    width: 100%;
+    /* Container steps: cukup tinggi untuk konten terbesar (step-3) */
+    min-height: 200px;
+}
+
+/* Pastikan tab indicator tidak merusak rounded */
+#tab-bg {
+    border-radius: 10px;
 }
 
 /* Custom Scrollbar */
