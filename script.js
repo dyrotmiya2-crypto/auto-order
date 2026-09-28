@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add("active");
-                // Unobserve agar animasi hanya jalan sekali saat dimuat
+                // Stop mengawasi elemen setelah ter-render agar tidak goyang dua kali
                 observer.unobserve(entry.target); 
             }
         });
@@ -26,7 +26,46 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ----------------------------------------------------
-// FUNGSI FAQ ACCORDION 
+// [ UI FIX: LOGIKA NAVBAR TAB MENU (Atas) ]
+// ----------------------------------------------------
+function navTab(btnElement, targetId, bgColorClass) {
+    const slider = document.getElementById('nav-slider');
+    const allBtns = document.querySelectorAll('.nav-tab-btn');
+    
+    // Matikan status active di semua menu
+    allBtns.forEach(b => {
+        b.classList.remove('active-tab', 'text-black');
+        b.classList.add('text-gray-500');
+    });
+    
+    // Set teks hitam dan penanda active ke tombol yg diklik
+    btnElement.classList.add('active-tab', 'text-black');
+    btnElement.classList.remove('text-gray-500');
+    
+    // Gerakkan background menu ke posisi yg tepat (Sliding Animation)
+    slider.style.left = btnElement.offsetLeft + 'px';
+    slider.style.width = btnElement.offsetWidth + 'px';
+    // Ganti class background sesuai warna tujuan
+    slider.className = `absolute top-1 bottom-1 rounded-full transition-all duration-300 -z-10 border-2 border-black ${bgColorClass}`;
+    
+    // Auto-scroll halus ke section terkait
+    document.getElementById(targetId).scrollIntoView({behavior: 'smooth'});
+}
+
+// Inisialisasi posisi awal background menu bar saat load & resize layar
+function initNavSlider() {
+    const activeBtn = document.querySelector('.nav-tab-btn.active-tab');
+    if(activeBtn) {
+        const slider = document.getElementById('nav-slider');
+        slider.style.left = activeBtn.offsetLeft + 'px';
+        slider.style.width = activeBtn.offsetWidth + 'px';
+    }
+}
+window.addEventListener('load', initNavSlider);
+window.addEventListener('resize', initNavSlider);
+
+// ----------------------------------------------------
+// [ UI FIX: FUNGSI FAQ ACCORDION (SMOOTH COLLAPSE GRID) ]
 // ----------------------------------------------------
 function toggleFaq(btn) {
     const content = btn.nextElementSibling;
@@ -35,11 +74,11 @@ function toggleFaq(btn) {
     const allIcons = document.querySelectorAll('.faq-icon');
     const allBtns = document.querySelectorAll('.faq-btn');
 
-    const isOpen = !content.classList.contains('max-h-0');
+    const isOpen = content.classList.contains('is-open');
 
+    // Tutup seluruh FAQ yang lain
     allContents.forEach(c => {
-        c.classList.add('max-h-0', 'border-opacity-0', 'opacity-0', 'py-0');
-        c.classList.remove('max-h-[500px]', 'opacity-100', 'py-4');
+        c.classList.remove('is-open');
     });
     allIcons.forEach(i => {
         i.classList.remove('rotate-180', 'bg-black', 'text-white');
@@ -49,9 +88,9 @@ function toggleFaq(btn) {
         b.classList.remove('bg-brutal-blue');
     });
 
+    // Buka FAQ yg sedang di-klik jika sebelumnya belum terbuka
     if (!isOpen) {
-        content.classList.remove('max-h-0', 'border-opacity-0', 'opacity-0', 'py-0');
-        content.classList.add('max-h-[500px]', 'opacity-100', 'py-4');
+        content.classList.add('is-open');
         icon.classList.add('rotate-180', 'bg-black', 'text-white');
         icon.classList.remove('bg-white');
         btn.classList.add('bg-brutal-blue');
@@ -104,39 +143,20 @@ function startTimer(durationInSeconds) {
 }
 
 // ----------------------------------------------------
-// [ UI FIX: DESAIN "INNER FRAME" (Active Tab State) ]
+// TABS VERIFIKASI PROGRES
 // ----------------------------------------------------
-// Fungsi untuk Tab Navigasi Atas (Scroll)
-function navTab(btnElement, targetId, activeColorClass) {
-    const allBtns = document.querySelectorAll('.nav-tab-btn');
-    
-    // Reset seluruh tab navigasi ke state in-active murni
-    allBtns.forEach(b => {
-        b.className = "nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-gray-500 border-2 border-transparent rounded-full hover:text-black transition-all";
-    });
-    
-    // Set style tab yang diklik menjadi "bingkai timbul dalam bingkai"
-    btnElement.className = `nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap border-2 border-black rounded-full shadow-brutal-sm text-black transition-all ${activeColorClass}`;
-    
-    // Auto-scroll halus ke tujuan
-    document.getElementById(targetId).scrollIntoView({behavior: 'smooth'});
-}
-
-// Fungsi untuk Tab Langkah Verifikasi (OOB Panel)
 function setTabProgress(step) {
     const t1 = document.getElementById('tab-1');
     const t2 = document.getElementById('tab-2');
     const t3 = document.getElementById('tab-3');
 
-    const baseClasses = "flex-1 text-center py-1.5 sm:py-2 text-[11px] sm:text-sm font-bold cursor-default transition-all duration-300 border-2".split(" ");
+    const baseClasses = "flex-1 text-center py-2 lg:py-2.5 text-[11px] sm:text-sm lg:text-sm font-bold cursor-default transition-all duration-300 border-2".split(" ");
     
-    // Reset seluruh teks progres tab
     [t1, t2, t3].forEach(t => {
         t.className = "";
         t.classList.add(...baseClasses, "text-gray-500", "border-transparent");
     });
 
-    // Modifikasi inner tab aktif yang menonjol dan pas didalam parent-nya
     if (step === 1) {
         t1.classList.remove("text-gray-500", "border-transparent");
         t1.classList.add("bg-brutal-blue", "border-black", "rounded-full", "shadow-brutal-sm", "text-black");
@@ -450,7 +470,6 @@ function openHistoryModal() {
             const badgeText = isSuccess ? 'Berhasil' : 'Gagal';
             const badgeTextColor = isSuccess ? 'text-blue-600' : 'text-red-600';
 
-            // Animasi halus pada elemen list history
             container.innerHTML += `
             <div class="anim-list-hover bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm mb-3">
                 <div class="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
