@@ -18,7 +18,7 @@
                 extend: {
                     fontFamily: { sans: ['Space Grotesk', 'sans-serif'] },
                     colors: {
-                        'bg-main': '#f8f9fa',
+                        'bg-main': '#fffdf5', /* Tema background diperbarui ke eye-care pastel */
                         'brutal-blue': '#93c5fd',
                         'brutal-yellow': '#fef08a',
                         'brutal-green': '#bbf7d0',
@@ -40,7 +40,7 @@
 <body class="text-black min-h-screen flex flex-col items-center py-4 px-3 sm:py-6 sm:px-6 md:px-8 overflow-x-hidden relative bg-bg-main">
 
     <!-- NAVBAR RESPONSIF -->
-    <nav class="w-full max-w-6xl bg-white border-3 sm:border-4 border-black rounded-2xl shadow-brutal flex flex-col md:flex-row justify-between items-center p-3 sm:p-4 mb-6 sm:mb-8 gap-4 relative z-10 reveal">
+    <nav class="w-full max-w-6xl bg-white border-3 sm:border-4 border-black rounded-2xl shadow-brutal flex flex-col md:flex-row justify-between items-center p-3 sm:p-4 mb-6 sm:mb-8 gap-4 relative z-20 reveal">
         
         <div class="flex items-center justify-between w-full md:w-1/3">
             <div class="flex items-center gap-2 sm:gap-3">
@@ -53,23 +53,24 @@
                 </div>
             </div>
             
-            <!-- Tombol Riwayat (Mobile Version) -->
             <button onclick="openHistoryModal()" class="anim-btn-history md:hidden bg-brutal-yellow border-2 border-black font-bold py-1.5 px-3 rounded-xl shadow-brutal-sm flex items-center gap-1.5 text-[10px] whitespace-nowrap">
                 <i class="ph ph-clock-counter-clockwise text-base"></i> Riwayat
             </button>
         </div>
 
-        <!-- [ UI FIX: Desain "Bingkai di Dalam Bingkai" untuk Navigasi ] -->
+        <!-- [ UI FIX: Interaksi Sliding Tab Menu ] -->
         <div class="flex w-full md:w-1/3 justify-center mt-2 md:mt-0">
-            <div class="flex border-2 border-black rounded-full bg-white p-1 w-full sm:w-auto shadow-brutal-sm">
-                <button onclick="navTab(this, 'panel-verifikasi', 'bg-brutal-blue')" class="nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap bg-brutal-blue border-2 border-black rounded-full shadow-brutal-sm text-black transition-all">Verifikasi</button>
-                <button onclick="navTab(this, 'fitur-pro', 'bg-brutal-green')" class="nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-gray-500 border-2 border-transparent rounded-full hover:text-black transition-all">Fitur Pro</button>
-                <button onclick="navTab(this, 'faq', 'bg-brutal-yellow')" class="nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-gray-500 border-2 border-transparent rounded-full hover:text-black transition-all">FAQ</button>
+            <div class="flex border-2 border-black rounded-full bg-white p-1 w-full sm:w-auto shadow-brutal-sm relative isolate">
+                <!-- Elemen Slider Animasi -->
+                <div id="nav-slider" class="absolute top-1 bottom-1 rounded-full transition-all duration-300 -z-10 bg-brutal-blue border-2 border-black"></div>
+                
+                <button onclick="navTab(this, 'panel-verifikasi', 'bg-brutal-blue')" class="nav-tab-btn active-tab flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-black transition-all rounded-full z-10">Verifikasi</button>
+                <button onclick="navTab(this, 'fitur-pro', 'bg-brutal-green')" class="nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-gray-500 transition-all rounded-full z-10">Fitur Pro</button>
+                <button onclick="navTab(this, 'faq', 'bg-brutal-yellow')" class="nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-gray-500 transition-all rounded-full z-10">FAQ</button>
             </div>
         </div>
 
         <div class="hidden md:flex w-full md:w-1/3 justify-end">
-            <!-- Interaktif: Tombol Riwayat Desktop -->
             <button onclick="openHistoryModal()" class="anim-btn-history bg-brutal-yellow border-2 border-black font-bold py-2 px-4 rounded-xl shadow-brutal-sm flex items-center gap-1.5 text-sm whitespace-nowrap">
                 <i class="ph ph-clock-counter-clockwise text-lg"></i> Riwayat Verifikasi
             </button>
@@ -77,9 +78,9 @@
     </nav>
 
     <!-- SECTION 1: MAIN VERIFIKASI -->
-    <main id="panel-verifikasi" class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start relative z-10">
+    <main id="panel-verifikasi" class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start relative z-10">
         
-        <div class="lg:col-span-7 flex flex-col gap-4 sm:gap-6 reveal">
+        <div class="lg:col-span-7 flex flex-col gap-5 sm:gap-6 reveal">
             <div class="flex flex-wrap gap-2 sm:gap-3">
                 <span class="bg-brutal-pink border-2 border-black px-3 py-1 rounded-full text-xs sm:text-sm font-bold shadow-brutal-sm flex items-center gap-1.5">
                     <i class="ph ph-sparkle animate-spin-fast text-lg text-pink-600"></i> Platform Verifikasi Mandiri
@@ -89,36 +90,37 @@
                 </span>
             </div>
 
-            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
+            <h2 class="text-4xl sm:text-5xl lg:text-[4rem] font-bold leading-[1.1] tracking-tight">
                 Aktivasi <br>
-                <span class="inline-block bg-brutal-blue border-3 sm:border-4 border-black px-3 sm:px-4 py-1 rounded-xl sm:rounded-2xl shadow-brutal my-2 transform-none">Alight Motion Pro</span><br>
+                <span class="inline-block bg-brutal-blue border-3 sm:border-4 border-black px-3 sm:px-4 py-1 rounded-xl sm:rounded-2xl shadow-brutal my-3 transform-none">Alight Motion Pro</span><br>
                 1 Tahun.
             </h2>
-            <p class="text-base sm:text-lg font-medium text-gray-800 max-w-xl">
+            <p class="text-base sm:text-lg lg:text-xl font-medium text-gray-800 max-w-xl">
                 Nikmati fitur editing video tanpa watermark, unlocked all preset XML, rendering jernih 4K 60FPS, dan akses efek premium tanpa batas.
             </p>
 
-            <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-1">
-                <!-- Statis: Hanya animasi reveal scroll -->
-                <div class="reveal bg-brutal-blue border-2 sm:border-3 border-black p-2 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-default">
-                    <i class="ph ph-video-camera text-xl sm:text-2xl mb-1 sm:mb-2"></i>
-                    <h3 class="font-bold text-[10px] sm:text-sm leading-tight">No watermark</h3>
+            <!-- [ ANIMASI BARU: anim-feature-3 ] -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-2">
+                <div class="anim-feature-3 bg-brutal-blue border-2 sm:border-3 border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
+                    <i class="ph ph-video-camera text-2xl sm:text-3xl mb-1.5 sm:mb-2"></i>
+                    <h3 class="font-bold text-[10px] sm:text-xs lg:text-sm leading-tight">No watermark</h3>
                 </div>
-                <div class="reveal bg-brutal-green border-2 sm:border-3 border-black p-2 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-default">
-                    <i class="ph ph-medal text-xl sm:text-2xl mb-1 sm:mb-2"></i>
-                    <h3 class="font-bold text-[10px] sm:text-sm leading-tight">durasi 1 thn</h3>
+                <div class="anim-feature-3 bg-brutal-green border-2 sm:border-3 border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
+                    <i class="ph ph-medal text-2xl sm:text-3xl mb-1.5 sm:mb-2"></i>
+                    <h3 class="font-bold text-[10px] sm:text-xs lg:text-sm leading-tight">durasi 1 thn</h3>
                 </div>
-                <div class="reveal bg-brutal-yellow border-2 sm:border-3 border-black p-2 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-default">
-                    <i class="ph ph-file-code text-xl sm:text-2xl mb-1 sm:mb-2"></i>
-                    <h3 class="font-bold text-[10px] sm:text-sm leading-tight">full Xml Preset</h3>
+                <div class="anim-feature-3 bg-brutal-yellow border-2 sm:border-3 border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
+                    <i class="ph ph-file-code text-2xl sm:text-3xl mb-1.5 sm:mb-2"></i>
+                    <h3 class="font-bold text-[10px] sm:text-xs lg:text-sm leading-tight">full Xml Preset</h3>
                 </div>
             </div>
 
-            <div class="reveal bg-brutal-purple border-2 sm:border-3 border-black p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-brutal mt-1">
-                <h3 class="font-bold text-base sm:text-lg flex items-center gap-2 mb-2 sm:mb-3">
-                    <i class="ph-fill ph-question text-lg sm:text-xl"></i> Cara Mengambil Link Login OOB:
+            <!-- Bingkai Statis (Fade up on scroll murni) -->
+            <div class="reveal bg-brutal-purple border-2 sm:border-3 border-black p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl shadow-brutal mt-2">
+                <h3 class="font-bold text-base sm:text-lg lg:text-xl flex items-center gap-2 mb-3">
+                    <i class="ph-fill ph-question text-xl lg:text-2xl"></i> Cara Mengambil Link Login OOB:
                 </h3>
-                <ol class="list-decimal list-inside space-y-1.5 text-xs sm:text-sm font-medium">
+                <ol class="list-decimal list-inside space-y-2 text-xs sm:text-sm lg:text-base font-medium">
                     <li>Ketik email aktif akun Alight Motion kamu lalu klik <strong>Kirim Link OOB</strong>.</li>
                     <li>Buka pesan email masuk dari <em>Alight Creative</em>.</li>
                     <li><strong>Tahan tekan lama</strong> pada tombol <em class="text-blue-600 font-bold">Log In to Alight Creative</em> di dalam email.</li>
@@ -129,24 +131,24 @@
         </div>
 
         <!-- RIGHT COLUMN (PANEL VERIFIKASI) -->
-        <div class="lg:col-span-5 flex flex-col gap-6 w-full relative">
+        <div class="lg:col-span-5 flex flex-col gap-8 w-full relative">
             
-            <div class="reveal bg-white border-3 sm:border-4 border-black rounded-[2rem] shadow-brutal-large p-5 sm:p-6 overflow-hidden relative flex flex-col">
+            <!-- [ SKALA UI: Diperbesar pada PC (lg:p-10) dan Mobile (p-6) ] -->
+            <div class="reveal bg-white border-3 sm:border-4 border-black rounded-[2rem] shadow-brutal-large p-6 sm:p-8 lg:p-10 overflow-hidden relative flex flex-col w-full">
                 
-                <div class="flex gap-2 mb-4 items-center shrink-0">
-                    <div class="w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-black"></div>
-                    <div class="w-3.5 h-3.5 rounded-full bg-yellow-400 border-2 border-black"></div>
-                    <div class="w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-black"></div>
-                    <span class="ml-2 text-[10px] sm:text-xs font-bold tracking-widest uppercase">Panel Verifikasi Pro</span>
+                <div class="flex gap-2 mb-5 items-center shrink-0">
+                    <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-red-500 border-2 border-black"></div>
+                    <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-yellow-400 border-2 border-black"></div>
+                    <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-green-500 border-2 border-black"></div>
+                    <span class="ml-2 text-[10px] sm:text-xs lg:text-sm font-bold tracking-widest uppercase">Panel Verifikasi Pro</span>
                 </div>
 
-                <hr class="border-black border-t-2 mb-5 -mx-5 sm:-mx-6 shrink-0">
+                <hr class="border-black border-t-2 mb-6 -mx-6 sm:-mx-8 lg:-mx-10 shrink-0">
 
-                <!-- [ UI FIX: Desain "Bingkai di Dalam Bingkai" untuk Step Progress ] -->
-                <div class="flex border-2 border-black rounded-full bg-white p-1 shadow-brutal-sm mb-6 w-full shrink-0">
-                    <div id="tab-1" class="flex-1 text-center py-1.5 sm:py-2 text-[11px] sm:text-sm font-bold cursor-default transition-all duration-300 bg-brutal-blue border-2 border-black rounded-full shadow-brutal-sm text-black">1. Email</div>
-                    <div id="tab-2" class="flex-1 text-center py-1.5 sm:py-2 text-[11px] sm:text-sm font-bold cursor-default transition-all duration-300 text-gray-500 border-2 border-transparent">2. Tempel OOB</div>
-                    <div id="tab-3" class="flex-1 text-center py-1.5 sm:py-2 text-[11px] sm:text-sm font-bold cursor-default transition-all duration-300 text-gray-500 border-2 border-transparent">3. Hasil Pro</div>
+                <div class="flex border-2 border-black rounded-full bg-white p-1 shadow-brutal-sm mb-6 lg:mb-8 w-full shrink-0">
+                    <div id="tab-1" class="flex-1 text-center py-2 lg:py-2.5 text-[11px] sm:text-sm lg:text-sm font-bold cursor-default transition-all duration-300 bg-brutal-blue border-2 border-black rounded-full shadow-brutal-sm text-black">1. Email</div>
+                    <div id="tab-2" class="flex-1 text-center py-2 lg:py-2.5 text-[11px] sm:text-sm lg:text-sm font-bold cursor-default transition-all duration-300 text-gray-500 border-2 border-transparent">2. Tempel OOB</div>
+                    <div id="tab-3" class="flex-1 text-center py-2 lg:py-2.5 text-[11px] sm:text-sm lg:text-sm font-bold cursor-default transition-all duration-300 text-gray-500 border-2 border-transparent">3. Hasil Pro</div>
                 </div>
 
                 <div id="toast" class="absolute top-3 right-3 left-3 sm:left-auto bg-red-200 border-2 border-black px-3 py-2 rounded-xl shadow-brutal-sm font-bold text-xs sm:text-sm transform transition-transform duration-300 translate-y-[-150%] opacity-0 z-50 text-center sm:text-left">
@@ -157,16 +159,15 @@
                     
                     <!-- STEP 1 -->
                     <div id="step-1" class="step-container active-step w-full">
-                        <label class="block text-xs sm:text-sm font-bold mb-2 uppercase tracking-wide">Alamat Email Alight Creative</label>
+                        <label class="block text-xs sm:text-sm lg:text-base font-bold mb-2 uppercase tracking-wide">Alamat Email Alight Creative</label>
                         <div class="relative mb-3">
-                            <i class="ph ph-envelope-simple absolute left-4 top-1/2 -translate-y-1/2 text-xl text-gray-500"></i>
-                            <input type="email" id="emailInput" placeholder="contoh: emailkamu@gmail.com" class="w-full bg-white border-2 border-black rounded-xl py-3 pl-11 pr-4 text-sm sm:text-base font-medium outline-none focus:bg-brutal-yellow transition-colors shadow-brutal-sm placeholder-gray-400">
+                            <i class="ph ph-envelope-simple absolute left-4 top-1/2 -translate-y-1/2 text-xl lg:text-2xl text-gray-500"></i>
+                            <input type="email" id="emailInput" placeholder="contoh: emailkamu@gmail.com" class="w-full bg-white border-2 border-black rounded-xl py-3.5 sm:py-4 lg:py-5 pl-12 pr-4 text-sm sm:text-base lg:text-lg font-medium outline-none focus:bg-brutal-yellow transition-colors shadow-brutal-sm placeholder-gray-400">
                         </div>
-                        <p class="text-[11px] sm:text-xs text-gray-500 font-medium mb-4 leading-relaxed">
+                        <p class="text-[11px] sm:text-xs lg:text-sm text-gray-500 font-medium mb-5 leading-relaxed">
                             Sistem akan menginstruksikan server Alight Creative untuk mengirimkan link login OOB.
                         </p>
-                        <!-- Interaktif: Tombol Aksi Verifikasi -->
-                        <button onclick="processStep1()" id="btn-step-1" class="anim-btn-action w-full bg-brutal-blue border-2 border-black rounded-xl py-3.5 font-bold text-sm sm:text-base shadow-brutal flex justify-center items-center gap-2">
+                        <button onclick="processStep1()" id="btn-step-1" class="anim-btn-action w-full bg-brutal-blue border-2 border-black rounded-xl py-4 sm:py-4 lg:py-5 font-bold text-sm sm:text-base lg:text-lg shadow-brutal flex justify-center items-center gap-2">
                             <span class="btn-text">Kirim Link OOB (Langkah 1) <i class="ph ph-arrow-right"></i></span>
                             <div class="spinner"></div>
                         </button>
@@ -174,39 +175,38 @@
 
                     <!-- STEP 2 -->
                     <div id="step-2" class="step-container hidden-step w-full">
-                        <div class="bg-brutal-green border-2 border-black rounded-lg p-2 mb-3 text-[11px] sm:text-xs font-bold flex items-center gap-2 shadow-brutal-sm overflow-hidden w-fit">
-                            <i class="ph-fill ph-check-circle text-base sm:text-lg shrink-0"></i>
+                        <div class="bg-brutal-green border-2 border-black rounded-lg p-2.5 lg:p-3 mb-4 text-[11px] sm:text-xs lg:text-sm font-bold flex items-center gap-2 shadow-brutal-sm overflow-hidden w-fit">
+                            <i class="ph-fill ph-check-circle text-base sm:text-lg lg:text-xl shrink-0"></i>
                             <span class="truncate">Terkirim ke: <span id="display-email" class="underline"></span></span>
                         </div>
                         
-                        <div class="flex gap-2 mb-4 items-center justify-start">
-                            <div class="w-fit bg-red-100 border-2 border-black rounded-lg px-3 py-2 flex items-center justify-center gap-1.5 shadow-brutal-sm">
-                                <i class="ph ph-clock text-red-600 text-sm sm:text-base static-clock" id="timer-icon"></i>
-                                <span class="text-[10px] sm:text-xs font-bold text-red-700 whitespace-nowrap">Sisa Waktu Link</span>
+                        <div class="flex gap-2 mb-5 items-center justify-start">
+                            <div class="w-fit bg-red-100 border-2 border-black rounded-lg px-3 py-2.5 flex items-center justify-center gap-1.5 shadow-brutal-sm">
+                                <i class="ph ph-clock text-red-600 text-sm sm:text-base lg:text-lg static-clock" id="timer-icon"></i>
+                                <span class="text-[10px] sm:text-xs lg:text-sm font-bold text-red-700 whitespace-nowrap">Sisa Waktu Link</span>
                             </div>
-                            <div class="bg-white border-2 border-black rounded-lg p-2 flex items-center justify-center shadow-brutal-sm min-w-[70px]">
-                                <span id="countdown-timer" class="font-mono text-[11px] sm:text-sm font-bold text-black">03:00</span>
+                            <div class="bg-white border-2 border-black rounded-lg p-2.5 flex items-center justify-center shadow-brutal-sm min-w-[80px]">
+                                <span id="countdown-timer" class="font-mono text-[11px] sm:text-sm lg:text-base font-bold text-black">03:00</span>
                             </div>
                         </div>
                         
-                        <label class="block text-xs sm:text-sm font-bold mb-2 uppercase tracking-wide">Tempel Link Verifikasi (OOB)</label>
+                        <label class="block text-xs sm:text-sm lg:text-base font-bold mb-2 uppercase tracking-wide">Tempel Link Verifikasi (OOB)</label>
                         <div class="relative mb-2">
-                            <i class="ph ph-link absolute left-4 top-1/2 -translate-y-1/2 text-xl text-gray-500"></i>
-                            <input type="text" id="oobInput" placeholder="https://alightcreative.com/..." class="w-full bg-white border-2 border-black rounded-xl py-3 pl-11 pr-4 text-sm sm:text-base font-medium outline-none focus:bg-brutal-yellow transition-colors shadow-brutal-sm placeholder-gray-400">
+                            <i class="ph ph-link absolute left-4 top-1/2 -translate-y-1/2 text-xl lg:text-2xl text-gray-500"></i>
+                            <input type="text" id="oobInput" placeholder="https://alightcreative.com/..." class="w-full bg-white border-2 border-black rounded-xl py-3.5 sm:py-4 lg:py-5 pl-12 pr-4 text-sm sm:text-base lg:text-lg font-medium outline-none focus:bg-brutal-yellow transition-colors shadow-brutal-sm placeholder-gray-400">
                         </div>
                         
-                        <div class="flex justify-end mb-4">
-                            <!-- [ UI FIX: Tombol Sampah sangat bersih tanpa background/shadow/border ] -->
-                            <button onclick="document.getElementById('oobInput').value=''" class="text-[10px] sm:text-[11px] font-bold text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1 bg-transparent border-none p-0 outline-none shadow-none cursor-pointer">
+                        <div class="flex justify-end mb-5 lg:mb-6">
+                            <button onclick="document.getElementById('oobInput').value=''" class="text-[10px] sm:text-[11px] lg:text-xs font-bold text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1 bg-transparent border-none p-0 outline-none shadow-none cursor-pointer">
                                 <i class="ph ph-trash"></i> Hapus semua text
                             </button>
                         </div>
                         
                         <div class="flex gap-2">
-                            <button onclick="backToStep1()" class="anim-btn-back bg-gray-200 border-2 border-black rounded-xl px-4 py-3 font-bold shadow-brutal shrink-0">
-                                <i class="ph ph-arrow-left text-lg"></i>
+                            <button onclick="backToStep1()" class="anim-btn-back bg-gray-200 border-2 border-black rounded-xl px-5 py-3.5 lg:py-4 font-bold shadow-brutal shrink-0">
+                                <i class="ph ph-arrow-left text-xl"></i>
                             </button>
-                            <button onclick="processStep2()" id="btn-step-2" class="anim-btn-action flex-1 bg-brutal-yellow border-2 border-black rounded-xl py-3 font-bold text-sm sm:text-base shadow-brutal flex justify-center items-center gap-2">
+                            <button onclick="processStep2()" id="btn-step-2" class="anim-btn-action flex-1 bg-brutal-yellow border-2 border-black rounded-xl py-3.5 lg:py-4 font-bold text-sm sm:text-base lg:text-lg shadow-brutal flex justify-center items-center gap-2">
                                 <span class="btn-text">Verifikasi Pro <i class="ph ph-check-circle"></i></span>
                                 <div class="spinner"></div>
                             </button>
@@ -216,47 +216,46 @@
                     <!-- STEP 3 -->
                     <div id="step-3" class="step-container hidden-step w-full bg-white">
                         <div class="flex flex-col items-center w-full">
-                            <div class="relative mb-3 mt-1">
-                                <div class="w-14 h-14 bg-brutal-green border-3 border-black rounded-full flex items-center justify-center shadow-brutal z-10 relative">
-                                    <i class="ph ph-check text-3xl font-bold"></i>
+                            <div class="relative mb-4 mt-2">
+                                <div class="w-16 h-16 lg:w-20 lg:h-20 bg-brutal-green border-3 lg:border-4 border-black rounded-full flex items-center justify-center shadow-brutal z-10 relative">
+                                    <i class="ph ph-check text-4xl lg:text-5xl font-bold"></i>
                                 </div>
                             </div>
 
-                            <h3 class="text-xl sm:text-2xl font-bold mb-1 flex items-center gap-2">
+                            <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-1.5 flex items-center gap-2">
                                 Akun Terverifikasi! <span class="animate-tada">🎉</span>
                             </h3>
-                            <p class="text-[11px] sm:text-xs font-medium text-gray-700 mb-4 text-center">Data verifikasi Anda telah tersimpan.</p>
+                            <p class="text-[11px] sm:text-xs lg:text-sm font-medium text-gray-700 mb-5 text-center">Data verifikasi Anda telah tersimpan.</p>
 
-                            <div class="w-full border-2 border-black rounded-xl p-3 text-[11px] sm:text-xs font-medium space-y-2 mb-4 bg-gray-50 shadow-brutal-sm">
-                                <div class="flex justify-between items-center border-b border-gray-300 pb-1.5 gap-2">
+                            <div class="w-full border-2 border-black rounded-xl p-4 lg:p-5 text-[11px] sm:text-xs lg:text-sm font-medium space-y-3 mb-6 bg-gray-50 shadow-brutal-sm">
+                                <div class="flex justify-between items-center border-b border-gray-300 pb-2 gap-2">
                                     <span class="text-gray-500 whitespace-nowrap">Email:</span>
                                     <span id="step3-email" class="font-bold text-black break-all text-right">-</span>
                                 </div>
-                                <div class="flex justify-between items-center border-b border-gray-300 pb-1.5 gap-2">
+                                <div class="flex justify-between items-center border-b border-gray-300 pb-2 gap-2">
                                     <span class="text-gray-500 whitespace-nowrap">Order ID:</span>
                                     <span id="step3-order" class="font-bold text-black break-all text-right">-</span>
                                 </div>
-                                <div class="flex justify-between items-center border-b border-gray-300 pb-1.5 gap-2">
+                                <div class="flex justify-between items-center border-b border-gray-300 pb-2 gap-2">
                                     <span class="text-gray-500 whitespace-nowrap">Masa Berlaku:</span>
                                     <span id="step3-expiry" class="font-bold text-blue-700 flex items-center gap-1 whitespace-nowrap">-</span>
                                 </div>
-                                <div class="flex justify-between items-center border-b border-gray-300 pb-1.5 gap-2">
+                                <div class="flex justify-between items-center border-b border-gray-300 pb-2 gap-2">
                                     <span class="text-gray-500 whitespace-nowrap">Waktu Aktivasi:</span>
                                     <span id="step3-time" class="font-bold text-purple-700 flex items-center gap-1 whitespace-nowrap">-</span>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-500 whitespace-nowrap">Status:</span>
-                                    <span class="bg-brutal-green border border-black px-2 py-0.5 rounded-full font-bold text-[9px] text-black">LINKED & VERIFIED</span>
+                                    <span class="bg-brutal-green border border-black px-3 py-1 rounded-full font-bold text-[10px] lg:text-xs text-black">LINKED & VERIFIED</span>
                                 </div>
                             </div>
 
-                            <div class="w-full space-y-2">
-                                <!-- Interaktif: Tombol Aksi Akhir -->
-                                <button onclick="copyStep3Data(this)" class="anim-btn-action w-full bg-brutal-yellow border-2 border-black py-2.5 rounded-xl font-bold shadow-brutal flex justify-center items-center gap-2 text-xs sm:text-sm">
-                                    <i class="ph ph-copy text-lg"></i> Salin Bukti Verifikasi
+                            <div class="w-full space-y-3">
+                                <button onclick="copyStep3Data(this)" class="anim-btn-action w-full bg-brutal-yellow border-2 border-black py-3 lg:py-4 rounded-xl font-bold shadow-brutal flex justify-center items-center gap-2 text-xs sm:text-sm lg:text-base">
+                                    <i class="ph ph-copy text-lg lg:text-xl"></i> Salin Bukti Verifikasi
                                 </button>
-                                <button onclick="resetForm()" class="anim-btn-action w-full bg-gray-200 border-2 border-black py-2.5 rounded-xl font-bold shadow-brutal flex justify-center items-center gap-2 text-xs sm:text-sm">
-                                    <i class="ph ph-arrow-clockwise"></i> Verifikasi Akun Lainnya
+                                <button onclick="resetForm()" class="anim-btn-action w-full bg-gray-200 border-2 border-black py-3 lg:py-4 rounded-xl font-bold shadow-brutal flex justify-center items-center gap-2 text-xs sm:text-sm lg:text-base">
+                                    <i class="ph ph-arrow-clockwise lg:text-lg"></i> Verifikasi Akun Lainnya
                                 </button>
                             </div>
                         </div>
@@ -265,27 +264,28 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-4">
-                <div class="reveal bg-brutal-yellow border-3 sm:border-4 border-black rounded-2xl shadow-brutal p-4">
-                    <div class="flex justify-between items-center mb-3 sm:mb-4">
-                        <h4 class="font-bold flex items-center gap-2 uppercase tracking-wide text-xs sm:text-sm">
-                            <i class="ph ph-users"></i> Statistik Verifikasi
+            <!-- [ SKALA UI & ANIMASI: Scale hover bingkai luar dan ruang lebih lega (pb-8) ] -->
+            <div class="grid grid-cols-1 gap-4 reveal">
+                <div class="anim-stats-scale bg-brutal-yellow border-3 sm:border-4 border-black rounded-2xl shadow-brutal p-5 sm:p-6 lg:p-8 pb-8 sm:pb-8 lg:pb-10 cursor-default">
+                    <div class="flex justify-between items-center mb-4 sm:mb-5 lg:mb-6">
+                        <h4 class="font-bold flex items-center gap-2 uppercase tracking-wide text-xs sm:text-sm lg:text-base">
+                            <i class="ph ph-users text-lg lg:text-xl"></i> Statistik Verifikasi
                         </h4>
-                        <span class="bg-brutal-green border-2 border-black px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold shadow-brutal-sm flex items-center gap-1.5 animate-pulse">
-                            <div class="w-2 h-2 bg-black rounded-full"></div> LIVE
+                        <span class="bg-brutal-green border-2 border-black px-3 py-1 rounded-full text-[10px] sm:text-xs lg:text-sm font-bold shadow-brutal-sm flex items-center gap-1.5 animate-pulse">
+                            <div class="w-2 h-2 lg:w-2.5 lg:h-2.5 bg-black rounded-full"></div> LIVE
                         </span>
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white border-2 border-black rounded-xl p-3 shadow-brutal-sm">
-                            <p class="text-[10px] sm:text-xs font-bold text-blue-600 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> HARI INI</p>
-                            <p class="text-2xl sm:text-3xl font-bold my-1" id="daily-count">14</p>
-                            <p class="text-[10px] font-semibold text-gray-500">Terverifikasi</p>
+                    <div class="grid grid-cols-2 gap-4 lg:gap-6">
+                        <div class="bg-white border-2 sm:border-3 border-black rounded-xl p-4 lg:p-5 shadow-brutal-sm">
+                            <p class="text-[10px] sm:text-xs lg:text-sm font-bold text-blue-600 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> HARI INI</p>
+                            <p class="text-3xl sm:text-4xl lg:text-5xl font-bold my-2" id="daily-count">14</p>
+                            <p class="text-[10px] lg:text-xs font-semibold text-gray-500">Terverifikasi</p>
                         </div>
-                        <div class="bg-brutal-blue border-2 border-black rounded-xl p-3 shadow-brutal-sm">
-                            <p class="text-[10px] sm:text-xs font-bold flex items-center gap-1"><i class="ph ph-trend-up"></i> TOTAL SUKSES</p>
-                            <p class="text-2xl sm:text-3xl font-bold my-1">16.5K</p>
-                            <p class="text-[10px] font-semibold text-gray-800">Akun Pro Aktif</p>
+                        <div class="bg-brutal-blue border-2 sm:border-3 border-black rounded-xl p-4 lg:p-5 shadow-brutal-sm">
+                            <p class="text-[10px] sm:text-xs lg:text-sm font-bold flex items-center gap-1"><i class="ph ph-trend-up"></i> TOTAL SUKSES</p>
+                            <p class="text-3xl sm:text-4xl lg:text-5xl font-bold my-2">16.5K</p>
+                            <p class="text-[10px] lg:text-xs font-semibold text-gray-800">Akun Pro Aktif</p>
                         </div>
                     </div>
                 </div>
@@ -294,279 +294,297 @@
     </main>
 
     <!-- SECTION 2: FITUR PRO -->
-    <section id="fitur-pro" class="w-full max-w-6xl mt-20 mb-8 px-2 relative z-10">
-        <h2 class="reveal text-2xl sm:text-4xl font-bold mb-6 flex items-center gap-3">
+    <section id="fitur-pro" class="w-full max-w-6xl mt-24 mb-10 px-2 relative z-10">
+        <h2 class="reveal text-2xl sm:text-4xl font-bold mb-8 flex items-center gap-3">
             <i class="ph-fill ph-star text-yellow-500 animate-spin-fast"></i> Eksplorasi Fitur <span class="bg-brutal-green border-2 sm:border-3 border-black px-3 rounded-xl shadow-brutal-sm">Premium</span>
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <div class="reveal bg-white border-3 border-black rounded-2xl p-5 shadow-brutal cursor-default">
-                <div class="w-12 h-12 bg-brutal-blue border-2 border-black rounded-xl flex items-center justify-center mb-4">
-                    <i class="ph ph-eraser text-2xl"></i>
+        <!-- [ ANIMASI BARU: anim-premium-4 ] -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-2xl p-6 shadow-brutal cursor-pointer">
+                <div class="w-14 h-14 bg-brutal-blue border-2 border-black rounded-xl flex items-center justify-center mb-5">
+                    <i class="ph ph-eraser text-3xl"></i>
                 </div>
-                <h3 class="font-bold text-lg mb-2">Tanpa Watermark</h3>
+                <h3 class="font-bold text-xl mb-2">Tanpa Watermark</h3>
                 <p class="text-sm font-medium text-gray-700">Hasil akhir render video dijamin bersih 100% dari tulisan Alight Motion yang mengganggu.</p>
             </div>
-            <div class="reveal bg-white border-3 border-black rounded-2xl p-5 shadow-brutal cursor-default">
-                <div class="w-12 h-12 bg-brutal-purple border-2 border-black rounded-xl flex items-center justify-center mb-4">
-                    <i class="ph ph-magic-wand text-2xl"></i>
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-2xl p-6 shadow-brutal cursor-pointer">
+                <div class="w-14 h-14 bg-brutal-purple border-2 border-black rounded-xl flex items-center justify-center mb-5">
+                    <i class="ph ph-magic-wand text-3xl"></i>
                 </div>
-                <h3 class="font-bold text-lg mb-2">Unlock Semua Efek</h3>
+                <h3 class="font-bold text-xl mb-2">Unlock Semua Efek</h3>
                 <p class="text-sm font-medium text-gray-700">Bebas gunakan seluruh efek premium berbayar yang terkunci di versi gratis sesuka Anda.</p>
             </div>
-            <div class="reveal bg-white border-3 border-black rounded-2xl p-5 shadow-brutal cursor-default">
-                <div class="w-12 h-12 bg-brutal-yellow border-2 border-black rounded-xl flex items-center justify-center mb-4">
-                    <i class="ph ph-file-code text-2xl"></i>
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-2xl p-6 shadow-brutal cursor-pointer">
+                <div class="w-14 h-14 bg-brutal-yellow border-2 border-black rounded-xl flex items-center justify-center mb-5">
+                    <i class="ph ph-file-code text-3xl"></i>
                 </div>
-                <h3 class="font-bold text-lg mb-2">Dukungan XML</h3>
+                <h3 class="font-bold text-xl mb-2">Dukungan XML</h3>
                 <p class="text-sm font-medium text-gray-700">Import semua file preset XML dari editor lain dengan lancar tanpa ada error fitur terkunci.</p>
             </div>
-            <div class="reveal bg-white border-3 border-black rounded-2xl p-5 shadow-brutal cursor-default">
-                <div class="w-12 h-12 bg-brutal-pink border-2 border-black rounded-xl flex items-center justify-center mb-4">
-                    <i class="ph ph-monitor-play text-2xl"></i>
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-2xl p-6 shadow-brutal cursor-pointer">
+                <div class="w-14 h-14 bg-brutal-pink border-2 border-black rounded-xl flex items-center justify-center mb-5">
+                    <i class="ph ph-monitor-play text-3xl"></i>
                 </div>
-                <h3 class="font-bold text-lg mb-2">Ekspor 4K 60FPS</h3>
+                <h3 class="font-bold text-xl mb-2">Ekspor 4K 60FPS</h3>
                 <p class="text-sm font-medium text-gray-700">Simpan editan dalam resolusi tertinggi hingga 4K UHD dan framerate 60 FPS super mulus.</p>
             </div>
         </div>
     </section>
 
     <!-- SECTION FAQ -->
-    <section id="faq" class="w-full max-w-3xl mt-16 mb-16 px-4 mx-auto relative z-10 flex flex-col items-center">
-        <div class="reveal bg-brutal-purple border-2 border-black rounded-full px-4 py-1.5 mb-6 shadow-brutal-sm flex items-center gap-2">
-            <i class="ph ph-question text-lg text-purple-900"></i>
+    <section id="faq" class="w-full max-w-3xl mt-20 mb-20 px-4 mx-auto relative z-10 flex flex-col items-center">
+        <div class="reveal bg-brutal-purple border-2 border-black rounded-full px-5 py-2 mb-6 shadow-brutal-sm flex items-center gap-2">
+            <i class="ph ph-question text-xl text-purple-900"></i>
             <span class="text-xs sm:text-sm font-bold text-purple-900">Pertanyaan Yang Sering Diajukan</span>
         </div>
         
-        <h2 class="reveal text-3xl sm:text-4xl font-bold mb-3 text-center">FAQ & Informasi Penting</h2>
-        <p class="reveal text-sm sm:text-base font-medium text-gray-600 text-center mb-8">Jawaban lengkap seputar mekanisme verifikasi dan lisensi Alight Motion Pro di AlightPro.</p>
+        <h2 class="reveal text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-center">FAQ & Informasi Penting</h2>
+        <p class="reveal text-sm sm:text-base lg:text-lg font-medium text-gray-600 text-center mb-10">Jawaban lengkap seputar mekanisme verifikasi dan lisensi Alight Motion Pro di AlightPro.</p>
 
+        <!-- [ UI FIX: FAQ Smooth Collapse (Grid Layout Transition) ] -->
         <div class="w-full flex flex-col gap-4">
-            <!-- Accordion dipertahankan sebagai elemen murni interaktif FAQ (tidak goyang saat hover, hanya konten turun) -->
             <div class="reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
-                <button class="faq-btn w-full p-4 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
+                <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
-                        <i class="ph ph-question text-xl"></i>
-                        <span class="font-bold text-sm sm:text-base">Berapa lama lisensi Alight Motion Pro ini aktif?</span>
+                        <i class="ph ph-question text-xl sm:text-2xl"></i>
+                        <span class="font-bold text-sm sm:text-base lg:text-lg">Berapa lama lisensi Alight Motion Pro ini aktif?</span>
                     </div>
-                    <div class="faq-icon w-8 h-8 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
-                        <i class="ph ph-caret-down font-bold"></i>
+                    <div class="faq-icon w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
+                        <i class="ph ph-caret-down font-bold sm:text-lg"></i>
                     </div>
                 </button>
-                <div class="faq-content max-h-0 bg-white px-4 border-t-2 border-black border-opacity-0 overflow-hidden py-0 opacity-0">
-                    <p class="text-sm font-medium text-gray-800 flex gap-2">
-                        <i class="ph-fill ph-star text-yellow-500 text-lg shrink-0 mt-0.5"></i> 
-                        <span>Lisensi yang diklaim melalui AlightPro berlaku secara penuh selama <strong>1 Tahun (365 Hari)</strong> terhitung sejak tanggal verifikasi berhasil dilakukan.</span>
-                    </p>
+                <div class="faq-content bg-white">
+                    <div>
+                        <div class="p-5 border-t-2 border-black bg-white">
+                            <p class="text-sm sm:text-base font-medium text-gray-800 flex gap-2">
+                                <i class="ph-fill ph-star text-yellow-500 text-lg sm:text-xl shrink-0 mt-0.5"></i> 
+                                <span>Lisensi yang diklaim melalui AlightPro berlaku secara penuh selama <strong>1 Tahun (365 Hari)</strong> terhitung sejak tanggal verifikasi berhasil dilakukan.</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
-                <button class="faq-btn w-full p-4 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
+                <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
-                        <i class="ph ph-question text-xl text-red-500"></i>
-                        <span class="font-bold text-sm sm:text-base">Apakah layanan verifikasi di AlightPro 100% gratis?</span>
+                        <i class="ph ph-question text-xl sm:text-2xl text-red-500"></i>
+                        <span class="font-bold text-sm sm:text-base lg:text-lg">Apakah layanan verifikasi di AlightPro 100% gratis?</span>
                     </div>
-                    <div class="faq-icon w-8 h-8 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
-                        <i class="ph ph-caret-down font-bold"></i>
+                    <div class="faq-icon w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
+                        <i class="ph ph-caret-down font-bold sm:text-lg"></i>
                     </div>
                 </button>
-                <div class="faq-content max-h-0 bg-white px-4 border-t-2 border-black border-opacity-0 overflow-hidden py-0 opacity-0">
-                    <p class="text-sm font-medium text-gray-800 flex gap-2">
-                        <i class="ph-fill ph-star text-yellow-500 text-lg shrink-0 mt-0.5"></i> 
-                        <span>Ya, platform kami menyediakan fitur aktivasi ini 100% gratis tanpa dipungut biaya apapun bagi seluruh pengguna.</span>
-                    </p>
+                <div class="faq-content bg-white">
+                    <div>
+                        <div class="p-5 border-t-2 border-black bg-white">
+                            <p class="text-sm sm:text-base font-medium text-gray-800 flex gap-2">
+                                <i class="ph-fill ph-star text-yellow-500 text-lg sm:text-xl shrink-0 mt-0.5"></i> 
+                                <span>Ya, platform kami menyediakan fitur aktivasi ini 100% gratis tanpa dipungut biaya apapun bagi seluruh pengguna.</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
-                <button class="faq-btn w-full p-4 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
+                <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
-                        <i class="ph ph-question text-xl text-green-500"></i>
-                        <span class="font-bold text-sm sm:text-base">Apa itu Link OOB dari Alight Creative?</span>
+                        <i class="ph ph-question text-xl sm:text-2xl text-green-500"></i>
+                        <span class="font-bold text-sm sm:text-base lg:text-lg">Apa itu Link OOB dari Alight Creative?</span>
                     </div>
-                    <div class="faq-icon w-8 h-8 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
-                        <i class="ph ph-caret-down font-bold"></i>
+                    <div class="faq-icon w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
+                        <i class="ph ph-caret-down font-bold sm:text-lg"></i>
                     </div>
                 </button>
-                <div class="faq-content max-h-0 bg-white px-4 border-t-2 border-black border-opacity-0 overflow-hidden py-0 opacity-0">
-                    <p class="text-sm font-medium text-gray-800 flex gap-2">
-                        <i class="ph-fill ph-star text-yellow-500 text-lg shrink-0 mt-0.5"></i> 
-                        <span>Link OOB (Out-Of-Band) adalah tautan autentikasi aman sekali pakai yang dikirimkan langsung oleh sistem resmi Alight Creative ke email Anda untuk login tanpa password.</span>
-                    </p>
+                <div class="faq-content bg-white">
+                    <div>
+                        <div class="p-5 border-t-2 border-black bg-white">
+                            <p class="text-sm sm:text-base font-medium text-gray-800 flex gap-2">
+                                <i class="ph-fill ph-star text-yellow-500 text-lg sm:text-xl shrink-0 mt-0.5"></i> 
+                                <span>Link OOB (Out-Of-Band) adalah tautan autentikasi aman sekali pakai yang dikirimkan langsung oleh sistem resmi Alight Creative ke email Anda untuk login tanpa password.</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
-                <button class="faq-btn w-full p-4 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
+                <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
-                        <i class="ph ph-question text-xl text-yellow-500"></i>
-                        <span class="font-bold text-sm sm:text-base">Kenapa Link OOB hanya aktif selama 3 menit?</span>
+                        <i class="ph ph-question text-xl sm:text-2xl text-yellow-500"></i>
+                        <span class="font-bold text-sm sm:text-base lg:text-lg">Kenapa Link OOB hanya aktif selama 3 menit?</span>
                     </div>
-                    <div class="faq-icon w-8 h-8 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
-                        <i class="ph ph-caret-down font-bold"></i>
+                    <div class="faq-icon w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
+                        <i class="ph ph-caret-down font-bold sm:text-lg"></i>
                     </div>
                 </button>
-                <div class="faq-content max-h-0 bg-white px-4 border-t-2 border-black border-opacity-0 overflow-hidden py-0 opacity-0">
-                    <p class="text-sm font-medium text-gray-800 flex gap-2">
-                        <i class="ph-fill ph-star text-yellow-500 text-lg shrink-0 mt-0.5"></i> 
-                        <span>Untuk alasan keamanan sistem Alight Creative, link token tersebut memiliki batas kadaluarsa yang singkat agar terhindar dari penyalahgunaan.</span>
-                    </p>
+                <div class="faq-content bg-white">
+                    <div>
+                        <div class="p-5 border-t-2 border-black bg-white">
+                            <p class="text-sm sm:text-base font-medium text-gray-800 flex gap-2">
+                                <i class="ph-fill ph-star text-yellow-500 text-lg sm:text-xl shrink-0 mt-0.5"></i> 
+                                <span>Untuk alasan keamanan sistem Alight Creative, link token tersebut memiliki batas kadaluarsa yang singkat agar terhindar dari penyalahgunaan.</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <div class="reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
-                <button class="faq-btn w-full p-4 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
+                <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
-                        <i class="ph ph-question text-xl text-purple-500"></i>
-                        <span class="font-bold text-sm sm:text-base">Apakah aman menggunakan email pribadi?</span>
+                        <i class="ph ph-question text-xl sm:text-2xl text-purple-500"></i>
+                        <span class="font-bold text-sm sm:text-base lg:text-lg">Apakah aman menggunakan email pribadi?</span>
                     </div>
-                    <div class="faq-icon w-8 h-8 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
-                        <i class="ph ph-caret-down font-bold"></i>
+                    <div class="faq-icon w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
+                        <i class="ph ph-caret-down font-bold sm:text-lg"></i>
                     </div>
                 </button>
-                <div class="faq-content max-h-0 bg-white px-4 border-t-2 border-black border-opacity-0 overflow-hidden py-0 opacity-0">
-                    <p class="text-sm font-medium text-gray-800 flex gap-2">
-                        <i class="ph-fill ph-star text-yellow-500 text-lg shrink-0 mt-0.5"></i> 
-                        <span>Sangat aman. Kami tidak meminta ataupun menyimpan password email Anda. Kami hanya membutuhkan link OOB publik untuk menginjeksi lisensi ke akun Anda.</span>
-                    </p>
+                <div class="faq-content bg-white">
+                    <div>
+                        <div class="p-5 border-t-2 border-black bg-white">
+                            <p class="text-sm sm:text-base font-medium text-gray-800 flex gap-2">
+                                <i class="ph-fill ph-star text-yellow-500 text-lg sm:text-xl shrink-0 mt-0.5"></i> 
+                                <span>Sangat aman. Kami tidak meminta ataupun menyimpan password email Anda. Kami hanya membutuhkan link OOB publik untuk menginjeksi lisensi ke akun Anda.</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- SECTION 3: FOOTER -->
-    <footer class="w-full max-w-6xl mt-4 mb-24 relative z-10 border-t-4 border-black pt-8 px-2">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="flex flex-col gap-4 reveal">
+    <footer class="w-full max-w-6xl mt-6 mb-24 relative z-10 border-t-4 border-black pt-10 px-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="flex flex-col gap-5 reveal">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-brutal-blue border-2 border-black rounded-xl flex items-center justify-center shadow-brutal-sm text-xl font-bold">A</div>
+                    <div class="w-12 h-12 bg-brutal-blue border-2 border-black rounded-xl flex items-center justify-center shadow-brutal-sm text-2xl font-bold">A</div>
                     <div>
-                        <h1 class="text-xl font-bold leading-tight flex items-center gap-1">AlightPro <span class="bg-brutal-pink text-[10px] border-2 border-black rounded-full px-2 py-0.5 shadow-brutal-sm flex items-center gap-1 transform-none"><i class="ph-fill ph-star text-pink-600"></i> PRO 1 TH</span></h1>
-                        <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-600">Alight Motion Verifier</p>
+                        <h1 class="text-xl sm:text-2xl font-bold leading-tight flex items-center gap-1">AlightPro <span class="bg-brutal-pink text-[10px] sm:text-xs border-2 border-black rounded-full px-2 py-0.5 shadow-brutal-sm flex items-center gap-1 transform-none"><i class="ph-fill ph-star text-pink-600"></i> PRO 1 TH</span></h1>
+                        <p class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-gray-600">Alight Motion Verifier</p>
                     </div>
                 </div>
-                <p class="text-sm font-medium text-gray-700">AlightPro adalah platform verifikasi mandiri untuk aktivasi akun Alight Motion Pro berdurasi 1 tahun secara gratis, cepat, dan aman berbasis token OOB Alight Creative.</p>
-                <div class="bg-brutal-purple border-2 border-black rounded-xl p-3 flex items-center gap-2 shadow-brutal-sm">
-                    <i class="ph-fill ph-shield-check text-purple-700 text-xl"></i>
-                    <p class="text-[11px] font-bold text-purple-900 leading-tight">Sistem Enkripsi Token OOB 100% Aman Tanpa Simpan Password.</p>
+                <p class="text-sm lg:text-base font-medium text-gray-700">AlightPro adalah platform verifikasi mandiri untuk aktivasi akun Alight Motion Pro berdurasi 1 tahun secara gratis, cepat, dan aman berbasis token OOB Alight Creative.</p>
+                <div class="bg-brutal-purple border-2 border-black rounded-xl p-4 flex items-center gap-3 shadow-brutal-sm">
+                    <i class="ph-fill ph-shield-check text-purple-700 text-2xl"></i>
+                    <p class="text-[11px] lg:text-xs font-bold text-purple-900 leading-tight">Sistem Enkripsi Token OOB 100% Aman Tanpa Simpan Password.</p>
                 </div>
             </div>
 
-            <div class="flex flex-col gap-3 reveal">
-                <h4 class="font-bold text-sm tracking-widest uppercase mb-1">Navigasi Cepat</h4>
-                <a href="#panel-verifikasi" class="text-sm font-medium flex items-center gap-2 hover:text-blue-600 transition-colors w-fit"><i class="ph ph-lightning text-blue-500"></i> Mulai Verifikasi Pro</a>
-                <a href="#fitur-pro" class="text-sm font-medium flex items-center gap-2 hover:text-green-600 transition-colors w-fit"><i class="ph ph-check-circle text-green-500"></i> Fitur Alight Motion</a>
-                <a href="#faq" class="text-sm font-medium flex items-center gap-2 hover:text-purple-600 transition-colors w-fit"><i class="ph ph-arrow-up-right text-purple-500"></i> Pertanyaan Umum (FAQ)</a>
+            <div class="flex flex-col gap-4 reveal">
+                <h4 class="font-bold text-sm lg:text-base tracking-widest uppercase mb-1">Navigasi Cepat</h4>
+                <a href="#panel-verifikasi" class="text-sm lg:text-base font-medium flex items-center gap-2 hover:text-blue-600 transition-colors w-fit"><i class="ph ph-lightning text-blue-500 text-lg"></i> Mulai Verifikasi Pro</a>
+                <a href="#fitur-pro" class="text-sm lg:text-base font-medium flex items-center gap-2 hover:text-green-600 transition-colors w-fit"><i class="ph ph-check-circle text-green-500 text-lg"></i> Fitur Alight Motion</a>
+                <a href="#faq" class="text-sm lg:text-base font-medium flex items-center gap-2 hover:text-purple-600 transition-colors w-fit"><i class="ph ph-arrow-up-right text-purple-500 text-lg"></i> Pertanyaan Umum (FAQ)</a>
             </div>
 
-            <div class="flex flex-col gap-3 reveal">
-                <h4 class="font-bold text-sm tracking-widest uppercase mb-1">Sosial Media Resmi</h4>
-                <p class="text-xs font-medium text-gray-700 mb-2">Ikuti sosial media resmi AlfianShop untuk pembaruan, tutorial, dan bantuan Alight Motion Pro.</p>
-                <div class="flex gap-3">
-                    <!-- Interaktif: Tombol Social Media -->
-                    <a href="#" class="anim-btn-social w-10 h-10 bg-[#0088cc] border-2 border-black rounded-xl flex items-center justify-center text-white shadow-brutal-sm"><i class="ph-fill ph-telegram-logo text-xl"></i></a>
-                    <a href="#" class="anim-btn-social w-10 h-10 bg-black border-2 border-black rounded-xl flex items-center justify-center text-white shadow-brutal-sm"><i class="ph-fill ph-tiktok-logo text-xl"></i></a>
-                    <a href="#" class="anim-btn-social w-10 h-10 bg-[#E1306C] border-2 border-black rounded-xl flex items-center justify-center text-white shadow-brutal-sm"><i class="ph-fill ph-instagram-logo text-xl"></i></a>
+            <div class="flex flex-col gap-4 reveal">
+                <h4 class="font-bold text-sm lg:text-base tracking-widest uppercase mb-1">Sosial Media Resmi</h4>
+                <p class="text-xs lg:text-sm font-medium text-gray-700 mb-2">Ikuti sosial media resmi AlfianShop untuk pembaruan, tutorial, dan bantuan Alight Motion Pro.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="anim-btn-social w-12 h-12 bg-[#0088cc] border-2 border-black rounded-xl flex items-center justify-center text-white shadow-brutal-sm"><i class="ph-fill ph-telegram-logo text-2xl"></i></a>
+                    <a href="#" class="anim-btn-social w-12 h-12 bg-black border-2 border-black rounded-xl flex items-center justify-center text-white shadow-brutal-sm"><i class="ph-fill ph-tiktok-logo text-2xl"></i></a>
+                    <a href="#" class="anim-btn-social w-12 h-12 bg-[#E1306C] border-2 border-black rounded-xl flex items-center justify-center text-white shadow-brutal-sm"><i class="ph-fill ph-instagram-logo text-2xl"></i></a>
                 </div>
             </div>
         </div>
-        <div class="border-t-2 border-black mt-8 pt-4 flex flex-col items-center justify-center text-center gap-2 reveal">
-            <p class="text-xs font-bold text-gray-600">© 2026 AlightPro. All rights reserved.</p>
-            <p class="text-xs font-bold text-gray-800 bg-brutal-yellow border-2 border-black px-3 py-1 rounded-full shadow-brutal-sm">Dibuat dengan ❤️ untuk Editor Alight Motion Indonesia</p>
+        <div class="border-t-2 border-black mt-10 pt-5 flex flex-col items-center justify-center text-center gap-3 reveal">
+            <p class="text-xs sm:text-sm font-bold text-gray-600">© 2026 AlightPro. All rights reserved.</p>
+            <p class="text-xs sm:text-sm font-bold text-gray-800 bg-brutal-yellow border-2 border-black px-4 py-1.5 rounded-full shadow-brutal-sm">Dibuat dengan ❤️ untuk Editor Alight Motion Indonesia</p>
         </div>
     </footer>
 
     <!-- FLOATING CS BUTTON -->
-    <!-- Interaktif: Tombol Bantuan (Float) -->
-    <button onclick="openCSModal()" class="anim-btn-float fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-14 h-14 sm:w-16 sm:h-16 bg-brutal-yellow border-3 border-black rounded-2xl shadow-brutal flex items-center justify-center z-40">
-        <i class="ph ph-headset text-3xl sm:text-4xl"></i>
-        <span class="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5">
+    <button onclick="openCSModal()" class="anim-btn-float fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-brutal-yellow border-3 border-black rounded-2xl shadow-brutal flex items-center justify-center z-40">
+        <i class="ph ph-headset text-3xl sm:text-4xl lg:text-5xl"></i>
+        <span class="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-4 w-4 sm:h-5 sm:w-5 bg-green-500 border-2 border-black"></span>
+            <span class="relative inline-flex rounded-full h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 bg-green-500 border-2 lg:border-3 border-black"></span>
         </span>
     </button>
 
     <!-- MODAL CS & KOMUNITAS -->
     <div id="cs-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div id="cs-modal-bg" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0" onclick="closeCSModal()"></div>
-        <div id="cs-modal-content" class="bg-white w-full max-w-md sm:max-w-lg border-4 border-black rounded-3xl shadow-brutal-large relative z-10 flex flex-col max-h-[90vh] sm:max-h-[85vh] overflow-hidden opacity-0 scale-95">
+        <div id="cs-modal-content" class="bg-white w-full max-w-md sm:max-w-lg lg:max-w-xl border-4 border-black rounded-3xl shadow-brutal-large relative z-10 flex flex-col max-h-[90vh] sm:max-h-[85vh] overflow-hidden opacity-0 scale-95">
             
-            <div class="bg-brutal-blue border-b-4 border-black p-4 flex justify-between items-center shrink-0">
+            <div class="bg-brutal-blue border-b-4 border-black p-4 lg:p-5 flex justify-between items-center shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brutal-yellow border-2 border-black rounded-full flex items-center justify-center shadow-brutal-sm"><i class="ph ph-headset text-2xl sm:text-3xl"></i></div>
                     <div>
-                        <h2 class="font-bold text-sm sm:text-base text-black leading-tight">Pusat Bantuan & Komunitas</h2>
-                        <p class="text-[10px] sm:text-xs font-semibold text-gray-800">Pusat Layanan CS & Monitoring</p>
+                        <h2 class="font-bold text-sm sm:text-base lg:text-lg text-black leading-tight">Pusat Bantuan & Komunitas</h2>
+                        <p class="text-[10px] sm:text-xs lg:text-sm font-semibold text-gray-800">Pusat Layanan CS & Monitoring</p>
                     </div>
                 </div>
-                <!-- Interaktif: Tombol Close -->
                 <button onclick="closeCSModal()" class="anim-btn-close w-8 h-8 sm:w-9 sm:h-9 bg-white border-2 border-black rounded-xl flex items-center justify-center shadow-brutal-sm"><i class="ph ph-x font-bold text-lg text-black"></i></button>
             </div>
             
-            <div class="p-4 overflow-y-auto flex-1 bg-gray-50 flex flex-col gap-4 custom-scrollbar">
+            <div class="p-4 lg:p-5 overflow-y-auto flex-1 bg-gray-50 flex flex-col gap-4 custom-scrollbar">
+                
                 <div class="w-full bg-brutal-yellow border-2 border-black rounded-2xl p-3 shadow-brutal-sm flex items-center justify-center gap-2">
-                    <i class="ph ph-chat-circle-dots text-xl text-black"></i>
-                    <span class="font-bold text-xs sm:text-sm text-black">Kontak CS & Komunitas</span>
+                    <i class="ph ph-chat-circle-dots text-xl lg:text-2xl text-black"></i>
+                    <span class="font-bold text-xs sm:text-sm lg:text-base text-black">Kontak CS & Komunitas</span>
                 </div>
-                <div class="bg-brutal-purple border-2 border-black rounded-2xl p-4 text-xs sm:text-sm font-semibold text-gray-900 shadow-brutal-sm text-center">
+
+                <div class="bg-brutal-purple border-2 border-black rounded-2xl p-4 text-xs sm:text-sm lg:text-base font-semibold text-gray-900 shadow-brutal-sm text-center">
                     Dapatkan informasi terbaru, solusi kendala, dan diskusi seputar Alight Motion Pro.
                 </div>
 
-                <div class="flex flex-col gap-3">
-                    <a href="https://chat.whatsapp.com/DWUNcTpX7Ai5sQngHjJ6nq" target="_blank" class="anim-btn-action bg-brutal-green border-2 border-black rounded-2xl p-3 shadow-brutal-sm flex items-center justify-between group">
+                <div class="flex flex-col gap-3 lg:gap-4">
+                    <a href="https://chat.whatsapp.com/DWUNcTpX7Ai5sQngHjJ6nq" target="_blank" class="anim-btn-action bg-brutal-green border-2 border-black rounded-2xl p-3 lg:p-4 shadow-brutal-sm flex items-center justify-between group">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-white border-2 border-black rounded-xl flex items-center justify-center shrink-0"><i class="ph-fill ph-whatsapp-logo text-green-600 text-2xl"></i></div>
-                            <div><h4 class="font-bold text-xs sm:text-sm text-black">Grup WhatsApp Komunitas</h4><p class="text-[10px] font-semibold text-gray-800">Diskusi & info update Alight Motion</p></div>
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white border-2 border-black rounded-xl flex items-center justify-center shrink-0"><i class="ph-fill ph-whatsapp-logo text-green-600 text-2xl lg:text-3xl"></i></div>
+                            <div><h4 class="font-bold text-xs sm:text-sm lg:text-base text-black">Grup WhatsApp Komunitas</h4><p class="text-[10px] lg:text-xs font-semibold text-gray-800">Diskusi & info update Alight Motion</p></div>
                         </div>
-                        <i class="ph ph-arrow-square-out text-lg font-bold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-black"></i>
+                        <i class="ph ph-arrow-square-out text-lg lg:text-xl font-bold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-black"></i>
                     </a>
                     
-                    <a href="https://whatsapp.com/channel/0029Vb7tD4BKAwEhQBRRVw44" target="_blank" class="anim-btn-action bg-brutal-teal border-2 border-black rounded-2xl p-3 shadow-brutal-sm flex items-center justify-between group">
+                    <a href="https://whatsapp.com/channel/0029Vb7tD4BKAwEhQBRRVw44" target="_blank" class="anim-btn-action bg-brutal-teal border-2 border-black rounded-2xl p-3 lg:p-4 shadow-brutal-sm flex items-center justify-between group">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-white border-2 border-black rounded-xl flex items-center justify-center shrink-0"><i class="ph ph-broadcast text-teal-600 text-2xl"></i></div>
-                            <div><h4 class="font-bold text-xs sm:text-sm text-black">Channel WhatsApp Resmi</h4><p class="text-[10px] font-semibold text-gray-800">Pengumuman & kabar fitur terbaru</p></div>
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white border-2 border-black rounded-xl flex items-center justify-center shrink-0"><i class="ph ph-broadcast text-teal-600 text-2xl lg:text-3xl"></i></div>
+                            <div><h4 class="font-bold text-xs sm:text-sm lg:text-base text-black">Channel WhatsApp Resmi</h4><p class="text-[10px] lg:text-xs font-semibold text-gray-800">Pengumuman & kabar fitur terbaru</p></div>
                         </div>
-                        <i class="ph ph-arrow-square-out text-lg font-bold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-black"></i>
+                        <i class="ph ph-arrow-square-out text-lg lg:text-xl font-bold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-black"></i>
                     </a>
                     
-                    <a href="#" target="_blank" class="anim-btn-action bg-[#3b82f6] border-2 border-black rounded-2xl p-3 shadow-brutal-sm flex items-center justify-between group">
+                    <a href="#" target="_blank" class="anim-btn-action bg-[#3b82f6] border-2 border-black rounded-2xl p-3 lg:p-4 shadow-brutal-sm flex items-center justify-between group">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-white border-2 border-black rounded-xl flex items-center justify-center shrink-0"><i class="ph-fill ph-paper-plane-tilt text-blue-600 text-2xl"></i></div>
-                            <div><h4 class="font-bold text-xs sm:text-sm text-white">Grup Telegram Support</h4><p class="text-[10px] font-medium text-blue-100">Dukungan teknis cepat & file XML</p></div>
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white border-2 border-black rounded-xl flex items-center justify-center shrink-0"><i class="ph-fill ph-paper-plane-tilt text-blue-600 text-2xl lg:text-3xl"></i></div>
+                            <div><h4 class="font-bold text-xs sm:text-sm lg:text-base text-white">Grup Telegram Support</h4><p class="text-[10px] lg:text-xs font-medium text-blue-100">Dukungan teknis cepat & file XML</p></div>
                         </div>
-                        <i class="ph ph-arrow-square-out text-lg font-bold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-white"></i>
+                        <i class="ph ph-arrow-square-out text-lg lg:text-xl font-bold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-white"></i>
                     </a>
                     
-                    <a href="https://wa.me/+6285821906899?text=halo,+saya+mau+menanyakan+tentang+website+anda" target="_blank" class="anim-btn-action bg-brutal-yellow border-2 border-black rounded-2xl p-3 shadow-brutal-sm flex items-center justify-between group">
+                    <a href="https://wa.me/+6285821906899?text=halo,+saya+mau+menanyakan+tentang+website+anda" target="_blank" class="anim-btn-action bg-brutal-yellow border-2 border-black rounded-2xl p-3 lg:p-4 shadow-brutal-sm flex items-center justify-between group">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-white border-2 border-black rounded-xl flex items-center justify-center shrink-0"><i class="ph ph-chat-circle-dots text-orange-600 text-2xl"></i></div>
-                            <div><h4 class="font-bold text-xs sm:text-sm text-black">Kontak Admin Direct</h4><p class="text-[10px] font-semibold text-gray-800">Konsultasi kendala verifikasi khusus</p></div>
+                            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white border-2 border-black rounded-xl flex items-center justify-center shrink-0"><i class="ph ph-chat-circle-dots text-orange-600 text-2xl lg:text-3xl"></i></div>
+                            <div><h4 class="font-bold text-xs sm:text-sm lg:text-base text-black">Kontak Admin Direct</h4><p class="text-[10px] lg:text-xs font-semibold text-gray-800">Konsultasi kendala verifikasi khusus</p></div>
                         </div>
-                        <i class="ph ph-arrow-square-out text-lg font-bold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-black"></i>
+                        <i class="ph ph-arrow-square-out text-lg lg:text-xl font-bold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-black"></i>
                     </a>
                 </div>
 
-                <div class="mt-2 text-center flex flex-col gap-3 w-full">
-                    <h4 class="font-bold text-[11px] sm:text-xs tracking-widest uppercase text-black">KUNJUNGI MEDIA SOSIAL RESMI (@ALFIANSHOP)</h4>
+                <div class="mt-3 text-center flex flex-col gap-3 w-full">
+                    <h4 class="font-bold text-[11px] sm:text-xs lg:text-sm tracking-widest uppercase text-black">KUNJUNGI MEDIA SOSIAL RESMI (@ALFIANSHOP)</h4>
                     <div class="grid grid-cols-3 gap-2 sm:gap-3 w-full">
-                        <!-- Interaktif: Tombol Social Media Dalam Modal -->
-                        <a href="#" class="anim-btn-social bg-[#0088cc] border-2 border-black rounded-xl py-2.5 flex flex-col items-center justify-center text-white shadow-brutal-sm gap-1 w-full">
-                            <i class="ph-fill ph-paper-plane-tilt text-xl"></i><span class="text-[9px] font-bold">Telegram</span>
+                        <a href="#" class="anim-btn-social bg-[#0088cc] border-2 border-black rounded-xl py-3 flex flex-col items-center justify-center text-white shadow-brutal-sm gap-1 w-full">
+                            <i class="ph-fill ph-paper-plane-tilt text-2xl"></i><span class="text-[10px] font-bold">Telegram</span>
                         </a>
-                        <a href="#" class="anim-btn-social bg-black border-2 border-black rounded-xl py-2.5 flex flex-col items-center justify-center text-white shadow-brutal-sm gap-1 w-full">
-                            <i class="ph-fill ph-tiktok-logo text-xl"></i><span class="text-[9px] font-bold">TikTok</span>
+                        <a href="#" class="anim-btn-social bg-black border-2 border-black rounded-xl py-3 flex flex-col items-center justify-center text-white shadow-brutal-sm gap-1 w-full">
+                            <i class="ph-fill ph-tiktok-logo text-2xl"></i><span class="text-[10px] font-bold">TikTok</span>
                         </a>
-                        <a href="#" class="anim-btn-social bg-[#E1306C] border-2 border-black rounded-xl py-2.5 flex flex-col items-center justify-center text-white shadow-brutal-sm gap-1 w-full">
-                            <i class="ph-fill ph-instagram-logo text-xl"></i><span class="text-[9px] font-bold">Instagram</span>
+                        <a href="#" class="anim-btn-social bg-[#E1306C] border-2 border-black rounded-xl py-3 flex flex-col items-center justify-center text-white shadow-brutal-sm gap-1 w-full">
+                            <i class="ph-fill ph-instagram-logo text-2xl"></i><span class="text-[10px] font-bold">Instagram</span>
                         </a>
                     </div>
                 </div>
             </div>
             
-            <div class="bg-white border-t-4 border-black p-4 flex justify-between items-center shrink-0">
-                <span class="text-[11px] font-bold text-gray-600">AlightPro Security v2.5.0</span>
-                <!-- Interaktif: Tombol Tutup -->
-                <button onclick="closeCSModal()" class="anim-btn-tutup bg-brutal-pink border-2 border-black px-5 py-2 rounded-xl font-bold text-xs text-black shadow-brutal-sm">Tutup</button>
+            <div class="bg-white border-t-4 border-black p-4 lg:p-5 flex justify-between items-center shrink-0">
+                <span class="text-[11px] lg:text-xs font-bold text-gray-600">AlightPro Security v2.5.0</span>
+                <button onclick="closeCSModal()" class="anim-btn-tutup bg-brutal-pink border-2 border-black px-6 py-2.5 rounded-xl font-bold text-xs lg:text-sm text-black shadow-brutal-sm">Tutup</button>
             </div>
         </div>
     </div>
@@ -574,25 +592,23 @@
     <!-- [ MODAL RIWAYAT ] -->
     <div id="history-modal" class="fixed inset-0 z-[70] flex items-center justify-center px-4 hidden">
         <div id="history-modal-bg" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0" onclick="closeHistoryModal()"></div>
-        <div id="history-modal-content" class="bg-white w-full max-w-md border-4 border-black rounded-3xl shadow-brutal-large relative z-10 flex flex-col max-h-[80vh] overflow-hidden opacity-0 scale-95">
-            <div class="bg-brutal-yellow border-b-4 border-black p-4 flex justify-between items-center shrink-0">
+        <div id="history-modal-content" class="bg-white w-full max-w-md lg:max-w-lg border-4 border-black rounded-3xl shadow-brutal-large relative z-10 flex flex-col max-h-[80vh] overflow-hidden opacity-0 scale-95">
+            <div class="bg-brutal-yellow border-b-4 border-black p-4 lg:p-5 flex justify-between items-center shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-white border-2 border-black rounded-xl flex items-center justify-center shadow-brutal-sm"><i class="ph ph-clock-counter-clockwise text-2xl"></i></div>
+                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white border-2 border-black rounded-xl flex items-center justify-center shadow-brutal-sm"><i class="ph ph-clock-counter-clockwise text-2xl lg:text-3xl"></i></div>
                     <div>
-                        <h2 class="font-bold text-sm sm:text-base text-black leading-tight">Riwayat Verifikasi</h2>
-                        <p class="text-[10px] sm:text-xs font-semibold text-gray-800">Daftar percobaan verifikasi</p>
+                        <h2 class="font-bold text-sm sm:text-base lg:text-lg text-black leading-tight">Riwayat Verifikasi</h2>
+                        <p class="text-[10px] sm:text-xs lg:text-sm font-semibold text-gray-800">Daftar percobaan verifikasi</p>
                     </div>
                 </div>
-                <!-- Interaktif: Tombol Close X -->
                 <button onclick="closeHistoryModal()" class="anim-btn-close w-8 h-8 sm:w-9 sm:h-9 bg-white border-2 border-black rounded-xl flex items-center justify-center shadow-brutal-sm"><i class="ph ph-x font-bold text-lg text-black"></i></button>
             </div>
             
-            <div id="history-list" class="p-4 overflow-y-auto flex-1 bg-gray-50 flex flex-col custom-scrollbar"></div>
+            <div id="history-list" class="p-4 lg:p-5 overflow-y-auto flex-1 bg-gray-50 flex flex-col custom-scrollbar"></div>
             
-            <div class="bg-white border-t-4 border-black p-4 flex justify-center items-center shrink-0">
-                <!-- Interaktif: Tombol Danger/Hapus -->
-                <button onclick="clearHistory()" class="anim-btn-danger text-xs sm:text-sm font-bold text-red-600 bg-red-100 border-2 border-red-200 px-4 py-2 rounded-xl w-full flex justify-center items-center gap-2">
-                    <i class="ph ph-trash"></i> Hapus Semua Riwayat
+            <div class="bg-white border-t-4 border-black p-4 lg:p-5 flex justify-center items-center shrink-0">
+                <button onclick="clearHistory()" class="anim-btn-danger text-xs sm:text-sm lg:text-base font-bold text-red-600 bg-red-100 border-2 border-red-200 px-5 py-2.5 lg:py-3 rounded-xl w-full flex justify-center items-center gap-2">
+                    <i class="ph ph-trash lg:text-lg"></i> Hapus Semua Riwayat
                 </button>
             </div>
         </div>
@@ -603,46 +619,45 @@
         <div id="success-modal-bg" class="absolute inset-0 bg-black/40 backdrop-blur-md opacity-0" onclick="closeSuccessModal()"></div>
         <div id="confetti-container" class="fixed inset-0 overflow-hidden pointer-events-none z-10 opacity-0"></div>
 
-        <div id="success-modal-content" class="bg-white w-full max-w-sm border-4 border-black rounded-3xl shadow-brutal-large relative z-20 flex flex-col p-4 sm:p-6 opacity-0 scale-95 mt-10">
+        <div id="success-modal-content" class="bg-white w-full max-w-sm lg:max-w-md border-4 border-black rounded-3xl shadow-brutal-large relative z-20 flex flex-col p-5 sm:p-6 lg:p-8 opacity-0 scale-95 mt-10">
             <div class="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center z-30">
                 <div class="relative">
-                    <div class="w-16 h-16 bg-brutal-green border-4 border-black rounded-full flex items-center justify-center shadow-brutal">
-                        <i class="ph ph-check text-4xl font-bold"></i>
+                    <div class="w-16 h-16 lg:w-20 lg:h-20 bg-brutal-green border-4 border-black rounded-full flex items-center justify-center shadow-brutal">
+                        <i class="ph ph-check text-4xl lg:text-5xl font-bold"></i>
                     </div>
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-max bg-brutal-yellow border-2 border-black px-3 py-0.5 rounded-full text-[10px] font-bold shadow-brutal flex items-center gap-1 transform-none">
-                        <i class="ph-fill ph-sparkle text-xs"></i>
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-max bg-brutal-yellow border-2 border-black px-3 py-0.5 rounded-full text-[10px] lg:text-xs font-bold shadow-brutal flex items-center gap-1 transform-none">
+                        <i class="ph-fill ph-sparkle text-xs lg:text-sm"></i>
                         PRO ACTIVE
                     </div>
                 </div>
             </div>
 
-            <!-- Interaktif: Tombol Close X -->
-            <button onclick="closeSuccessModal()" class="anim-btn-close absolute top-4 right-4 w-8 h-8 border-2 border-black rounded-xl bg-white flex items-center justify-center shadow-brutal-sm z-30">
-                <i class="ph ph-x font-bold text-lg text-black"></i>
+            <button onclick="closeSuccessModal()" class="anim-btn-close absolute top-4 right-4 w-8 h-8 lg:w-10 lg:h-10 border-2 border-black rounded-xl bg-white flex items-center justify-center shadow-brutal-sm z-30">
+                <i class="ph ph-x font-bold text-lg lg:text-xl text-black"></i>
             </button>
 
-            <div class="mt-8 flex flex-col items-center">
-                <h3 class="text-2xl font-bold mb-1 flex items-center gap-2">
+            <div class="mt-8 lg:mt-10 flex flex-col items-center">
+                <h3 class="text-2xl lg:text-3xl font-bold mb-1 flex items-center gap-2">
                     Verifikasi Berhasil! <span class="animate-tada">🎉</span>
                 </h3>
-                <p class="text-xs font-medium text-gray-700 mb-5 text-center leading-relaxed">Selamat! Akun Alight Motion kamu resmi aktif versi Pro 1 Tahun.</p>
+                <p class="text-xs lg:text-sm font-medium text-gray-700 mb-6 text-center leading-relaxed">Selamat! Akun Alight Motion kamu resmi aktif versi Pro 1 Tahun.</p>
 
-                <div class="flex gap-2 w-full mb-4">
-                    <div class="flex-1 bg-brutal-blue border-2 border-black rounded-xl py-2 px-1 text-center shadow-brutal-sm">
-                        <i class="ph ph-video-camera text-xl mb-1 text-blue-800"></i>
-                        <p class="text-[9px] font-bold leading-tight">No Watermark</p>
+                <div class="flex gap-2 w-full mb-5">
+                    <div class="flex-1 bg-brutal-blue border-2 border-black rounded-xl py-3 lg:py-4 px-1 text-center shadow-brutal-sm">
+                        <i class="ph ph-video-camera text-xl lg:text-2xl mb-1 text-blue-800"></i>
+                        <p class="text-[9px] lg:text-xs font-bold leading-tight">No Watermark</p>
                     </div>
-                    <div class="flex-1 bg-brutal-green border-2 border-black rounded-xl py-2 px-1 text-center shadow-brutal-sm">
-                        <i class="ph ph-medal text-xl mb-1 text-green-800"></i>
-                        <p class="text-[9px] font-bold leading-tight">1 Tahun Full</p>
+                    <div class="flex-1 bg-brutal-green border-2 border-black rounded-xl py-3 lg:py-4 px-1 text-center shadow-brutal-sm">
+                        <i class="ph ph-medal text-xl lg:text-2xl mb-1 text-green-800"></i>
+                        <p class="text-[9px] lg:text-xs font-bold leading-tight">1 Tahun Full</p>
                     </div>
-                    <div class="flex-1 bg-brutal-yellow border-2 border-black rounded-xl py-2 px-1 text-center shadow-brutal-sm">
-                        <i class="ph ph-files text-xl mb-1 text-yellow-800"></i>
-                        <p class="text-[9px] font-bold leading-tight">Full XML Preset</p>
+                    <div class="flex-1 bg-brutal-yellow border-2 border-black rounded-xl py-3 lg:py-4 px-1 text-center shadow-brutal-sm">
+                        <i class="ph ph-files text-xl lg:text-2xl mb-1 text-yellow-800"></i>
+                        <p class="text-[9px] lg:text-xs font-bold leading-tight">Full XML Preset</p>
                     </div>
                 </div>
 
-                <div id="copy-data-box" class="w-full border-2 border-black rounded-xl p-3 text-xs font-medium space-y-3 mb-5 bg-gray-50 shadow-brutal-sm">
+                <div id="copy-data-box" class="w-full border-2 border-black rounded-xl p-4 lg:p-5 text-xs lg:text-sm font-medium space-y-3 mb-6 bg-gray-50 shadow-brutal-sm">
                     <div class="flex justify-between items-center border-b border-gray-300 pb-2 gap-4">
                         <span class="text-gray-500 whitespace-nowrap">Email Terdaftar:</span>
                         <span id="modal-email" class="font-bold text-black break-all text-right">email@domain.com</span>
@@ -665,12 +680,11 @@
                     </div>
                 </div>
 
-                <div class="w-full space-y-2">
-                    <!-- Interaktif: Tombol Action Modal -->
-                    <button onclick="copySuccessData(this)" class="anim-btn-action w-full bg-brutal-yellow border-2 border-black py-2.5 rounded-xl font-bold shadow-brutal flex justify-center items-center gap-2 text-sm">
-                        <i class="ph ph-copy text-lg"></i> Salin Bukti Verifikasi
+                <div class="w-full space-y-3">
+                    <button onclick="copySuccessData(this)" class="anim-btn-action w-full bg-brutal-yellow border-2 border-black py-3 lg:py-4 rounded-xl font-bold shadow-brutal flex justify-center items-center gap-2 text-sm lg:text-base">
+                        <i class="ph ph-copy text-lg lg:text-xl"></i> Salin Bukti Verifikasi
                     </button>
-                    <button onclick="resetAndCloseModal()" class="anim-btn-action w-full bg-brutal-blue border-2 border-black py-2.5 rounded-xl font-bold shadow-brutal flex justify-center items-center gap-2 text-sm">
+                    <button onclick="resetAndCloseModal()" class="anim-btn-action w-full bg-brutal-blue border-2 border-black py-3 lg:py-4 rounded-xl font-bold shadow-brutal flex justify-center items-center gap-2 text-sm lg:text-base">
                         Lanjut Verifikasi Akun Lainnya
                     </button>
                 </div>
