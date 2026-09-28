@@ -18,7 +18,7 @@
                 extend: {
                     fontFamily: { sans: ['Space Grotesk', 'sans-serif'] },
                     colors: {
-                        'bg-main': '#fffdf5',
+                        'bg-main': '#fffdf5', 
                         'brutal-blue': '#93c5fd',
                         'brutal-yellow': '#fef08a',
                         'brutal-green': '#bbf7d0',
@@ -37,12 +37,10 @@
         }
     </script>
 </head>
-<!-- Body menggunakan padding vertikal untuk memberikan ruang sticky -->
 <body class="text-black min-h-screen flex flex-col items-center py-4 px-3 sm:py-6 sm:px-6 md:px-8 overflow-x-hidden relative bg-bg-main">
 
-    <!-- [ UI FIX: NAVBAR STICKY & SPASI MOBILE ] -->
-    <!-- Navbar kini bersifat sticky dengan jarak atas yang proporsional -->
-    <nav id="main-navbar" class="w-full max-w-6xl bg-white border-3 sm:border-4 border-black rounded-2xl shadow-brutal flex flex-col md:flex-row justify-between items-center p-3 sm:p-4 mb-6 sm:mb-8 gap-3 md:gap-4 sticky top-4 sm:top-6 z-[99] transition-all duration-300 reveal">
+    <!-- [ UI FIX: Navbar Sticky dengan gap terukur & margin disesuaikan ] -->
+    <nav id="main-navbar" class="w-full max-w-6xl bg-white border-3 sm:border-4 border-black rounded-2xl shadow-brutal flex flex-col md:flex-row justify-between items-center p-3 sm:p-4 mb-6 sm:mb-8 gap-3 sm:gap-4 sticky top-0 z-[999] transition-all duration-300 reveal">
         
         <div class="flex items-center justify-between w-full md:w-1/3">
             <div class="flex items-center gap-2 sm:gap-3">
@@ -60,7 +58,7 @@
             </button>
         </div>
 
-        <!-- Margin-top (mt-2) dihapus agar posisinya naik sedikit di mobile namun tetap dibatasi gap-3 parent -->
+        <!-- Margin atas dihilangkan, mengandalkan gap parent agar proporsional -->
         <div class="flex w-full md:w-1/3 justify-center">
             <div class="flex border-2 border-black rounded-full bg-white p-1 w-full sm:w-auto shadow-brutal-sm relative isolate">
                 <div id="nav-slider" class="absolute top-1 bottom-1 rounded-full transition-all duration-300 -z-10 bg-brutal-blue border-2 border-black"></div>
@@ -154,7 +152,6 @@
                 </div>
 
                 <div class="relative w-full">
-                    
                     <!-- STEP 1 -->
                     <div id="step-1" class="step-container active-step w-full">
                         <label class="block text-xs sm:text-sm lg:text-base font-bold mb-2 uppercase tracking-wide">Alamat Email Alight Creative</label>
@@ -262,55 +259,49 @@
                 </div>
             </div>
 
-            <!-- [ UI FIX: DESAIN STATISTIK VERIFIKASI IDENTIK DENGAN REFERENSI ] -->
+            <!-- [ UI FIX: Perombakan Layout "Statistik Verifikasi" agar persis referensi ] -->
             <div class="grid grid-cols-1 gap-4 reveal">
-                <div class="anim-stats-scale bg-brutal-yellow border-3 sm:border-4 border-black rounded-2xl shadow-brutal p-5 sm:p-6 lg:p-7 flex flex-col gap-4 sm:gap-5 cursor-default">
+                <div class="anim-stats-scale bg-brutal-yellow border-3 sm:border-4 border-black rounded-2xl shadow-brutal p-4 sm:p-5 lg:p-6 cursor-default">
                     
-                    <!-- Header -->
-                    <div class="flex justify-between items-start sm:items-center">
+                    <!-- Bagian Atas Statistik -->
+                    <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-3">
-                            <!-- Bingkai Ikon Bulat Kotak -->
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 border-2 border-black rounded-xl flex items-center justify-center bg-transparent shrink-0">
-                                <i class="ph ph-users text-2xl sm:text-3xl"></i>
+                            <div class="w-10 h-10 border-2 border-black rounded-xl flex items-center justify-center bg-white shadow-brutal-sm shrink-0">
+                                <i class="ph ph-users text-xl"></i>
                             </div>
-                            <div class="flex flex-col">
-                                <h4 class="font-bold text-sm sm:text-base lg:text-lg tracking-wide uppercase leading-tight">Statistik Verifikasi Real</h4>
-                                <p class="text-[10px] sm:text-xs font-medium text-gray-700">Live Real-Time Database</p>
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm lg:text-base tracking-wide leading-tight">STATISTIK VERIFIKASI REAL</h4>
+                                <p class="text-[9px] sm:text-[10px] lg:text-xs font-medium text-gray-700">Live Real-Time Database</p>
                             </div>
                         </div>
-                        <div class="bg-brutal-green border-2 border-black px-3 py-1.5 rounded-full shadow-brutal-sm flex items-center gap-2 shrink-0">
-                            <div class="w-2.5 h-2.5 bg-black rounded-full animate-pulse"></div>
-                            <span class="text-[10px] sm:text-xs font-bold tracking-wide">LIVE</span>
+                        <span class="bg-brutal-green border-2 border-black px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] lg:text-xs font-bold shadow-brutal-sm flex items-center gap-1.5 animate-pulse shrink-0">
+                            <div class="w-2 h-2 lg:w-2.5 lg:h-2.5 bg-black rounded-full"></div> LIVE
+                        </span>
+                    </div>
+                    
+                    <!-- Bagian Tengah: Grid 2 Kolom -->
+                    <div class="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+                        <div class="bg-white border-2 sm:border-3 border-black rounded-xl p-3 sm:p-4 shadow-brutal-sm">
+                            <p class="text-[10px] sm:text-xs font-bold text-blue-600 flex items-center gap-1 mb-1"><i class="ph ph-calendar-blank"></i> HARI INI</p>
+                            <p class="text-3xl sm:text-4xl lg:text-5xl font-bold my-1 leading-none" id="daily-count">6</p>
+                            <p class="text-[10px] sm:text-xs font-semibold text-gray-600 mt-1">6 Terverifikasi</p>
+                        </div>
+                        <div class="bg-brutal-blue border-2 sm:border-3 border-black rounded-xl p-3 sm:p-4 shadow-brutal-sm">
+                            <p class="text-[10px] sm:text-xs font-bold flex items-center gap-1 mb-1 text-black"><i class="ph ph-sparkle text-pink-600"></i> TOTAL SUKSES</p>
+                            <p class="text-3xl sm:text-4xl lg:text-5xl font-bold my-1 leading-none text-black">16.6K</p>
+                            <p class="text-[10px] sm:text-xs font-semibold text-gray-800 mt-1">16.625 Akun Pro</p>
                         </div>
                     </div>
 
-                    <!-- Grid -->
-                    <div class="grid grid-cols-2 gap-3 sm:gap-4 mt-1">
-                        <div class="bg-white border-2 border-black rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-brutal-sm">
-                            <div class="flex items-center gap-1.5 mb-2 sm:mb-3">
-                                <i class="ph ph-calendar-blank text-blue-600 text-lg sm:text-xl"></i>
-                                <span class="text-[10px] sm:text-xs font-bold text-blue-600 tracking-wide">HARI INI</span>
-                            </div>
-                            <h5 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-1" id="daily-count">6</h5>
-                            <p class="text-[10px] sm:text-xs font-medium text-gray-600">6 Terverifikasi</p>
-                        </div>
-                        <div class="bg-[#93c5fd] border-2 border-black rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-brutal-sm">
-                            <div class="flex items-center gap-1.5 mb-2 sm:mb-3">
-                                <i class="ph ph-sparkle text-pink-600 text-lg sm:text-xl"></i>
-                                <span class="text-[10px] sm:text-xs font-bold text-gray-900 tracking-wide">TOTAL SUKSES</span>
-                            </div>
-                            <h5 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-1">16.6K</h5>
-                            <p class="text-[10px] sm:text-xs font-medium text-gray-800">16.625 Akun Pro</p>
-                        </div>
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="flex justify-between items-center mt-1 pt-4 border-t-2 border-black/10">
-                        <div class="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-900">
-                            <i class="ph-fill ph-shield-check text-green-600 text-base sm:text-lg"></i> Terverifikasi Otomatis
-                        </div>
-                        <div class="bg-white border-2 border-black rounded-lg px-2 sm:px-3 py-1 flex items-center gap-1 text-[10px] sm:text-xs font-bold text-blue-700 shadow-brutal-sm">
-                            <i class="ph ph-database text-sm sm:text-base"></i> mongodb
+                    <!-- Bagian Bawah: Divider & Badge -->
+                    <hr class="border-black border-t-2 mb-3">
+                    <div class="flex justify-between items-center">
+                        <p class="text-[10px] sm:text-xs font-bold text-gray-800 flex items-center gap-1">
+                            <i class="ph ph-shield-check text-green-600 text-lg"></i> Terverifikasi Otomatis
+                        </p>
+                        <div class="bg-white border-2 border-black rounded-lg px-2 py-0.5 flex items-center gap-1 shadow-brutal-sm">
+                            <i class="ph ph-database text-blue-600"></i>
+                            <span class="text-[9px] sm:text-[10px] font-bold">mongodb</span>
                         </div>
                     </div>
 
@@ -367,8 +358,8 @@
         <p class="reveal text-sm sm:text-base lg:text-lg font-medium text-gray-600 text-center mb-10">Jawaban lengkap seputar mekanisme verifikasi dan lisensi Alight Motion Pro di AlightPro.</p>
 
         <div class="w-full flex flex-col gap-4">
-            <!-- [ UI FIX: Class anim-faq-frame ditambahkan untuk animasi Hover yang tidak merusak klik collapse ] -->
-            <div class="reveal anim-faq-frame bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <!-- [ UI FIX: Penambahan class anim-faq-frame ] -->
+            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl"></i>
@@ -390,7 +381,7 @@
                 </div>
             </div>
 
-            <div class="reveal anim-faq-frame bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-red-500"></i>
@@ -412,7 +403,7 @@
                 </div>
             </div>
 
-            <div class="reveal anim-faq-frame bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-green-500"></i>
@@ -434,7 +425,7 @@
                 </div>
             </div>
 
-            <div class="reveal anim-faq-frame bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-yellow-500"></i>
@@ -456,7 +447,7 @@
                 </div>
             </div>
             
-            <div class="reveal anim-faq-frame bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-purple-500"></i>
@@ -521,13 +512,12 @@
         </div>
     </footer>
 
-    <!-- [ UI FIX: FLOATING CS BUTTON ] -->
-    <!-- Dikembalikan ke ukuran default (w-14 sm:w-16) dan tidak membesar berlebihan di layar PC -->
-    <button onclick="openCSModal()" class="anim-btn-float fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-14 h-14 sm:w-16 sm:h-16 bg-brutal-yellow border-3 border-black rounded-2xl shadow-brutal flex items-center justify-center z-40">
-        <i class="ph ph-headset text-3xl sm:text-4xl"></i>
-        <span class="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5">
+    <!-- [ UI FIX: Tombol Bantuan Floating dinormalkan ukurannya ke dimensi w-14 h-14 murni ] -->
+    <button onclick="openCSModal()" class="anim-btn-float fixed bottom-6 right-6 w-14 h-14 bg-brutal-yellow border-3 border-black rounded-2xl shadow-brutal flex items-center justify-center z-40">
+        <i class="ph ph-headset text-3xl"></i>
+        <span class="absolute -top-1 -right-1 flex h-4 w-4">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-4 w-4 sm:h-5 sm:w-5 bg-green-500 border-2 sm:border-3 border-black"></span>
+            <span class="relative inline-flex rounded-full h-4 w-4 bg-green-500 border-2 border-black"></span>
         </span>
     </button>
 
