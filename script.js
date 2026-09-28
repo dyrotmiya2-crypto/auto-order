@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add("active");
-                // Stop mengawasi elemen setelah ter-render agar tidak goyang dua kali
                 observer.unobserve(entry.target); 
             }
         });
@@ -26,33 +25,43 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ----------------------------------------------------
-// [ UI FIX: LOGIKA NAVBAR TAB MENU (Atas) ]
+// [ UI FIX: EFEK STICKY NAVBAR DENGAN BLUR / SHADOW ]
+// ----------------------------------------------------
+window.addEventListener('scroll', () => {
+    const nav = document.getElementById('main-navbar');
+    if (window.scrollY > 10) {
+        // Tambahkan efek blur glassmorphism transparan dan bayangan besar saat sticky
+        nav.classList.add('bg-white/80', 'backdrop-blur-md', 'shadow-brutal-large');
+        nav.classList.remove('bg-white', 'shadow-brutal');
+    } else {
+        // Kembali ke normal solid saat di paling atas
+        nav.classList.add('bg-white', 'shadow-brutal');
+        nav.classList.remove('bg-white/80', 'backdrop-blur-md', 'shadow-brutal-large');
+    }
+});
+
+// ----------------------------------------------------
+// LOGIKA NAVBAR TAB MENU (Sliding Background)
 // ----------------------------------------------------
 function navTab(btnElement, targetId, bgColorClass) {
     const slider = document.getElementById('nav-slider');
     const allBtns = document.querySelectorAll('.nav-tab-btn');
     
-    // Matikan status active di semua menu
     allBtns.forEach(b => {
         b.classList.remove('active-tab', 'text-black');
         b.classList.add('text-gray-500');
     });
     
-    // Set teks hitam dan penanda active ke tombol yg diklik
     btnElement.classList.add('active-tab', 'text-black');
     btnElement.classList.remove('text-gray-500');
     
-    // Gerakkan background menu ke posisi yg tepat (Sliding Animation)
     slider.style.left = btnElement.offsetLeft + 'px';
     slider.style.width = btnElement.offsetWidth + 'px';
-    // Ganti class background sesuai warna tujuan
     slider.className = `absolute top-1 bottom-1 rounded-full transition-all duration-300 -z-10 border-2 border-black ${bgColorClass}`;
     
-    // Auto-scroll halus ke section terkait
     document.getElementById(targetId).scrollIntoView({behavior: 'smooth'});
 }
 
-// Inisialisasi posisi awal background menu bar saat load & resize layar
 function initNavSlider() {
     const activeBtn = document.querySelector('.nav-tab-btn.active-tab');
     if(activeBtn) {
@@ -65,7 +74,7 @@ window.addEventListener('load', initNavSlider);
 window.addEventListener('resize', initNavSlider);
 
 // ----------------------------------------------------
-// [ UI FIX: FUNGSI FAQ ACCORDION (SMOOTH COLLAPSE GRID) ]
+// FUNGSI FAQ ACCORDION (SMOOTH COLLAPSE GRID)
 // ----------------------------------------------------
 function toggleFaq(btn) {
     const content = btn.nextElementSibling;
@@ -76,7 +85,6 @@ function toggleFaq(btn) {
 
     const isOpen = content.classList.contains('is-open');
 
-    // Tutup seluruh FAQ yang lain
     allContents.forEach(c => {
         c.classList.remove('is-open');
     });
@@ -88,7 +96,6 @@ function toggleFaq(btn) {
         b.classList.remove('bg-brutal-blue');
     });
 
-    // Buka FAQ yg sedang di-klik jika sebelumnya belum terbuka
     if (!isOpen) {
         content.classList.add('is-open');
         icon.classList.add('rotate-180', 'bg-black', 'text-white');
