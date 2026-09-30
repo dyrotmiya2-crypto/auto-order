@@ -39,8 +39,8 @@
 </head>
 <body class="text-black min-h-screen flex flex-col items-center py-4 px-3 sm:py-6 sm:px-6 md:px-8 overflow-x-hidden relative bg-bg-main">
 
-    <!-- [ UI FIX: Navbar Sticky dengan gap terukur & margin disesuaikan ] -->
-    <nav id="main-navbar" class="w-full max-w-6xl bg-white border-3 sm:border-4 border-black rounded-2xl shadow-brutal flex flex-col md:flex-row justify-between items-center p-3 sm:p-4 mb-6 sm:mb-8 gap-3 sm:gap-4 sticky top-0 z-[999] transition-all duration-300 reveal">
+    <!-- [ UI FIX: Z-Index diubah ke z-40 agar berada di belakang Modal (z-50). Perilaku Sticky khusus Desktop (md:sticky) ] -->
+    <nav id="main-navbar" class="w-full max-w-6xl bg-white border-3 sm:border-4 border-black rounded-2xl shadow-brutal flex flex-col md:flex-row justify-between items-center p-3 sm:p-4 mb-6 sm:mb-8 gap-3 sm:gap-4 relative md:sticky md:top-4 z-40 transition-all duration-300 reveal">
         
         <div class="flex items-center justify-between w-full md:w-1/3">
             <div class="flex items-center gap-2 sm:gap-3">
@@ -53,25 +53,27 @@
                 </div>
             </div>
             
+            <!-- [ FITUR BARU: Badge Notifikasi Mobile ] -->
             <button onclick="openHistoryModal()" class="anim-btn-history md:hidden bg-brutal-yellow border-2 border-black font-bold py-1.5 px-3 rounded-xl shadow-brutal-sm flex items-center gap-1.5 text-[10px] whitespace-nowrap">
                 <i class="ph ph-clock-counter-clockwise text-base"></i> Riwayat
+                <span class="history-badge hidden bg-gray-900 text-white text-[9px] px-1.5 py-0 rounded-full border border-black min-w-[18px] text-center ml-0.5 shadow-sm">0</span>
             </button>
         </div>
 
-        <!-- Margin atas dihilangkan, mengandalkan gap parent agar proporsional -->
         <div class="flex w-full md:w-1/3 justify-center">
             <div class="flex border-2 border-black rounded-full bg-white p-1 w-full sm:w-auto shadow-brutal-sm relative isolate">
                 <div id="nav-slider" class="absolute top-1 bottom-1 rounded-full transition-all duration-300 -z-10 bg-brutal-blue border-2 border-black"></div>
-                
                 <button onclick="navTab(this, 'panel-verifikasi', 'bg-brutal-blue')" class="nav-tab-btn active-tab flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-black transition-all rounded-full z-10">Verifikasi</button>
                 <button onclick="navTab(this, 'fitur-pro', 'bg-brutal-green')" class="nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-gray-500 transition-all rounded-full z-10">Fitur Pro</button>
                 <button onclick="navTab(this, 'faq', 'bg-brutal-yellow')" class="nav-tab-btn flex-1 md:flex-initial px-4 py-1.5 text-[11px] sm:text-sm font-bold whitespace-nowrap text-gray-500 transition-all rounded-full z-10">FAQ</button>
             </div>
         </div>
 
+        <!-- [ FITUR BARU: Badge Notifikasi Desktop ] -->
         <div class="hidden md:flex w-full md:w-1/3 justify-end">
             <button onclick="openHistoryModal()" class="anim-btn-history bg-brutal-yellow border-2 border-black font-bold py-2 px-4 rounded-xl shadow-brutal-sm flex items-center gap-1.5 text-sm whitespace-nowrap">
                 <i class="ph ph-clock-counter-clockwise text-lg"></i> Riwayat Verifikasi
+                <span class="history-badge hidden bg-gray-900 text-white text-[10px] px-2 py-0.5 rounded-full border border-black min-w-[22px] text-center ml-1 shadow-sm">0</span>
             </button>
         </div>
     </nav>
@@ -152,6 +154,7 @@
                 </div>
 
                 <div class="relative w-full">
+                    
                     <!-- STEP 1 -->
                     <div id="step-1" class="step-container active-step w-full">
                         <label class="block text-xs sm:text-sm lg:text-base font-bold mb-2 uppercase tracking-wide">Alamat Email Alight Creative</label>
@@ -170,18 +173,15 @@
 
                     <!-- STEP 2 -->
                     <div id="step-2" class="step-container hidden-step w-full">
-                        <div class="bg-brutal-green border-2 border-black rounded-lg p-2.5 lg:p-3 mb-4 text-[11px] sm:text-xs lg:text-sm font-bold flex items-center gap-2 shadow-brutal-sm overflow-hidden w-fit">
-                            <i class="ph-fill ph-check-circle text-base sm:text-lg lg:text-xl shrink-0"></i>
-                            <span class="truncate">Terkirim ke: <span id="display-email" class="underline"></span></span>
-                        </div>
                         
-                        <div class="flex gap-2 mb-5 items-center justify-start">
-                            <div class="w-fit bg-red-100 border-2 border-black rounded-lg px-3 py-2.5 flex items-center justify-center gap-1.5 shadow-brutal-sm">
-                                <i class="ph ph-clock text-red-600 text-sm sm:text-base lg:text-lg static-clock" id="timer-icon"></i>
-                                <span class="text-[10px] sm:text-xs lg:text-sm font-bold text-red-700 whitespace-nowrap">Sisa Waktu Link</span>
+                        <!-- [ UI FIX: Desain UI Timer OOB sesuai referensi Gambar 4 ] -->
+                        <div class="flex justify-between items-center bg-pink-50 border-2 border-black rounded-xl px-4 py-3 sm:py-3.5 mb-5 shadow-brutal-sm w-full">
+                            <div class="flex items-center gap-2">
+                                <i class="ph ph-clock text-pink-600 text-lg sm:text-xl static-clock" id="timer-icon"></i>
+                                <span class="text-[11px] sm:text-sm font-bold text-black">Masa Berlaku OOB (3 Menit):</span>
                             </div>
-                            <div class="bg-white border-2 border-black rounded-lg p-2.5 flex items-center justify-center shadow-brutal-sm min-w-[80px]">
-                                <span id="countdown-timer" class="font-mono text-[11px] sm:text-sm lg:text-base font-bold text-black">03:00</span>
+                            <div class="bg-brutal-green border-2 border-black rounded-lg px-3 py-1 flex items-center justify-center shadow-brutal-sm">
+                                <span id="countdown-timer" class="font-mono text-[11px] sm:text-sm font-bold text-black">03:00</span>
                             </div>
                         </div>
                         
@@ -259,11 +259,9 @@
                 </div>
             </div>
 
-            <!-- [ UI FIX: Perombakan Layout "Statistik Verifikasi" agar persis referensi ] -->
             <div class="grid grid-cols-1 gap-4 reveal">
                 <div class="anim-stats-scale bg-brutal-yellow border-3 sm:border-4 border-black rounded-2xl shadow-brutal p-4 sm:p-5 lg:p-6 cursor-default">
                     
-                    <!-- Bagian Atas Statistik -->
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 border-2 border-black rounded-xl flex items-center justify-center bg-white shadow-brutal-sm shrink-0">
@@ -279,7 +277,6 @@
                         </span>
                     </div>
                     
-                    <!-- Bagian Tengah: Grid 2 Kolom -->
                     <div class="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
                         <div class="bg-white border-2 sm:border-3 border-black rounded-xl p-3 sm:p-4 shadow-brutal-sm">
                             <p class="text-[10px] sm:text-xs font-bold text-blue-600 flex items-center gap-1 mb-1"><i class="ph ph-calendar-blank"></i> HARI INI</p>
@@ -293,7 +290,6 @@
                         </div>
                     </div>
 
-                    <!-- Bagian Bawah: Divider & Badge -->
                     <hr class="border-black border-t-2 mb-3">
                     <div class="flex justify-between items-center">
                         <p class="text-[10px] sm:text-xs font-bold text-gray-800 flex items-center gap-1">
@@ -311,38 +307,113 @@
     </main>
 
     <!-- SECTION 2: FITUR PRO -->
+    <!-- [ UI FIX: Perombakan "Eksplorasi Fitur Premium" menjadi 6 poin keunggulan tanpa teks gratis ] -->
     <section id="fitur-pro" class="w-full max-w-6xl mt-24 mb-10 px-2 relative z-10">
-        <h2 class="reveal text-2xl sm:text-4xl font-bold mb-8 flex items-center gap-3">
-            <i class="ph-fill ph-star text-yellow-500 animate-spin-fast"></i> Eksplorasi Fitur <span class="bg-brutal-green border-2 sm:border-3 border-black px-3 rounded-xl shadow-brutal-sm">Premium</span>
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-2xl p-6 shadow-brutal cursor-pointer">
-                <div class="w-14 h-14 bg-brutal-blue border-2 border-black rounded-xl flex items-center justify-center mb-5">
-                    <i class="ph ph-eraser text-3xl"></i>
-                </div>
-                <h3 class="font-bold text-xl mb-2">Tanpa Watermark</h3>
-                <p class="text-sm font-medium text-gray-700">Hasil akhir render video dijamin bersih 100% dari tulisan Alight Motion yang mengganggu.</p>
+        
+        <div class="reveal flex flex-col items-center justify-center w-full mb-8">
+            <div class="flex justify-center mb-3">
+                <span class="bg-brutal-yellow border-2 border-black px-4 py-1.5 rounded-full text-xs font-bold shadow-brutal-sm flex items-center gap-2">
+                    <i class="ph-fill ph-star text-yellow-600 animate-spin-fast text-lg"></i> Keunggulan Alight Motion Pro 1 Tahun
+                </span>
             </div>
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-2xl p-6 shadow-brutal cursor-pointer">
-                <div class="w-14 h-14 bg-brutal-purple border-2 border-black rounded-xl flex items-center justify-center mb-5">
-                    <i class="ph ph-magic-wand text-3xl"></i>
+            <h2 class="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-center leading-[1.2]">
+                Semua Fitur Premium <br>
+                <span class="inline-block bg-brutal-blue border-3 sm:border-4 border-black px-4 sm:px-6 py-1 sm:py-2 rounded-2xl sm:rounded-[1.5rem] shadow-brutal mt-3 transform-none">Terbuka 100% Bebas Akses</span>
+            </h2>
+            <p class="text-sm sm:text-base font-medium text-gray-700 text-center mt-6 max-w-2xl">
+                Nikmati kebebasan berkreasi membuat video cinematic, AM preset, jedag-jedug aesthetic, dan motion graphics tanpa halangan fitur terkunci.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            <!-- Card 1 -->
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="w-14 h-14 bg-pink-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
+                        <i class="ph ph-magic-wand text-3xl text-pink-600"></i>
+                    </div>
+                    <span class="bg-white border-2 border-black px-3 py-1 rounded-full text-[10px] font-bold tracking-wider shadow-brutal-sm uppercase">PRO FEATURE</span>
                 </div>
-                <h3 class="font-bold text-xl mb-2">Unlock Semua Efek</h3>
-                <p class="text-sm font-medium text-gray-700">Bebas gunakan seluruh efek premium berbayar yang terkunci di versi gratis sesuka Anda.</p>
+                <h3 class="font-bold text-xl mb-3">Tanpa Watermark</h3>
+                <p class="text-sm font-medium text-gray-700 flex-1 mb-5 leading-relaxed">Eksport hasil editan video kamu tanpa logo watermark Alight Motion. Tampilan profesional untuk YouTube, TikTok, & Reels.</p>
+                <div class="pt-4 border-t-2 border-gray-100 flex items-center gap-2 text-[11px] sm:text-xs font-bold text-green-700">
+                    <i class="ph-fill ph-check-circle text-base"></i> Termasuk Paket Pro 1 Tahun
+                </div>
             </div>
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-2xl p-6 shadow-brutal cursor-pointer">
-                <div class="w-14 h-14 bg-brutal-yellow border-2 border-black rounded-xl flex items-center justify-center mb-5">
-                    <i class="ph ph-file-code text-3xl"></i>
+            
+            <!-- Card 2 -->
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="w-14 h-14 bg-blue-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
+                        <i class="ph ph-file-code text-3xl text-blue-600"></i>
+                    </div>
+                    <span class="bg-white border-2 border-black px-3 py-1 rounded-full text-[10px] font-bold tracking-wider shadow-brutal-sm uppercase">UNLIMITED</span>
                 </div>
-                <h3 class="font-bold text-xl mb-2">Dukungan XML</h3>
-                <p class="text-sm font-medium text-gray-700">Import semua file preset XML dari editor lain dengan lancar tanpa ada error fitur terkunci.</p>
+                <h3 class="font-bold text-xl mb-3">Full Preset & XML Unlocked</h3>
+                <p class="text-sm font-medium text-gray-700 flex-1 mb-5 leading-relaxed">Bebas import dan export file preset XML / QR Code buatan creator terkemuka tanpa batasan ukuran file.</p>
+                <div class="pt-4 border-t-2 border-gray-100 flex items-center gap-2 text-[11px] sm:text-xs font-bold text-green-700">
+                    <i class="ph-fill ph-check-circle text-base"></i> Termasuk Paket Pro 1 Tahun
+                </div>
             </div>
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-2xl p-6 shadow-brutal cursor-pointer">
-                <div class="w-14 h-14 bg-brutal-pink border-2 border-black rounded-xl flex items-center justify-center mb-5">
-                    <i class="ph ph-monitor-play text-3xl"></i>
+
+            <!-- Card 3 -->
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="w-14 h-14 bg-green-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
+                        <i class="ph ph-sliders text-3xl text-green-600"></i>
+                    </div>
+                    <span class="bg-white border-2 border-black px-3 py-1 rounded-full text-[10px] font-bold tracking-wider shadow-brutal-sm uppercase">ADVANCED</span>
                 </div>
-                <h3 class="font-bold text-xl mb-2">Ekspor 4K 60FPS</h3>
-                <p class="text-sm font-medium text-gray-700">Simpan editan dalam resolusi tertinggi hingga 4K UHD dan framerate 60 FPS super mulus.</p>
+                <h3 class="font-bold text-xl mb-3">Keyframe Smooth Curve Graph</h3>
+                <p class="text-sm font-medium text-gray-700 flex-1 mb-5 leading-relaxed">Kontrol animasi tingkat lanjut dengan kurva kustom keyframe, easing profesional, serta efek motion blur yang realistis.</p>
+                <div class="pt-4 border-t-2 border-gray-100 flex items-center gap-2 text-[11px] sm:text-xs font-bold text-green-700">
+                    <i class="ph-fill ph-check-circle text-base"></i> Termasuk Paket Pro 1 Tahun
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="w-14 h-14 bg-purple-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
+                        <i class="ph ph-stack text-3xl text-purple-600"></i>
+                    </div>
+                    <span class="bg-white border-2 border-black px-3 py-1 rounded-full text-[10px] font-bold tracking-wider shadow-brutal-sm uppercase">UNLIMITED LAYERS</span>
+                </div>
+                <h3 class="font-bold text-xl mb-3">Vektor & Multi-Layer Graphics</h3>
+                <p class="text-sm font-medium text-gray-700 flex-1 mb-5 leading-relaxed">Dukungan layer grafis, video, foto, audio, dan bentuk vektor tanpa batas dengan blending mode terlengkap.</p>
+                <div class="pt-4 border-t-2 border-gray-100 flex items-center gap-2 text-[11px] sm:text-xs font-bold text-green-700">
+                    <i class="ph-fill ph-check-circle text-base"></i> Termasuk Paket Pro 1 Tahun
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="w-14 h-14 bg-yellow-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
+                        <i class="ph ph-video-camera text-3xl text-yellow-600"></i>
+                    </div>
+                    <span class="bg-white border-2 border-black px-3 py-1 rounded-full text-[10px] font-bold tracking-wider shadow-brutal-sm uppercase">ULTRA HD</span>
+                </div>
+                <h3 class="font-bold text-xl mb-3">Eksport 4K 60FPS High-Bitrate</h3>
+                <p class="text-sm font-medium text-gray-700 flex-1 mb-5 leading-relaxed">Proses render ekstra cepat dan jernih hingga kualitas 4K UHD 60FPS tanpa kompresi buram atau patah-patah.</p>
+                <div class="pt-4 border-t-2 border-gray-100 flex items-center gap-2 text-[11px] sm:text-xs font-bold text-green-700">
+                    <i class="ph-fill ph-check-circle text-base"></i> Termasuk Paket Pro 1 Tahun
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+                <div class="flex justify-between items-start mb-5">
+                    <div class="w-14 h-14 bg-teal-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
+                        <i class="ph ph-cloud-arrow-up text-3xl text-teal-600"></i>
+                    </div>
+                    <span class="bg-white border-2 border-black px-3 py-1 rounded-full text-[10px] font-bold tracking-wider shadow-brutal-sm uppercase">CLOUD SYNC</span>
+                </div>
+                <h3 class="font-bold text-xl mb-3">Sync Cloud & Project Backup</h3>
+                <p class="text-sm font-medium text-gray-700 flex-1 mb-5 leading-relaxed">Proyek kamu tersimpan aman di cloud Alight Creative, bisa dilanjutkan di mana saja, kapan saja tanpa khawatir hilang.</p>
+                <div class="pt-4 border-t-2 border-gray-100 flex items-center gap-2 text-[11px] sm:text-xs font-bold text-green-700">
+                    <i class="ph-fill ph-check-circle text-base"></i> Termasuk Paket Pro 1 Tahun
+                </div>
             </div>
         </div>
     </section>
@@ -358,7 +429,6 @@
         <p class="reveal text-sm sm:text-base lg:text-lg font-medium text-gray-600 text-center mb-10">Jawaban lengkap seputar mekanisme verifikasi dan lisensi Alight Motion Pro di AlightPro.</p>
 
         <div class="w-full flex flex-col gap-4">
-            <!-- [ UI FIX: Penambahan class anim-faq-frame ] -->
             <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
@@ -381,11 +451,12 @@
                 </div>
             </div>
 
+            <!-- [ UI FIX: Konten FAQ disesuaikan untuk layanan premium/berbayar ] -->
             <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-red-500"></i>
-                        <span class="font-bold text-sm sm:text-base lg:text-lg">Apakah layanan verifikasi di AlightPro 100% gratis?</span>
+                        <span class="font-bold text-sm sm:text-base lg:text-lg">Berapa biaya layanan verifikasi di AlightPro?</span>
                     </div>
                     <div class="faq-icon w-8 h-8 sm:w-10 sm:h-10 bg-white border-2 border-black rounded-full flex items-center justify-center shrink-0 transition-transform duration-300">
                         <i class="ph ph-caret-down font-bold sm:text-lg"></i>
@@ -396,7 +467,7 @@
                         <div class="p-5 border-t-2 border-black bg-white">
                             <p class="text-sm sm:text-base font-medium text-gray-800 flex gap-2">
                                 <i class="ph-fill ph-star text-yellow-500 text-lg sm:text-xl shrink-0 mt-0.5"></i> 
-                                <span>Ya, platform kami menyediakan fitur aktivasi ini 100% gratis tanpa dipungut biaya apapun bagi seluruh pengguna.</span>
+                                <span>Layanan verifikasi ini merupakan bagian dari paket premium berbayar. Kami menjamin proses aktivasi 1 Tahun penuh dengan garansi, tanpa memungut biaya siluman tambahan di luar paket yang dibeli.</span>
                             </p>
                         </div>
                     </div>
@@ -482,7 +553,7 @@
                         <p class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-gray-600">Alight Motion Verifier</p>
                     </div>
                 </div>
-                <p class="text-sm lg:text-base font-medium text-gray-700">AlightPro adalah platform verifikasi mandiri untuk aktivasi akun Alight Motion Pro berdurasi 1 tahun secara gratis, cepat, dan aman berbasis token OOB Alight Creative.</p>
+                <p class="text-sm lg:text-base font-medium text-gray-700">AlightPro adalah platform verifikasi mandiri untuk aktivasi akun Alight Motion Pro berdurasi 1 tahun secara instan, cepat, dan aman berbasis token OOB Alight Creative.</p>
                 <div class="bg-brutal-purple border-2 border-black rounded-xl p-4 flex items-center gap-3 shadow-brutal-sm">
                     <i class="ph-fill ph-shield-check text-purple-700 text-2xl"></i>
                     <p class="text-[11px] lg:text-xs font-bold text-purple-900 leading-tight">Sistem Enkripsi Token OOB 100% Aman Tanpa Simpan Password.</p>
@@ -512,7 +583,7 @@
         </div>
     </footer>
 
-    <!-- [ UI FIX: Tombol Bantuan Floating dinormalkan ukurannya ke dimensi w-14 h-14 murni ] -->
+    <!-- FLOATING CS BUTTON -->
     <button onclick="openCSModal()" class="anim-btn-float fixed bottom-6 right-6 w-14 h-14 bg-brutal-yellow border-3 border-black rounded-2xl shadow-brutal flex items-center justify-center z-40">
         <i class="ph ph-headset text-3xl"></i>
         <span class="absolute -top-1 -right-1 flex h-4 w-4">
@@ -521,7 +592,7 @@
         </span>
     </button>
 
-    <!-- MODAL CS & KOMUNITAS -->
+    <!-- MODAL CS & KOMUNITAS (z-50) -->
     <div id="cs-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div id="cs-modal-bg" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0" onclick="closeCSModal()"></div>
         <div id="cs-modal-content" class="bg-white w-full max-w-md sm:max-w-lg lg:max-w-xl border-4 border-black rounded-3xl shadow-brutal-large relative z-10 flex flex-col max-h-[90vh] sm:max-h-[85vh] overflow-hidden opacity-0 scale-95">
@@ -605,7 +676,7 @@
         </div>
     </div>
 
-    <!-- [ MODAL RIWAYAT ] -->
+    <!-- [ MODAL RIWAYAT (z-70) ] -->
     <div id="history-modal" class="fixed inset-0 z-[70] flex items-center justify-center px-4 hidden">
         <div id="history-modal-bg" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0" onclick="closeHistoryModal()"></div>
         <div id="history-modal-content" class="bg-white w-full max-w-md lg:max-w-lg border-4 border-black rounded-3xl shadow-brutal-large relative z-10 flex flex-col max-h-[80vh] overflow-hidden opacity-0 scale-95">
@@ -630,7 +701,7 @@
         </div>
     </div>
 
-    <!-- MODAL HASIL VERIFIKASI -->
+    <!-- MODAL HASIL VERIFIKASI (z-60) -->
     <div id="success-modal" class="fixed inset-0 z-[60] flex items-center justify-center px-4 hidden">
         <div id="success-modal-bg" class="absolute inset-0 bg-black/40 backdrop-blur-md opacity-0" onclick="closeSuccessModal()"></div>
         <div id="confetti-container" class="fixed inset-0 overflow-hidden pointer-events-none z-10 opacity-0"></div>
