@@ -15,6 +15,18 @@ body { background-color: #fffdf5; }
 }
 
 /* =========================================================
+   [ PERBAIKAN UI: TEKS BREAK MOBILE ]
+========================================================= */
+@media (max-width: 768px) {
+    .premium-badge-text {
+        font-size: 15px !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        white-space: nowrap !important;
+    }
+}
+
+/* =========================================================
    [ VARIASI ANIMASI INTERAKTIF (HOVER/CLICK) ]
 ========================================================= */
 
