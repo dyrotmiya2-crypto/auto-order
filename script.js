@@ -109,7 +109,7 @@ function toggleFaq(btn) {
 }
 
 // ----------------------------------------------------
-// [ FITUR BARU: LOGIKA BADGE RIWAYAT ]
+// LOGIKA BADGE RIWAYAT
 // ----------------------------------------------------
 function updateBadgeUI() {
     let count = parseInt(localStorage.getItem('alightBadgeCount') || '0');
@@ -158,17 +158,20 @@ function startTimer(durationInSeconds) {
     let timer = durationInSeconds;
     const display = document.getElementById('countdown-timer');
     
-    display.classList.remove('text-red-700', 'animate-pulse');
-    display.classList.add('text-black');
+    if (display) {
+        display.classList.remove('text-red-700', 'animate-pulse');
+        display.classList.add('text-black');
+    }
 
     countdownInterval = setInterval(function () {
         let minutes = parseInt(timer / 60, 10);
         let seconds = parseInt(timer % 60, 10);
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
-        display.textContent = minutes + ":" + seconds;
+        
+        if (display) display.textContent = minutes + ":" + seconds;
 
-        if (timer < 30) { 
+        if (timer < 30 && display) { 
             display.classList.add('text-red-700', 'animate-pulse'); 
         }
 
@@ -191,28 +194,34 @@ function setTabProgress(step) {
     const baseClasses = "flex-1 text-center py-2 lg:py-2.5 text-[11px] sm:text-sm lg:text-sm font-bold cursor-default transition-all duration-300 border-2".split(" ");
     
     [t1, t2, t3].forEach(t => {
-        t.className = "";
-        t.classList.add(...baseClasses, "text-gray-500", "border-transparent");
+        if(t) {
+            t.className = "";
+            t.classList.add(...baseClasses, "text-gray-500", "border-transparent");
+        }
     });
 
-    if (step === 1) {
+    if (step === 1 && t1) {
         t1.classList.remove("text-gray-500", "border-transparent");
         t1.classList.add("bg-brutal-blue", "border-black", "rounded-full", "shadow-brutal-sm", "text-black");
-    } else if (step === 2) {
+    } else if (step === 2 && t2) {
         t2.classList.remove("text-gray-500", "border-transparent");
         t2.classList.add("bg-brutal-green", "border-black", "rounded-full", "shadow-brutal-sm", "text-black");
-    } else if (step === 3) {
+    } else if (step === 3 && t3) {
         t3.classList.remove("text-gray-500", "border-transparent");
         t3.classList.add("bg-brutal-pink", "border-black", "rounded-full", "shadow-brutal-sm", "text-black");
     }
 }
 
 function transitionStep(hideEl, showEl) {
-    hideEl.classList.remove('active-step');
-    hideEl.classList.add('hidden-step');
+    if(hideEl) {
+        hideEl.classList.remove('active-step');
+        hideEl.classList.add('hidden-step');
+    }
     setTimeout(() => {
-        showEl.classList.remove('hidden-step');
-        showEl.classList.add('active-step');
+        if(showEl) {
+            showEl.classList.remove('hidden-step');
+            showEl.classList.add('active-step');
+        }
     }, 300);
 }
 
@@ -240,11 +249,12 @@ async function parseResponse(res) {
 }
 
 async function processStep1() {
+    if(!emailInput) return;
     const email = emailInput.value.trim();
     if (!email || !email.includes('@')) { showToast("⚠️ Masukkan email yang valid!"); return; }
 
     const btn = document.getElementById('btn-step-1');
-    btn.classList.add('is-loading');
+    if(btn) btn.classList.add('is-loading');
 
     try {
         const response = await fetch('/api/send', {
@@ -256,15 +266,23 @@ async function processStep1() {
         if (!data.ok) throw new Error(data.why || 'Gagal mengirim link.');
 
         userEmailMemory = email; 
-        document.getElementById('display-email').innerText = email;
-        document.getElementById('modal-email').innerText = email;
+        
+        // [ FIX: Penambahan Null Check ]
+        const displayEmail = document.getElementById('display-email');
+        if(displayEmail) displayEmail.innerText = email;
+        
+        const modalEmail = document.getElementById('modal-email');
+        if(modalEmail) modalEmail.innerText = email;
 
         setTabProgress(2);
         transitionStep(step1UI, step2UI);
         startTimer(180);
 
-    } catch (error) { showToast(`❌ Error: ${error.message}`); } 
-    finally { btn.classList.remove('is-loading'); }
+    } catch (error) { 
+        showToast(`❌ Error: ${error.message}`); 
+    } finally { 
+        if(btn) btn.classList.remove('is-loading'); 
+    }
 }
 
 function backToStep1() {
@@ -286,16 +304,16 @@ function saveHistory(status, email, orderStr) {
     });
     localStorage.setItem('alightHistory', JSON.stringify(history));
     
-    // Increment notifikasi badge setiap selesai mencatat riwayat
     incrementBadge();
 }
 
 async function processStep2() {
+    if(!oobInput) return;
     const oob = oobInput.value.trim();
     if (!oob) { showToast("⚠️ Tempelkan link OOB terlebih dahulu!"); return; }
 
     const btn = document.getElementById('btn-step-2');
-    btn.classList.add('is-loading');
+    if(btn) btn.classList.add('is-loading');
 
     try {
         const response = await fetch('/api/verify', {
@@ -313,25 +331,40 @@ async function processStep2() {
         clearInterval(countdownInterval); 
         const timeData = getActivationTimeData();
         
-        document.getElementById('modal-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
-        document.getElementById('modal-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
-        if(data.orderId) document.getElementById('modal-order').innerText = data.orderId;
+        // [ FIX: Penambahan Null Check Semua Setter UI ]
+        const modalExpiry = document.getElementById('modal-expiry');
+        if (modalExpiry) modalExpiry.innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
+        
+        const modalTime = document.getElementById('modal-time');
+        if (modalTime) modalTime.innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
+        
+        const modalOrder = document.getElementById('modal-order');
+        if (modalOrder && data.orderId) modalOrder.innerText = data.orderId;
 
-        document.getElementById('step3-email').innerText = userEmailMemory;
-        document.getElementById('step3-expiry').innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
-        document.getElementById('step3-time').innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
-        if(data.orderId) document.getElementById('step3-order').innerText = data.orderId;
+        const step3Email = document.getElementById('step3-email');
+        if (step3Email) step3Email.innerText = userEmailMemory;
+        
+        const step3Expiry = document.getElementById('step3-expiry');
+        if (step3Expiry) step3Expiry.innerHTML = `<i class="ph ph-calendar-blank"></i> ${timeData.expiryDate}`;
+        
+        const step3Time = document.getElementById('step3-time');
+        if (step3Time) step3Time.innerHTML = `<i class="ph ph-clock"></i> ${timeData.timeWita}`;
+        
+        const step3Order = document.getElementById('step3-order');
+        if (step3Order && data.orderId) step3Order.innerText = data.orderId;
 
         saveHistory('success', userEmailMemory, data.orderId || 'Alfian-Shop-XXX');
 
         openSuccessModal();
+        
         const counter = document.getElementById('daily-count');
         if (counter) counter.innerText = parseInt(counter.innerText) + 1;
 
     } catch (error) { 
         showToast(`❌ Error: ${error.message}`); 
-    } 
-    finally { btn.classList.remove('is-loading'); }
+    } finally { 
+        if(btn) btn.classList.remove('is-loading'); 
+    }
 }
 
 function resetAndCloseModal() {
@@ -339,25 +372,31 @@ function resetAndCloseModal() {
     const modalBg = document.getElementById('success-modal-bg');
     const modalContent = document.getElementById('success-modal-content');
     
-    modalBg.classList.remove('backdrop-enter');
-    modalBg.classList.add('backdrop-exit');
-    modalContent.classList.remove('modal-enter');
-    modalContent.classList.add('modal-exit');
+    if(modalBg) {
+        modalBg.classList.remove('backdrop-enter');
+        modalBg.classList.add('backdrop-exit');
+    }
+    if(modalContent) {
+        modalContent.classList.remove('modal-enter');
+        modalContent.classList.add('modal-exit');
+    }
     
     setTimeout(() => { 
-        modal.classList.add('hidden'); 
+        if(modal) modal.classList.add('hidden'); 
         resetForm();
     }, 200);
 }
 
 function resetForm() {
     clearInterval(countdownInterval);
-    userEmailMemory = ""; emailInput.value = ""; oobInput.value = "";
+    userEmailMemory = ""; 
+    if(emailInput) emailInput.value = ""; 
+    if(oobInput) oobInput.value = "";
     
-    if(!step3UI.classList.contains('hidden-step')) {
+    if(step3UI && !step3UI.classList.contains('hidden-step')) {
         setTabProgress(1);
         transitionStep(step3UI, step1UI);
-    } else if(!step2UI.classList.contains('hidden-step')){
+    } else if(step2UI && !step2UI.classList.contains('hidden-step')){
         setTabProgress(1);
         transitionStep(step2UI, step1UI);
     }
@@ -371,11 +410,15 @@ function openSuccessModal() {
     const modalBg = document.getElementById('success-modal-bg');
     const modalContent = document.getElementById('success-modal-content');
     
-    modal.classList.remove('hidden');
-    modalBg.classList.remove('backdrop-exit');
-    modalBg.classList.add('backdrop-enter');
-    modalContent.classList.remove('modal-exit');
-    modalContent.classList.add('modal-enter');
+    if(modal) modal.classList.remove('hidden');
+    if(modalBg) {
+        modalBg.classList.remove('backdrop-exit');
+        modalBg.classList.add('backdrop-enter');
+    }
+    if(modalContent) {
+        modalContent.classList.remove('modal-exit');
+        modalContent.classList.add('modal-enter');
+    }
     
     shootConfetti();
 }
@@ -385,13 +428,17 @@ function closeSuccessModal() {
     const modalBg = document.getElementById('success-modal-bg');
     const modalContent = document.getElementById('success-modal-content');
     
-    modalBg.classList.remove('backdrop-enter');
-    modalBg.classList.add('backdrop-exit');
-    modalContent.classList.remove('modal-enter');
-    modalContent.classList.add('modal-exit');
+    if(modalBg) {
+        modalBg.classList.remove('backdrop-enter');
+        modalBg.classList.add('backdrop-exit');
+    }
+    if(modalContent) {
+        modalContent.classList.remove('modal-enter');
+        modalContent.classList.add('modal-exit');
+    }
     
     setTimeout(() => { 
-        modal.classList.add('hidden');
+        if(modal) modal.classList.add('hidden');
         setTabProgress(3);
         transitionStep(step2UI, step3UI);
     }, 200);
@@ -399,8 +446,9 @@ function closeSuccessModal() {
 
 function shootConfetti() {
     const container = document.getElementById('confetti-container');
-    container.innerHTML = '';
+    if(!container) return;
     
+    container.innerHTML = '';
     container.style.transition = 'none'; 
     container.style.opacity = '1';
     
@@ -449,9 +497,13 @@ function shootConfetti() {
 // ----------------------------------------------------
 function copySuccessData(btnElement) {
     const isFromStep3 = btnElement.innerText.includes('Verifikasi Akun');
-    const email = document.getElementById(isFromStep3 ? 'step3-email' : 'modal-email').innerText;
-    const expiry = document.getElementById(isFromStep3 ? 'step3-expiry' : 'modal-expiry').innerText;
-    const orderId = document.getElementById(isFromStep3 ? 'step3-order' : 'modal-order').innerText;
+    const emailEl = document.getElementById(isFromStep3 ? 'step3-email' : 'modal-email');
+    const expiryEl = document.getElementById(isFromStep3 ? 'step3-expiry' : 'modal-expiry');
+    const orderIdEl = document.getElementById(isFromStep3 ? 'step3-order' : 'modal-order');
+    
+    const email = emailEl ? emailEl.innerText : "-";
+    const expiry = expiryEl ? expiryEl.innerText : "-";
+    const orderId = orderIdEl ? orderIdEl.innerText : "-";
     
     const textToCopy = `AlightPro - Bukti Verifikasi\n\nEmail Terdaftar: ${email}\nOrder ID: ${orderId}\nMasa Berlaku Lisensi: ${expiry}\nStatus Akun: LINKED & VERIFIED\nAuto Renewal: Aktif\n\nSelamat berkreasi!`;
     
@@ -465,26 +517,13 @@ function copySuccessData(btnElement) {
 }
 
 function copyStep3Data(btnElement) {
-    const email = document.getElementById('step3-email').innerText;
-    const expiry = document.getElementById('step3-expiry').innerText;
-    const orderId = document.getElementById('step3-order').innerText;
-    
-    const textToCopy = `AlightPro - Bukti Verifikasi\n\nEmail Terdaftar: ${email}\nOrder ID: ${orderId}\nMasa Berlaku Lisensi: ${expiry}\nStatus Akun: LINKED & VERIFIED\nAuto Renewal: Aktif\n\nSelamat berkreasi!`;
-    
-    navigator.clipboard.writeText(textToCopy).then(() => {
-        const originalHtml = btnElement.innerHTML;
-        btnElement.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> Disalin!`;
-        setTimeout(() => { btnElement.innerHTML = originalHtml; }, 2000);
-    }).catch(err => {
-        showToast("❌ Gagal menyalin.");
-    });
+    copySuccessData(btnElement);
 }
 
 // ----------------------------------------------------
 // FUNGSI MODAL RIWAYAT 
 // ----------------------------------------------------
 function openHistoryModal() {
-    // Reset Badge Saat User Membuka Riwayat
     resetBadge();
 
     const modal = document.getElementById('history-modal');
@@ -492,6 +531,8 @@ function openHistoryModal() {
     const modalContent = document.getElementById('history-modal-content');
     const container = document.getElementById('history-list');
     
+    if(!modal || !container) return;
+
     let historyData = JSON.parse(localStorage.getItem('alightHistory') || '[]');
     const now = Date.now();
     const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
@@ -530,10 +571,14 @@ function openHistoryModal() {
     }
 
     modal.classList.remove('hidden');
-    modalBg.classList.remove('backdrop-exit');
-    modalBg.classList.add('backdrop-enter');
-    modalContent.classList.remove('modal-exit');
-    modalContent.classList.add('modal-enter');
+    if(modalBg) {
+        modalBg.classList.remove('backdrop-exit');
+        modalBg.classList.add('backdrop-enter');
+    }
+    if(modalContent) {
+        modalContent.classList.remove('modal-exit');
+        modalContent.classList.add('modal-enter');
+    }
 }
 
 function clearHistory() {
@@ -546,12 +591,18 @@ function closeHistoryModal() {
     const modalBg = document.getElementById('history-modal-bg');
     const modalContent = document.getElementById('history-modal-content');
     
-    modalBg.classList.remove('backdrop-enter');
-    modalBg.classList.add('backdrop-exit');
-    modalContent.classList.remove('modal-enter');
-    modalContent.classList.add('modal-exit');
+    if(modalBg) {
+        modalBg.classList.remove('backdrop-enter');
+        modalBg.classList.add('backdrop-exit');
+    }
+    if(modalContent) {
+        modalContent.classList.remove('modal-enter');
+        modalContent.classList.add('modal-exit');
+    }
     
-    setTimeout(() => { modal.classList.add('hidden'); }, 200);
+    setTimeout(() => { 
+        if(modal) modal.classList.add('hidden'); 
+    }, 200);
 }
 
 // ----------------------------------------------------
@@ -561,19 +612,31 @@ function openCSModal() {
     const modal = document.getElementById('cs-modal');
     const modalBg = document.getElementById('cs-modal-bg');
     const modalContent = document.getElementById('cs-modal-content');
-    modal.classList.remove('hidden');
-    modalBg.classList.remove('backdrop-exit');
-    modalBg.classList.add('backdrop-enter');
-    modalContent.classList.remove('modal-exit');
-    modalContent.classList.add('modal-enter');
+    
+    if(modal) modal.classList.remove('hidden');
+    if(modalBg) {
+        modalBg.classList.remove('backdrop-exit');
+        modalBg.classList.add('backdrop-enter');
+    }
+    if(modalContent) {
+        modalContent.classList.remove('modal-exit');
+        modalContent.classList.add('modal-enter');
+    }
 }
 function closeCSModal() {
     const modal = document.getElementById('cs-modal');
     const modalBg = document.getElementById('cs-modal-bg');
     const modalContent = document.getElementById('cs-modal-content');
-    modalBg.classList.remove('backdrop-enter');
-    modalBg.classList.add('backdrop-exit');
-    modalContent.classList.remove('modal-enter');
-    modalContent.classList.add('modal-exit');
-    setTimeout(() => { modal.classList.add('hidden'); }, 200);
+    
+    if(modalBg) {
+        modalBg.classList.remove('backdrop-enter');
+        modalBg.classList.add('backdrop-exit');
+    }
+    if(modalContent) {
+        modalContent.classList.remove('modal-enter');
+        modalContent.classList.add('modal-exit');
+    }
+    setTimeout(() => { 
+        if(modal) modal.classList.add('hidden'); 
+    }, 200);
 }
