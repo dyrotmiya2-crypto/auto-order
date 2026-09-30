@@ -39,8 +39,8 @@
 </head>
 <body class="text-black min-h-screen flex flex-col items-center py-4 px-3 sm:py-6 sm:px-6 md:px-8 overflow-x-hidden relative bg-bg-main">
 
-    <!-- [ UI FIX: Z-Index diubah ke z-40 agar berada di belakang Modal (z-50). Perilaku Sticky khusus Desktop (md:sticky) ] -->
-    <nav id="main-navbar" class="w-full max-w-6xl bg-white border-3 sm:border-4 border-black rounded-2xl shadow-brutal flex flex-col md:flex-row justify-between items-center p-3 sm:p-4 mb-6 sm:mb-8 gap-3 sm:gap-4 relative md:sticky md:top-4 z-40 transition-all duration-300 reveal">
+    <!-- NAVBAR RESPONSIF -->
+    <nav id="main-navbar" class="w-full max-w-6xl bg-white border-[3px] sm:border-4 border-black rounded-2xl shadow-brutal flex flex-col md:flex-row justify-between items-center p-3 sm:p-4 mb-6 sm:mb-8 gap-3 sm:gap-4 relative md:sticky md:top-4 z-40 transition-all duration-300 reveal">
         
         <div class="flex items-center justify-between w-full md:w-1/3">
             <div class="flex items-center gap-2 sm:gap-3">
@@ -53,7 +53,6 @@
                 </div>
             </div>
             
-            <!-- [ FITUR BARU: Badge Notifikasi Mobile ] -->
             <button onclick="openHistoryModal()" class="anim-btn-history md:hidden bg-brutal-yellow border-2 border-black font-bold py-1.5 px-3 rounded-xl shadow-brutal-sm flex items-center gap-1.5 text-[10px] whitespace-nowrap">
                 <i class="ph ph-clock-counter-clockwise text-base"></i> Riwayat
                 <span class="history-badge hidden bg-gray-900 text-white text-[9px] px-1.5 py-0 rounded-full border border-black min-w-[18px] text-center ml-0.5 shadow-sm">0</span>
@@ -69,7 +68,6 @@
             </div>
         </div>
 
-        <!-- [ FITUR BARU: Badge Notifikasi Desktop ] -->
         <div class="hidden md:flex w-full md:w-1/3 justify-end">
             <button onclick="openHistoryModal()" class="anim-btn-history bg-brutal-yellow border-2 border-black font-bold py-2 px-4 rounded-xl shadow-brutal-sm flex items-center gap-1.5 text-sm whitespace-nowrap">
                 <i class="ph ph-clock-counter-clockwise text-lg"></i> Riwayat Verifikasi
@@ -93,7 +91,7 @@
 
             <h2 class="text-4xl sm:text-5xl lg:text-[4rem] font-bold leading-[1.1] tracking-tight">
                 Aktivasi <br>
-                <span class="inline-block bg-brutal-blue border-3 sm:border-4 border-black px-3 sm:px-4 py-1 rounded-xl sm:rounded-2xl shadow-brutal my-3 transform-none">Alight Motion Pro</span><br>
+                <span class="premium-badge-text inline-block bg-brutal-blue border-[3px] sm:border-4 border-black px-4 sm:px-6 py-1.5 sm:py-2 rounded-2xl sm:rounded-[1.5rem] shadow-brutal mt-3 transform-none">Alight Motion Pro</span><br>
                 1 Tahun.
             </h2>
             <p class="text-base sm:text-lg lg:text-xl font-medium text-gray-800 max-w-xl">
@@ -101,21 +99,21 @@
             </p>
 
             <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-2">
-                <div class="anim-feature-3 bg-brutal-blue border-2 sm:border-3 border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
+                <div class="anim-feature-3 bg-brutal-blue border-[3px] border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
                     <i class="ph ph-video-camera text-2xl sm:text-3xl mb-1.5 sm:mb-2"></i>
                     <h3 class="font-bold text-[10px] sm:text-xs lg:text-sm leading-tight">No watermark</h3>
                 </div>
-                <div class="anim-feature-3 bg-brutal-green border-2 sm:border-3 border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
+                <div class="anim-feature-3 bg-brutal-green border-[3px] border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
                     <i class="ph ph-medal text-2xl sm:text-3xl mb-1.5 sm:mb-2"></i>
                     <h3 class="font-bold text-[10px] sm:text-xs lg:text-sm leading-tight">durasi 1 thn</h3>
                 </div>
-                <div class="anim-feature-3 bg-brutal-yellow border-2 sm:border-3 border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
+                <div class="anim-feature-3 bg-brutal-yellow border-[3px] border-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-brutal text-center sm:text-left flex flex-col items-center sm:items-start cursor-pointer">
                     <i class="ph ph-file-code text-2xl sm:text-3xl mb-1.5 sm:mb-2"></i>
                     <h3 class="font-bold text-[10px] sm:text-xs lg:text-sm leading-tight">full Xml Preset</h3>
                 </div>
             </div>
 
-            <div class="reveal bg-brutal-purple border-2 sm:border-3 border-black p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl shadow-brutal mt-2">
+            <div class="reveal bg-brutal-purple border-[3px] border-black p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl shadow-brutal mt-2">
                 <h3 class="font-bold text-base sm:text-lg lg:text-xl flex items-center gap-2 mb-3">
                     <i class="ph-fill ph-question text-xl lg:text-2xl"></i> Cara Mengambil Link Login OOB:
                 </h3>
@@ -130,9 +128,10 @@
         </div>
 
         <!-- RIGHT COLUMN (PANEL VERIFIKASI) -->
-        <div class="lg:col-span-5 flex flex-col gap-8 w-full relative">
+        <!-- [ FIX: max-w-md mx-auto ditambahkan untuk menjaga proporsi bingkai di mobile/tablet agar tidak melar memanjang asimetris ] -->
+        <div class="lg:col-span-5 flex flex-col gap-8 w-full max-w-md mx-auto lg:max-w-full relative">
             
-            <div class="reveal bg-white border-3 sm:border-4 border-black rounded-[2rem] shadow-brutal-large p-6 sm:p-8 lg:p-10 overflow-hidden relative flex flex-col w-full">
+            <div class="reveal bg-white border-[3px] sm:border-4 border-black rounded-[2rem] shadow-brutal-large p-6 sm:p-8 lg:p-10 overflow-hidden relative flex flex-col w-full">
                 
                 <div class="flex gap-2 mb-5 items-center shrink-0">
                     <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-red-500 border-2 border-black"></div>
@@ -174,7 +173,6 @@
                     <!-- STEP 2 -->
                     <div id="step-2" class="step-container hidden-step w-full">
                         
-                        <!-- [ UI FIX: Desain UI Timer OOB sesuai referensi Gambar 4 ] -->
                         <div class="flex justify-between items-center bg-pink-50 border-2 border-black rounded-xl px-4 py-3 sm:py-3.5 mb-5 shadow-brutal-sm w-full">
                             <div class="flex items-center gap-2">
                                 <i class="ph ph-clock text-pink-600 text-lg sm:text-xl static-clock" id="timer-icon"></i>
@@ -183,6 +181,11 @@
                             <div class="bg-brutal-green border-2 border-black rounded-lg px-3 py-1 flex items-center justify-center shadow-brutal-sm">
                                 <span id="countdown-timer" class="font-mono text-[11px] sm:text-sm font-bold text-black">03:00</span>
                             </div>
+                        </div>
+                        
+                        <div class="bg-brutal-green border-2 border-black rounded-lg p-2.5 lg:p-3 mb-4 text-[11px] sm:text-xs lg:text-sm font-bold flex items-center gap-2 shadow-brutal-sm overflow-hidden w-fit">
+                            <i class="ph-fill ph-check-circle text-base sm:text-lg lg:text-xl shrink-0"></i>
+                            <span class="truncate">Terkirim ke: <span id="display-email" class="underline"></span></span>
                         </div>
                         
                         <label class="block text-xs sm:text-sm lg:text-base font-bold mb-2 uppercase tracking-wide">Tempel Link Verifikasi (OOB)</label>
@@ -212,7 +215,7 @@
                     <div id="step-3" class="step-container hidden-step w-full bg-white">
                         <div class="flex flex-col items-center w-full">
                             <div class="relative mb-4 mt-2">
-                                <div class="w-16 h-16 lg:w-20 lg:h-20 bg-brutal-green border-3 lg:border-4 border-black rounded-full flex items-center justify-center shadow-brutal z-10 relative">
+                                <div class="w-16 h-16 lg:w-20 lg:h-20 bg-brutal-green border-[3px] lg:border-4 border-black rounded-full flex items-center justify-center shadow-brutal z-10 relative">
                                     <i class="ph ph-check text-4xl lg:text-5xl font-bold"></i>
                                 </div>
                             </div>
@@ -260,7 +263,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-4 reveal">
-                <div class="anim-stats-scale bg-brutal-yellow border-3 sm:border-4 border-black rounded-2xl shadow-brutal p-4 sm:p-5 lg:p-6 cursor-default">
+                <div class="anim-stats-scale bg-brutal-yellow border-[3px] sm:border-4 border-black rounded-2xl shadow-brutal p-4 sm:p-5 lg:p-6 cursor-default">
                     
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-3">
@@ -278,12 +281,12 @@
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
-                        <div class="bg-white border-2 sm:border-3 border-black rounded-xl p-3 sm:p-4 shadow-brutal-sm">
+                        <div class="bg-white border-2 sm:border-[3px] border-black rounded-xl p-3 sm:p-4 shadow-brutal-sm">
                             <p class="text-[10px] sm:text-xs font-bold text-blue-600 flex items-center gap-1 mb-1"><i class="ph ph-calendar-blank"></i> HARI INI</p>
                             <p class="text-3xl sm:text-4xl lg:text-5xl font-bold my-1 leading-none" id="daily-count">6</p>
                             <p class="text-[10px] sm:text-xs font-semibold text-gray-600 mt-1">6 Terverifikasi</p>
                         </div>
-                        <div class="bg-brutal-blue border-2 sm:border-3 border-black rounded-xl p-3 sm:p-4 shadow-brutal-sm">
+                        <div class="bg-brutal-blue border-2 sm:border-[3px] border-black rounded-xl p-3 sm:p-4 shadow-brutal-sm">
                             <p class="text-[10px] sm:text-xs font-bold flex items-center gap-1 mb-1 text-black"><i class="ph ph-sparkle text-pink-600"></i> TOTAL SUKSES</p>
                             <p class="text-3xl sm:text-4xl lg:text-5xl font-bold my-1 leading-none text-black">16.6K</p>
                             <p class="text-[10px] sm:text-xs font-semibold text-gray-800 mt-1">16.625 Akun Pro</p>
@@ -307,7 +310,6 @@
     </main>
 
     <!-- SECTION 2: FITUR PRO -->
-    <!-- [ UI FIX: Perombakan "Eksplorasi Fitur Premium" menjadi 6 poin keunggulan tanpa teks gratis ] -->
     <section id="fitur-pro" class="w-full max-w-6xl mt-24 mb-10 px-2 relative z-10">
         
         <div class="reveal flex flex-col items-center justify-center w-full mb-8">
@@ -318,7 +320,7 @@
             </div>
             <h2 class="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-center leading-[1.2]">
                 Semua Fitur Premium <br>
-                <span class="inline-block bg-brutal-blue border-3 sm:border-4 border-black px-4 sm:px-6 py-1 sm:py-2 rounded-2xl sm:rounded-[1.5rem] shadow-brutal mt-3 transform-none">Terbuka 100% Bebas Akses</span>
+                <span class="premium-badge-text inline-block bg-brutal-blue border-[3px] sm:border-4 border-black px-4 sm:px-6 py-1.5 sm:py-2 rounded-2xl sm:rounded-[1.5rem] shadow-brutal mt-3 transform-none">Terbuka 100% Bebas Akses</span>
             </h2>
             <p class="text-sm sm:text-base font-medium text-gray-700 text-center mt-6 max-w-2xl">
                 Nikmati kebebasan berkreasi membuat video cinematic, AM preset, jedag-jedug aesthetic, dan motion graphics tanpa halangan fitur terkunci.
@@ -327,7 +329,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             <!-- Card 1 -->
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+            <div class="reveal anim-premium-4 bg-white border-[3px] border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
                 <div class="flex justify-between items-start mb-5">
                     <div class="w-14 h-14 bg-pink-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
                         <i class="ph ph-magic-wand text-3xl text-pink-600"></i>
@@ -342,7 +344,7 @@
             </div>
             
             <!-- Card 2 -->
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+            <div class="reveal anim-premium-4 bg-white border-[3px] border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
                 <div class="flex justify-between items-start mb-5">
                     <div class="w-14 h-14 bg-blue-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
                         <i class="ph ph-file-code text-3xl text-blue-600"></i>
@@ -357,7 +359,7 @@
             </div>
 
             <!-- Card 3 -->
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+            <div class="reveal anim-premium-4 bg-white border-[3px] border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
                 <div class="flex justify-between items-start mb-5">
                     <div class="w-14 h-14 bg-green-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
                         <i class="ph ph-sliders text-3xl text-green-600"></i>
@@ -372,7 +374,7 @@
             </div>
 
             <!-- Card 4 -->
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+            <div class="reveal anim-premium-4 bg-white border-[3px] border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
                 <div class="flex justify-between items-start mb-5">
                     <div class="w-14 h-14 bg-purple-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
                         <i class="ph ph-stack text-3xl text-purple-600"></i>
@@ -387,7 +389,7 @@
             </div>
 
             <!-- Card 5 -->
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+            <div class="reveal anim-premium-4 bg-white border-[3px] border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
                 <div class="flex justify-between items-start mb-5">
                     <div class="w-14 h-14 bg-yellow-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
                         <i class="ph ph-video-camera text-3xl text-yellow-600"></i>
@@ -402,7 +404,7 @@
             </div>
 
             <!-- Card 6 -->
-            <div class="reveal anim-premium-4 bg-white border-3 border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
+            <div class="reveal anim-premium-4 bg-white border-[3px] border-black rounded-3xl p-6 shadow-brutal cursor-pointer flex flex-col h-full">
                 <div class="flex justify-between items-start mb-5">
                     <div class="w-14 h-14 bg-teal-100 border-2 border-black rounded-2xl flex items-center justify-center shadow-brutal-sm">
                         <i class="ph ph-cloud-arrow-up text-3xl text-teal-600"></i>
@@ -420,7 +422,7 @@
 
     <!-- SECTION FAQ -->
     <section id="faq" class="w-full max-w-3xl mt-20 mb-20 px-4 mx-auto relative z-10 flex flex-col items-center">
-        <div class="reveal bg-brutal-purple border-2 border-black rounded-full px-5 py-2 mb-6 shadow-brutal-sm flex items-center gap-2">
+        <div class="reveal bg-brutal-purple border-[3px] border-black rounded-full px-5 py-2 mb-6 shadow-brutal-sm flex items-center gap-2">
             <i class="ph ph-question text-xl text-purple-900"></i>
             <span class="text-xs sm:text-sm font-bold text-purple-900">Pertanyaan Yang Sering Diajukan</span>
         </div>
@@ -429,7 +431,7 @@
         <p class="reveal text-sm sm:text-base lg:text-lg font-medium text-gray-600 text-center mb-10">Jawaban lengkap seputar mekanisme verifikasi dan lisensi Alight Motion Pro di AlightPro.</p>
 
         <div class="w-full flex flex-col gap-4">
-            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-[3px] border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl"></i>
@@ -451,8 +453,7 @@
                 </div>
             </div>
 
-            <!-- [ UI FIX: Konten FAQ disesuaikan untuk layanan premium/berbayar ] -->
-            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-[3px] border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-red-500"></i>
@@ -474,7 +475,7 @@
                 </div>
             </div>
 
-            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-[3px] border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-green-500"></i>
@@ -496,7 +497,7 @@
                 </div>
             </div>
 
-            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-[3px] border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-yellow-500"></i>
@@ -518,7 +519,7 @@
                 </div>
             </div>
             
-            <div class="anim-faq-frame reveal bg-white border-3 border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
+            <div class="anim-faq-frame reveal bg-white border-[3px] border-black rounded-2xl overflow-hidden shadow-brutal cursor-pointer">
                 <button class="faq-btn w-full p-5 flex items-center justify-between text-left transition-colors" onclick="toggleFaq(this)">
                     <div class="flex items-center gap-3">
                         <i class="ph ph-question text-xl sm:text-2xl text-purple-500"></i>
@@ -584,7 +585,7 @@
     </footer>
 
     <!-- FLOATING CS BUTTON -->
-    <button onclick="openCSModal()" class="anim-btn-float fixed bottom-6 right-6 w-14 h-14 bg-brutal-yellow border-3 border-black rounded-2xl shadow-brutal flex items-center justify-center z-40">
+    <button onclick="openCSModal()" class="anim-btn-float fixed bottom-6 right-6 w-14 h-14 bg-brutal-yellow border-[3px] border-black rounded-2xl shadow-brutal flex items-center justify-center z-40">
         <i class="ph ph-headset text-3xl"></i>
         <span class="absolute -top-1 -right-1 flex h-4 w-4">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -592,7 +593,7 @@
         </span>
     </button>
 
-    <!-- MODAL CS & KOMUNITAS (z-50) -->
+    <!-- MODAL CS & KOMUNITAS -->
     <div id="cs-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
         <div id="cs-modal-bg" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0" onclick="closeCSModal()"></div>
         <div id="cs-modal-content" class="bg-white w-full max-w-md sm:max-w-lg lg:max-w-xl border-4 border-black rounded-3xl shadow-brutal-large relative z-10 flex flex-col max-h-[90vh] sm:max-h-[85vh] overflow-hidden opacity-0 scale-95">
@@ -676,7 +677,7 @@
         </div>
     </div>
 
-    <!-- [ MODAL RIWAYAT (z-70) ] -->
+    <!-- MODAL RIWAYAT (z-70) -->
     <div id="history-modal" class="fixed inset-0 z-[70] flex items-center justify-center px-4 hidden">
         <div id="history-modal-bg" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0" onclick="closeHistoryModal()"></div>
         <div id="history-modal-content" class="bg-white w-full max-w-md lg:max-w-lg border-4 border-black rounded-3xl shadow-brutal-large relative z-10 flex flex-col max-h-[80vh] overflow-hidden opacity-0 scale-95">
