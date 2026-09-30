@@ -8,7 +8,7 @@ const emailInput = document.getElementById('emailInput');
 const oobInput = document.getElementById('oobInput');
 
 // ----------------------------------------------------
-// FUNGSI SCROLL REVEAL (Aktif untuk Semua Frame/Bingkai)
+// FUNGSI SCROLL REVEAL 
 // ----------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
     const reveals = document.querySelectorAll(".reveal");
@@ -22,21 +22,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { root: null, threshold: 0.1 });
     
     reveals.forEach(reveal => revealObserver.observe(reveal));
+    
+    // Inisiasi Badge UI pada saat reload halaman
+    updateBadgeUI();
 });
 
 // ----------------------------------------------------
 // [ UI FIX: EFEK STICKY NAVBAR DENGAN BLUR / SHADOW ]
 // ----------------------------------------------------
 window.addEventListener('scroll', () => {
-    const nav = document.getElementById('main-navbar');
-    if (window.scrollY > 10) {
-        // Tambahkan efek blur glassmorphism transparan dan bayangan besar saat sticky
-        nav.classList.add('bg-white/80', 'backdrop-blur-md', 'shadow-brutal-large');
-        nav.classList.remove('bg-white', 'shadow-brutal');
-    } else {
-        // Kembali ke normal solid saat di paling atas
-        nav.classList.add('bg-white', 'shadow-brutal');
-        nav.classList.remove('bg-white/80', 'backdrop-blur-md', 'shadow-brutal-large');
+    // Efek sticky glassmorphism hanya diproses bila lebar layar Desktop/Tablet (md)
+    if (window.innerWidth >= 768) {
+        const nav = document.getElementById('main-navbar');
+        if (window.scrollY > 20) {
+            nav.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-brutal-large');
+            nav.classList.remove('bg-white', 'shadow-brutal');
+        } else {
+            nav.classList.add('bg-white', 'shadow-brutal');
+            nav.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-brutal-large');
+        }
     }
 });
 
@@ -102,6 +106,33 @@ function toggleFaq(btn) {
         icon.classList.remove('bg-white');
         btn.classList.add('bg-brutal-blue');
     }
+}
+
+// ----------------------------------------------------
+// [ FITUR BARU: LOGIKA BADGE RIWAYAT ]
+// ----------------------------------------------------
+function updateBadgeUI() {
+    let count = parseInt(localStorage.getItem('alightBadgeCount') || '0');
+    const badges = document.querySelectorAll('.history-badge');
+    badges.forEach(badge => {
+        if(count > 0) {
+            badge.innerText = count;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    });
+}
+
+function incrementBadge() {
+    let count = parseInt(localStorage.getItem('alightBadgeCount') || '0');
+    localStorage.setItem('alightBadgeCount', count + 1);
+    updateBadgeUI();
+}
+
+function resetBadge() {
+    localStorage.setItem('alightBadgeCount', '0');
+    updateBadgeUI();
 }
 
 // ----------------------------------------------------
@@ -254,6 +285,9 @@ function saveHistory(status, email, orderStr) {
         timestamp: timeData.timestamp
     });
     localStorage.setItem('alightHistory', JSON.stringify(history));
+    
+    // Increment notifikasi badge setiap selesai mencatat riwayat
+    incrementBadge();
 }
 
 async function processStep2() {
@@ -450,6 +484,9 @@ function copyStep3Data(btnElement) {
 // FUNGSI MODAL RIWAYAT 
 // ----------------------------------------------------
 function openHistoryModal() {
+    // Reset Badge Saat User Membuka Riwayat
+    resetBadge();
+
     const modal = document.getElementById('history-modal');
     const modalBg = document.getElementById('history-modal-bg');
     const modalContent = document.getElementById('history-modal-content');
